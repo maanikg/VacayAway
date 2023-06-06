@@ -1,5 +1,5 @@
 import React from "react";
-import googleMapStyles from "./GoogleMapStyles";
+import googleMapStyles from "./mapStyle";
 
 export default function MapView() {
     let map;

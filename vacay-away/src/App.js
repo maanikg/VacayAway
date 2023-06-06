@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
-import mapStyle from './GoogleMapStyles';
+import mapStyle from './mapStyle';
 
 // const mapStyles = {
 // width: '100%',
@@ -41,13 +41,13 @@ export class MapContainer extends Component {
   }
 
   render() {
-    const coords = { lat: -21.805149, lng: -49.0921657 };
+    const coords = { lat: 43.6532, lng: -79.3832 };
     return (
       <Map
         // style={this.mapStyle}
         style={mapStyle}
         google={this.props.google}
-        zoom={7}
+        zoom={16}
         initialCenter={coords}
         onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
       >
