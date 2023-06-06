@@ -1,52 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { Map, GoogleApiWrapper } from 'google-maps-react';
 
-function App() {
-  const user = {
-    name: 'Vacation Person',
-    location: {
-      city: 'San Francisco',
-      country: 'USA'
-    }
+const mapStyles = {
+  width: '100%',
+  height: '100%',
+  // { elementType: "geometry", stylers: [{ color: "#242f3e" }] } 
+};
+
+export class MapContainer extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Hi</h1>
+        <Map
+          google={this.props.google}
+          zoom={14}
+          style={mapStyles}
+          initialCenter={
+            {
+              lat: -1.2884,
+              lng: 36.8233
+            }
+          }
+        />
+      </div>
+    );
   }
-
-
-  return (
-    <div className="App">
-      {/* <div className="wrapper">
-        <div className="first">first</div>
-        <div className="second">second</div>
-        <div className="third">third</div>
-      </div> */}
-      <header>
-        <p>Created by {user.name}</p>
-        <p>Location: {user.location.city}, {user.location.country}</p>
-        {/* <React.Button> </React.Button> */}
-        {/* <Button> </Button> */}
-        {/* <button>Hi</button> */}
-      </header>
-      <header className="App-body">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload!!.
-          {/* <button>Hi</button> */}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-
-      <footer>
-        <p>Created by {user.name}</p>
-        <p>Location: {user.location.city}, {user.location.country}</p>
-      </footer>
-    </div>
-  );
 }
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc'
+})(MapContainer);
