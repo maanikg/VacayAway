@@ -61,6 +61,7 @@ export class MapContainer extends Component {
                         <Map
                             // style={this.mapStyle}
                             style={mapStyle}
+                            disableDefaultUI={true}
                             google={this.props.google}
                             zoom={15}
                             initialCenter={coords}
