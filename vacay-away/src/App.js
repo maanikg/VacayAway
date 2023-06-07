@@ -4,10 +4,17 @@ import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import mapStyle from './mapStyle';
 
 // const mapStyles = {
-// width: '100%',
-// height: '100%',
+//   width: '100%',
+//   height: '100%',
 //   elementType: "geometry", stylers: [{ color: "#6c0f0f" }]
 // };
+// const containerStyle = {
+//   position: 'absolute'
+//   width: '50%',
+//   height: '50%',
+
+//   backgroundColor: 'black'
+// }
 // const mapStyle = [
 //   {
 //     featureType: 'water',
@@ -31,29 +38,43 @@ import mapStyle from './mapStyle';
 //     ]
 //   }
 // ];
-const zoom = 12;
+// const zoom = 10;
 
 export class MapContainer extends Component {
   _mapLoaded(mapProps, map) {
     map.setOptions({
-      styles: mapStyle
+      styles: mapStyle//,
+      // containerStyle: containerStyle
     });
   }
 
   render() {
     const coords = { lat: 43.6532, lng: -79.3832 };
     return (
-      <Map
-        // style={this.mapStyle}
-        style={mapStyle}
-        google={this.props.google}
-        zoom={16}
-        initialCenter={coords}
-        onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
-      >
-        <Marker position={coords} />
-      </Map>
+      <div >
+        <h1>Hi</h1>
+        {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
+        <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
+          <Map
+            // style={this.mapStyle}
+            style={mapStyle}
+            google={this.props.google}
+            zoom={15}
+            initialCenter={coords}
+            // containerStyle={containerStyle}
+            onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
+
+          >
+            <Marker position={coords} />
+          </Map>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <h1>Bye</h1>
+        </div>
+      </div >
     );
+
   }
 }
 
