@@ -52,25 +52,33 @@ export class MapContainer extends Component {
     const coords = { lat: 43.6532, lng: -79.3832 };
     return (
       <div >
-        <h1>Hi</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
+          <h1  >Hi </h1>
+          </div>
         {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
-        <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
-          <Map
-            // style={this.mapStyle}
-            style={mapStyle}
-            google={this.props.google}
-            zoom={15}
-            initialCenter={coords}
-            // containerStyle={containerStyle}
-            onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
+        <div style={{ display: 'flex' }}>
+          <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
+            <Map
+              // style={this.mapStyle}
+              style={mapStyle}
+              google={this.props.google}
+              zoom={15}
+              initialCenter={coords}
+              // containerStyle={containerStyle}
+              onReady={(mapProps, map) => this._mapLoaded(mapProps, map)}
 
-          >
-            <Marker position={coords} />
-          </Map>
+            >
+              <Marker position={coords} />
+            </Map>
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
+            <h1>Sidebar</h1>
+          </div>
+          
         </div>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <h1>Bye</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0d57cd' }}>
+            <h1>Footer</h1>
         </div>
       </div >
     );
