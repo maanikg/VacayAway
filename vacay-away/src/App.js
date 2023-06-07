@@ -53,8 +53,8 @@ export class MapContainer extends Component {
     return (
       <div >
         <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
-          <h1  >Hi </h1>
-          </div>
+          <h1  >Hi! </h1>
+        </div>
         {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
         <div style={{ display: 'flex' }}>
           <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
@@ -75,10 +75,10 @@ export class MapContainer extends Component {
           <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
             <h1>Sidebar</h1>
           </div>
-          
+
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0d57cd' }}>
-            <h1>Footer</h1>
+          <h1>Footer</h1>
         </div>
       </div >
     );
