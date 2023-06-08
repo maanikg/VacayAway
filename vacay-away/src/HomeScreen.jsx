@@ -3,11 +3,12 @@ export default function HomeScreen() {
     const [username, setUsername] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [passwordVerify, setPasswordVerify] = useState("");
+    const [outputMessage, setOutputMessage] = useState("");
     function buttonClick() {
         if (passwordInput != passwordVerify) {
-            alert("Passwords do not match");
+            setOutputMessage("Passwords do not match");
         } else {
-            alert("hi");
+            setOutputMessage("Hello " + username + "!");
         }
     }
     return (
@@ -45,6 +46,7 @@ export default function HomeScreen() {
                     placeholder="Verify Password"
                     autoComplete="false"
                     onChange={e => setPasswordVerify(e.target.value)}
+                    
                 // onChange={e => {
                 //     if (passwordInput.value != passwordVerify.value) {
                 //         alert("Passwords do not match");
@@ -54,7 +56,7 @@ export default function HomeScreen() {
                 />
 
                 <button onClick={buttonClick} >Log In</button>
-                <div>{username}</div>
+                <div>{outputMessage}</div>
             </div>
         </div>
     );
