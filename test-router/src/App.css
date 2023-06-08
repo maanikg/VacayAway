@@ -9,11 +9,11 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 5s linear;
   }
 }
 
-.App-header {
+.App-body {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -32,7 +32,35 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.wrapper {
+  display: table;
+  width: 100%;
+}
+
+.row {
+  display: table-row;
+}
+
+.first {
+  display: table-cell;
+  background-color: red;
+  width: 33%;
+}
+
+.second {
+  display: table-cell;
+  background-color: blue;
+  width: 33%;
+}
+
+.third {
+  display: table-cell;
+  background-color: #bada55;
+  width: 34%;
 }
