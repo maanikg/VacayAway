@@ -13,7 +13,7 @@ export default function HomeScreen() {
     }
     return (
         <div>
-            <h1>HomeScreen</h1>
+            {/* <h1>HomeScreen!</h1> */}
             <h1 style={{ backgroundColor: 'green' }}>Title</h1>
 
             <div>
@@ -46,7 +46,7 @@ export default function HomeScreen() {
                     placeholder="Verify Password"
                     autoComplete="false"
                     onChange={e => setPasswordVerify(e.target.value)}
-                    
+
                 // onChange={e => {
                 //     if (passwordInput.value != passwordVerify.value) {
                 //         alert("Passwords do not match");
