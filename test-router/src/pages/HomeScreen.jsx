@@ -1,15 +1,15 @@
-import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
+import { AuthErrorCodes, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 // import { loginEmailPassword } from "../firebase.js"
 import { auth } from "../firebase.js"
 // import "../firebase.js"
 import { Outlet, Link } from "react-router-dom";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function HomeScreen() {
     const [email, setEmail] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
-    //const [passwordVerify, setPasswordVerify] = useState("");
+    const [passwordVerify, setPasswordVerify] = useState("");
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
@@ -34,27 +34,34 @@ export default function HomeScreen() {
             showLoginError(error)
         }
     }
-    function buttonClick() {
 
-        // if (passwordInput != passwordVerify) {
-        //     setOutputMessage("Passwords do not match");
-        // } else {
-        loginEmailPassword();
-        // signInWithEmailAndPassword(email, passwordInput)
-        // setOutputMessage("Hello " + username + "!");
-        // setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
-
-
-        // }
+    const createUserEmailPassword = async () => {
+        if (passwordInput != passwordVerify) {
+            setOutputMessage("Passwords do not match. Please try again.")
+        } else {
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, passwordInput)
+                console.log(userCredential.user)
+                setOutputMessage("created new account! Welcome " +
+                    userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
+                + "!");
+            } catch (error) {
+                console.log(error)
+                showLoginError(error)
+            }
+        }
     }
     function switchAuth() {
         setLoggingIn(!loggingIn)
-        if (!loggingIn) {
-            setAuthMessage("Don't have an account? Sign up here!")
+        setPasswordVerify("")
+        setPasswordInput("")
+        setEmail("")
+        // dispatchEvent()
+        if (loggingIn) {
+            setAuthMessage("Don't have an account? Click here to sign up!")
         } else {
             setAuthMessage("Already have an account? Click here to log in.")
         }
-
     }
 
     return (
@@ -72,10 +79,7 @@ export default function HomeScreen() {
                 <button >My trips</button>
             </div>
             <div>
-                <text onClick={switchAuth}>{authMessage}</text>
-                {/* <li> */}
-                {/* <Link to="/map">Already have an account? Sign in here</Link> */}
-                {/* </li> */}
+                <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
             </div>
             <div style={{ display: 'flex' }}>
                 <input
@@ -83,6 +87,7 @@ export default function HomeScreen() {
                     type="email"
                     placeholder="Email"
                     autoComplete="false"
+                    value={email}
                     onChange={e => setEmail(e.target.value)}
                 />
                 <input
@@ -90,23 +95,23 @@ export default function HomeScreen() {
                     type="password"
                     placeholder="Password"
                     autoComplete="false"
+                    value={passwordInput}
                     onChange={e => setPasswordInput(e.target.value)}
                 />
-                {/* <input
-                    name="passwordVerify"
-                    type="password"
-                    placeholder="Verify Password"
-                    autoComplete="false"
-                    onChange={e => setPasswordVerify(e.target.value)}
-
-                // onChange={e => {
-                //     if (passwordInput.value != passwordVerify.value) {
-                //         alert("Passwords do not match");
-                //     }
-                // }
-                // }
-                /> */}
-                <button onClick={buttonClick} >Log In</button>
+                {loggingIn ?
+                    <input
+                        name="passwordVerify"
+                        type="password"
+                        placeholder="Verify Password"
+                        autoComplete="false"
+                        value={passwordVerify}
+                        onChange={(e) => setPasswordVerify(e.target.value)}
+                    />
+                    : null
+                }
+                <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
+                    {!loggingIn ? "Log In" : "Sign Up"}
+                </button>
                 <div>{outputMessage}</div>
             </div>
         </div>
