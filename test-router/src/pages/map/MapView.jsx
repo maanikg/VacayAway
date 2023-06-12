@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 // import React from 'react';
+import { useNavigate } from 'react-router';
+import { Navigate } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import mapStyle from './mapStyle';
+import WithNavigate from "./temp.js"
 
 // const mapStyles = {
 //   width: '100%',
@@ -39,8 +42,9 @@ import mapStyle from './mapStyle';
 //   }
 // ];
 // const zoom = 10;
-
+// const navigate = useNavigate()
 export class MapContainer extends Component {
+
     _mapLoaded(mapProps, map) {
         map.setOptions({
             styles: mapStyle//,
@@ -49,7 +53,10 @@ export class MapContainer extends Component {
     }
 
     render() {
+        // navigate = useNavigate();
+        // const navigate = useNavigate();
         const coords = { lat: 43.6532, lng: -79.3832 };
+
         return (
             <div >
                 <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
@@ -80,6 +87,12 @@ export class MapContainer extends Component {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0d57cd' }}>
                     <h1>Footer</h1>
+                </div>
+                <button onClick={
+                    () => null
+                }>Go Home</button>
+                <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0dcd9d' }}>
+                    <h1>Footer2</h1>
                 </div>
             </div >
         );
