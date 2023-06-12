@@ -17,12 +17,12 @@ export default function HomeScreen() {
     const [passwordVerify, setPasswordVerify] = useState("");
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
     const [promptLoginTrue, setPromptLoginTrue] = useState(false);
+    const [prompt, setPrompt] = useState("");
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const navigate = useNavigate();
-    // const [error]
 
     const showLoginError = (error) => {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
@@ -74,8 +74,12 @@ export default function HomeScreen() {
                 setPasswordInput("")
                 setEmail("")
                 setOutputMessage("")
+                if (prompt === "trips") {
+                    navigate('/trips')
+                }
                 // setOutputMessage("Welcome " + user.displayName + "!")
             } else {
+                alert("logged out")
                 setLoggedIn(false)
                 setPasswordVerify("")
                 setPasswordInput("")
@@ -101,10 +105,11 @@ export default function HomeScreen() {
             setAuthMessage("Already have an account? Click here to log in.")
         }
     }
-
+    //pass in paramater into function
     function promptLogin() {
         // alert("Please log in to view your trips")
         setPromptLoginTrue(!promptLoginTrue)
+        setPrompt("trips")
         setPromptMessage("Please log in to view your trips")
     }
 
@@ -175,11 +180,13 @@ export default function HomeScreen() {
                         <button onClick={() =>
                             setPromptLoginTrue(!promptLoginTrue)
                         }>Back</button>
-                    </> : <button onClick={logout}>Log Out</button>
-
+                    </> : null
                 }
             </div>
-            <Outlet />
+            <div style={{ display: !loggedIn ? "none" : null }}>
+                <button onClick={logout}>Log Out</button>
+            </div>
+            {/* <Outlet /> */}
         </div >
 
     );
