@@ -1,3 +1,4 @@
+import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
 import {
     AuthErrorCodes,
     signInWithEmailAndPassword,
@@ -16,6 +17,7 @@ export default function HomeScreen() {
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
+    const navigate = useNavigate();
     // const [error]
 
     const showLoginError = (error) => {
@@ -93,13 +95,18 @@ export default function HomeScreen() {
             <h1 style={{ backgroundColor: 'green' }}>Title</h1>
 
             <div>
-                <button>Explore!</button>
+                <button
+                    onClick={() => navigate('/map')}
+                >Explore!</button>
             </div>
             <div>
-                <button>Curate your plan</button>
+                <button
+                >Curate your plan</button>
             </div>
             <div>
-                <button >My trips</button>
+                <button
+                    onClick={() => navigate('/trips')}
+                >My trips</button>
             </div>
             <div>
                 <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
@@ -137,6 +144,8 @@ export default function HomeScreen() {
                 </button>
                 <div>{outputMessage}</div>
             </div>
+            <Outlet />
         </div>
+
     );
 }

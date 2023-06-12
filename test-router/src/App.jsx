@@ -6,6 +6,7 @@ import NavigationBar from './pages/NavigationBar';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
 import './css/App.css'
+import Trips from './pages/Trips';
 
 export default function App() {
   return (
@@ -16,10 +17,13 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           {/* <Route index */}
+          {/* <Route path="/" element={<Layout />}> */}
           <Route path="/" element={<Layout />}>
+
             {/* <Route path="/" element={<HomeScreen />}> */}
             <Route index element={<HomeScreen />} />
-            <Route path="map" element={<MapView />} />
+            <Route path="map" caseSensitive={true} element={<MapView />} />
+            <Route path="trips" caseSensitive={true} element={<Trips />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
