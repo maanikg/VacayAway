@@ -1,8 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { hi } from "./pages/HomeScreen.jsx"
-import { email, passwordInput } from "./pages/HomeScreen.jsx"
-import { getAuth, connectAuthEmulator, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, connectAuthEmulator/*, signInWithEmailAndPassword */} from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,15 +20,3 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 export const auth = getAuth(firebaseApp);
 connectAuthEmulator(auth, "http://localhost:9099");
-// export { auth }
-// const loginEmailPassword = async () => {
-//     // const loginEmail = email;
-//     // const loginPassword = passwordInput;
-//     const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
-//     console.log(userCredential.user)
-// }
-
-// const loginEmailPassword = (email, password) => {
-// }
-
-// hi.addEventListener("click", loginEmailPassword)

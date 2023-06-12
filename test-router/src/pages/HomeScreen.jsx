@@ -1,10 +1,13 @@
-import { AuthErrorCodes, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-// import { loginEmailPassword } from "../firebase.js"
+import {
+    AuthErrorCodes,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "firebase/auth";
 import { auth } from "../firebase.js"
-// import "../firebase.js"
-import { Outlet, Link } from "react-router-dom";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, /*useRef, useEffect*/ } from "react";
 
 export default function HomeScreen() {
     const [email, setEmail] = useState("");
@@ -16,7 +19,7 @@ export default function HomeScreen() {
     // const [error]
 
     const showLoginError = (error) => {
-        if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
+        if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
             setOutputMessage("Wrong password, try again.")
         }
         else {
@@ -36,7 +39,7 @@ export default function HomeScreen() {
     }
 
     const createUserEmailPassword = async () => {
-        if (passwordInput != passwordVerify) {
+        if (passwordInput !== passwordVerify) {
             setOutputMessage("Passwords do not match. Please try again.")
         } else {
             try {
@@ -45,12 +48,31 @@ export default function HomeScreen() {
                 setOutputMessage("created new account! Welcome " +
                     userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
                 + "!");
+                alert("created new account! Welcome " +
+                    userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
+                + "!")
             } catch (error) {
                 console.log(error)
                 showLoginError(error)
             }
         }
     }
+
+    const monitorAuthState = async () => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // console.log(user)
+                // setOutputMessage("Welcome " + user.displayName + "!")
+            } else {
+
+            }
+        })
+    }
+
+    const logout = async () => {
+        await signOut(auth)
+    }
+
     function switchAuth() {
         setLoggingIn(!loggingIn)
         setPasswordVerify("")
@@ -64,6 +86,7 @@ export default function HomeScreen() {
         }
     }
 
+    monitorAuthState()
     return (
         <div>
             {/* <h1>HomeScreen!</h1> */}
