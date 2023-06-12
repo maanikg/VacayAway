@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
 import './css/App.css'
 import Trips from './pages/Trips';
+import Plan from './pages/Plan';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
             {/* <Route path="/" element={<HomeScreen />}> */}
             <Route index element={<HomeScreen />} />
             <Route path="map" caseSensitive={true} element={<MapView />} />
+            <Route path="plan" caseSensitive={true} element={<Plan />} />
             <Route path="trips" caseSensitive={true} element={<Trips />} />
             <Route path="*" element={<NoPage />} />
           </Route>

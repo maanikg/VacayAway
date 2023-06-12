@@ -4,7 +4,8 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     onAuthStateChanged,
-    signOut
+    signOut,
+    getAuth
 } from "firebase/auth";
 import { auth } from "./firebase.js"
 
@@ -16,6 +17,7 @@ export default function HomeScreen() {
     const [passwordVerify, setPasswordVerify] = useState("");
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const navigate = useNavigate();
     // const [error]
@@ -34,6 +36,7 @@ export default function HomeScreen() {
             const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
             console.log(userCredential.user)
             setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
+            monitorAuthState()
         } catch (error) {
             console.log(error)
             showLoginError(error)
@@ -53,6 +56,7 @@ export default function HomeScreen() {
                 alert("created new account! Welcome " +
                     userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
                 + "!")
+                monitorAuthState()
             } catch (error) {
                 console.log(error)
                 showLoginError(error)
@@ -63,10 +67,18 @@ export default function HomeScreen() {
     const monitorAuthState = async () => {
         onAuthStateChanged(auth, user => {
             if (user) {
-                // console.log(user)
+                setLoggedIn(true)
+                setPasswordVerify("")
+                setPasswordInput("")
+                setEmail("")
+                setOutputMessage("")
                 // setOutputMessage("Welcome " + user.displayName + "!")
             } else {
-
+                setLoggedIn(false)
+                setPasswordVerify("")
+                setPasswordInput("")
+                setEmail("")
+                setOutputMessage("")
             }
         })
     }
@@ -88,12 +100,11 @@ export default function HomeScreen() {
         }
     }
 
-    monitorAuthState()
     return (
         <div>
             {/* <h1>HomeScreen!</h1> */}
             <h1 style={{ backgroundColor: 'green' }}>Title</h1>
-
+            {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
             <div>
                 <button
                     onClick={() => navigate('/map')}
@@ -101,6 +112,7 @@ export default function HomeScreen() {
             </div>
             <div>
                 <button
+                    onClick={() => navigate('/plan')}
                 >Curate your plan</button>
             </div>
             <div>
@@ -108,42 +120,47 @@ export default function HomeScreen() {
                     onClick={() => navigate('/trips')}
                 >My trips</button>
             </div>
-            <div>
-                <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
-            </div>
-            <div style={{ display: 'flex' }}>
-                <input
-                    name="usernameInput"
-                    type="email"
-                    placeholder="Email"
-                    autoComplete="false"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                />
-                <input
-                    name="passwordInput"
-                    type="password"
-                    placeholder="Password"
-                    autoComplete="false"
-                    value={passwordInput}
-                    onChange={e => setPasswordInput(e.target.value)}
-                />
-                {loggingIn ?
-                    <input
-                        name="passwordVerify"
-                        type="password"
-                        placeholder="Verify Password"
-                        autoComplete="false"
-                        value={passwordVerify}
-                        onChange={(e) => setPasswordVerify(e.target.value)}
-                    />
-                    : null
-                }
-                <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
-                    {!loggingIn ? "Log In" : "Sign Up"}
-                </button>
-                <div>{outputMessage}</div>
-            </div>
+            {!loggedIn ?
+                <>
+                    <div>
+                        <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
+                    </div>
+
+                    <div style={{ display: 'flex' }}>
+                        <input
+                            name="usernameInput"
+                            type="email"
+                            placeholder="Email"
+                            autoComplete="false"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        <input
+                            name="passwordInput"
+                            type="password"
+                            placeholder="Password"
+                            autoComplete="false"
+                            value={passwordInput}
+                            onChange={e => setPasswordInput(e.target.value)}
+                        />
+                        {loggingIn ?
+                            <input
+                                name="passwordVerify"
+                                type="password"
+                                placeholder="Verify Password"
+                                autoComplete="false"
+                                value={passwordVerify}
+                                onChange={(e) => setPasswordVerify(e.target.value)}
+                            />
+                            : null
+                        }
+                        <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
+                            {!loggingIn ? "Log In" : "Sign Up"}
+                        </button>
+                        <div>{outputMessage}</div>
+                    </div>
+                </> : <button onClick={logout}>Log Out</button>
+            }
             <Outlet />
         </div>
 
