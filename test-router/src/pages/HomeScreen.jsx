@@ -122,10 +122,6 @@ export default function HomeScreen() {
             </div>
             {!loggedIn ?
                 <>
-                    <div>
-                        <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
-                    </div>
-
                     <div style={{ display: 'flex' }}>
                         <input
                             name="usernameInput"
@@ -158,6 +154,9 @@ export default function HomeScreen() {
                             {!loggingIn ? "Log In" : "Sign Up"}
                         </button>
                         <div>{outputMessage}</div>
+                    </div>
+                    <div>
+                        <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
                     </div>
                 </> : <button onClick={logout}>Log Out</button>
             }
