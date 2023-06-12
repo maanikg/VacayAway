@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import React from 'react';
 import { useNavigate } from 'react-router';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useHistory } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import mapStyle from './mapStyle';
 import WithNavigate from "./temp.js"
@@ -43,8 +43,8 @@ import WithNavigate from "./temp.js"
 // ];
 // const zoom = 10;
 // const navigate = useNavigate()
+// let history = useHistory()
 export class MapContainer extends Component {
-
     _mapLoaded(mapProps, map) {
         map.setOptions({
             styles: mapStyle//,
@@ -89,7 +89,7 @@ export class MapContainer extends Component {
                     <h1>Footer</h1>
                 </div>
                 <button onClick={
-                    () => null
+                    () => this.props.navigate('/')
                 }>Go Home</button>
                 <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0dcd9d' }}>
                     <h1>Footer2</h1>
@@ -100,6 +100,15 @@ export class MapContainer extends Component {
     }
 }
 
+export function MapWithRouter(props) {
+    const navigate = useNavigate();
+    return (
+        <>
+            <MapContainer navigate={navigate}></MapContainer>
+            <h1>hiiii</h1>
+        </>
+    )
+}
 // MapContainer.defaultProps = GoogleMapStyles;
 
 export default GoogleApiWrapper({
