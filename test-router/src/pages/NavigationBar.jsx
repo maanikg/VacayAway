@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import "./styles3.css"
+//import styles3.css
+import "../css/styles3.css"
 // import usericon from "../public/userIcon.png"
 
 export default function NavigationBar() {

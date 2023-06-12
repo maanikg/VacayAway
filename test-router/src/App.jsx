@@ -2,10 +2,10 @@
 import MapView from './pages/map/MapView';
 import HomeScreen from './pages/HomeScreen';
 import NoPage from './pages/NoPage';
-import NavigationBar from './NavigationBar';
+import NavigationBar from './pages/NavigationBar';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
-import './App.css'
+import './css/App.css'
 
 export default function App() {
   return (
