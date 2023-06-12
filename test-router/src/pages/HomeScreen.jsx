@@ -18,6 +18,8 @@ export default function HomeScreen() {
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [promptLoginTrue, setPromptLoginTrue] = useState(false);
+    const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const navigate = useNavigate();
     // const [error]
@@ -100,68 +102,85 @@ export default function HomeScreen() {
         }
     }
 
+    function promptLogin() {
+        // alert("Please log in to view your trips")
+        setPromptLoginTrue(!promptLoginTrue)
+        setPromptMessage("Please log in to view your trips")
+    }
+
     return (
         <div>
-            {/* <h1>HomeScreen!</h1> */}
-            <h1 style={{ backgroundColor: 'green' }}>Title</h1>
-            {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
-            <div>
-                <button
-                    onClick={() => navigate('/map')}
-                >Explore!</button>
+            <div style={{ display: promptLoginTrue ? "none" : null }}>
+                {/* <h1>HomeScreen!</h1> */}
+                <h1 style={{ backgroundColor: 'green' }}>Title</h1>
+                {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
+                <div>
+                    <button
+                        onClick={() => navigate('/map')}
+                    >Explore!</button>
+                </div>
+                <div>
+                    <button
+                        onClick={() => navigate('/plan')}
+                    >Curate your plan</button>
+                </div>
+                <div>
+                    <button
+                        onClick={() => loggedIn ? navigate('/trips') : promptLogin()}
+                    >My trips</button>
+                </div>
             </div>
-            <div>
-                <button
-                    onClick={() => navigate('/plan')}
-                >Curate your plan</button>
-            </div>
-            <div>
-                <button
-                    onClick={() => navigate('/trips')}
-                >My trips</button>
-            </div>
-            {!loggedIn ?
-                <>
-                    <div style={{ display: 'flex' }}>
-                        <input
-                            name="usernameInput"
-                            type="email"
-                            placeholder="Email"
-                            autoComplete="false"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        <input
-                            name="passwordInput"
-                            type="password"
-                            placeholder="Password"
-                            autoComplete="false"
-                            value={passwordInput}
-                            onChange={e => setPasswordInput(e.target.value)}
-                        />
-                        {loggingIn ?
+            <div style={{ display: !promptLoginTrue ? "none" : null }}>
+                {!loggedIn ?
+                    <>
+                        <div>
+                            <text>{promptMessage}</text>
+                        </div>
+                        <div style={{ display: 'flex' }}>
                             <input
-                                name="passwordVerify"
-                                type="password"
-                                placeholder="Verify Password"
+                                name="usernameInput"
+                                type="email"
+                                placeholder="Email"
                                 autoComplete="false"
-                                value={passwordVerify}
-                                onChange={(e) => setPasswordVerify(e.target.value)}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                             />
-                            : null
-                        }
-                        <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
-                            {!loggingIn ? "Log In" : "Sign Up"}
-                        </button>
-                        <div>{outputMessage}</div>
-                    </div>
-                    <div>
-                        <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
-                    </div>
-                </> : <button onClick={logout}>Log Out</button>
-            }
+                            <input
+                                name="passwordInput"
+                                type="password"
+                                placeholder="Password"
+                                autoComplete="false"
+                                value={passwordInput}
+                                onChange={e => setPasswordInput(e.target.value)}
+                            />
+                            {loggingIn ?
+                                <input
+                                    name="passwordVerify"
+                                    type="password"
+                                    placeholder="Verify Password"
+                                    autoComplete="false"
+                                    value={passwordVerify}
+                                    onChange={(e) => setPasswordVerify(e.target.value)}
+                                />
+                                : null
+                            }
+                            <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
+                                {!loggingIn ? "Log In" : "Sign Up"}
+                            </button>
+                            <div>{outputMessage}</div>
+                        </div>
+                        <div>
+                            <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
+                        </div>
+                        <button onClick={() =>
+                            setPromptLoginTrue(!promptLoginTrue)
+                        }>Back</button>
+                    </> : <button onClick={logout}>Log Out</button>
+
+                }
+            </div>
             <Outlet />
-        </div>
+        </div >
 
     );
 }

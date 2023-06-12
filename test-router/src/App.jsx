@@ -8,13 +8,13 @@ import Layout from './pages/Layout';
 import './css/App.css'
 import Trips from './pages/Trips';
 import Plan from './pages/Plan';
+// import AuthPage from './pages/AuthPage';
 
 export default function App() {
   return (
     // <div style={{ backgroundColor: "blue" }}>
     <div>
       <NavigationBar />
-      {/* <div> */}
       <BrowserRouter>
         <Routes>
           {/* <Route index */}
@@ -23,6 +23,7 @@ export default function App() {
 
             {/* <Route path="/" element={<HomeScreen />}> */}
             <Route index element={<HomeScreen />} />
+            {/* <Route path="auth" element={<AuthPage />} /> */}
             <Route path="map" caseSensitive={true} element={<MapView />} />
             <Route path="plan" caseSensitive={true} element={<Plan />} />
             <Route path="trips" caseSensitive={true} element={<Trips />} />
@@ -32,9 +33,5 @@ export default function App() {
       </BrowserRouter>
       {/* </div> */}
     </div >
-    // </div>
-    // {/* <MapView />
-    // <HomeScreen />
-    // <BaseLayout /> */}
   );
 }
