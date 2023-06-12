@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 import { Navigate, useHistory } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import mapStyle from './mapStyle';
-import WithNavigate from "./temp.js"
 
 // const mapStyles = {
 //   width: '100%',
@@ -100,17 +99,16 @@ export class MapContainer extends Component {
     }
 }
 
+// MapContainer.defaultProps = GoogleMapStyles;
 export function MapWithRouter(props) {
     const navigate = useNavigate();
     return (
         <>
-            <MapContainer navigate={navigate}></MapContainer>
-            <h1>hiiii</h1>
+            <MapContainer google={props.google} navigate={navigate}></MapContainer>
         </>
     )
 }
-// MapContainer.defaultProps = GoogleMapStyles;
 
 export default GoogleApiWrapper({
     apiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc'
-})(MapContainer);
+})(MapWithRouter);

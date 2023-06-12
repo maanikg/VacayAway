@@ -1,6 +1,7 @@
 // import React from 'react';
 // import MapView from './pages/map/MapView';
-import Map, { MapWithRouter } from './pages/map/MapView';
+import Map from './pages/map/MapView';
+import MapWithRouter from './pages/map/MapView';
 import HomeScreen from './pages/HomeScreen';
 import NoPage from './pages/NoPage';
 import NavigationBar from './pages/NavigationBar';
