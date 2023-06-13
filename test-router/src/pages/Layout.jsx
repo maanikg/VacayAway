@@ -4,7 +4,7 @@ const Layout = () => {
     return (
         <>
             <div>hi</div>
-            <nav>
+            {/* <nav>
                 <ul>
                     <li>
                         <Link to="/">HomeScreen</Link>
@@ -19,7 +19,7 @@ const Layout = () => {
                         <Link to="/plan">Plan</Link>
                     </li>
                 </ul>
-            </nav>
+            </nav> */}
 
             <Outlet />
         </>
