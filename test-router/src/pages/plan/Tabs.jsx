@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import myImage from "./541316.jpg"
-import { Button } from 'bootstrap';
 const Tabs = () => {
 
     const [currentTab, setCurrentTab] = useState('1');
@@ -119,7 +118,6 @@ const Tabs = () => {
                                     >
                                         <img src={myImage} alt="my image" width='500vh' />
                                     </button>
-                                    <Button variant="primary">Primary</Button>{' '}
                                 </div>
                             </div>}
                     </div>
