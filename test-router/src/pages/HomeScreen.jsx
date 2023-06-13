@@ -1,15 +1,15 @@
-import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
+import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
 import {
     AuthErrorCodes,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     onAuthStateChanged,
     signOut,
-    getAuth
+    /*getAuth*/
 } from "firebase/auth";
 import { auth } from "./firebase.js"
 
-import { useState, useRef, useEffect } from "react";
+import { useState,/* useRef,*/ useEffect } from "react";
 
 export default function HomeScreen() {
     const [email, setEmail] = useState("");
@@ -67,36 +67,36 @@ export default function HomeScreen() {
         }
     }
 
-    const monitorAuthState = async () => {
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                // const tempLoggedIn = true
-                setLoggedIn(true)
-                console.log(user)
-                // loggedIn.current = true
-                setPasswordVerify("")
-                setPasswordInput("")
-                setEmail("")
-                setOutputMessage("")
-                if (prompt === "trips") {
-                    navigate('/trips')
-                }
-                // setOutputMessage("Welcome " + user.displayName + "!")
-            } else {
+    // const monitorAuthState = async () => {
+    //     onAuthStateChanged(auth, user => {
+    //         if (user) {
+    //             // const tempLoggedIn = true
+    //             setLoggedIn(true)
+    //             console.log(user)
+    //             // loggedIn.current = true
+    //             setPasswordVerify("")
+    //             setPasswordInput("")
+    //             setEmail("")
+    //             setOutputMessage("")
+    //             if (prompt === "trips") {
+    //                 navigate('/trips')
+    //             }
+    //             // setOutputMessage("Welcome " + user.displayName + "!")
+    //         } else {
 
-                // const tempLoggedIn = false
-                // alert("logged out")
-                // console.log("logged out")
-                // loggedIn.current = false
-                setLoggedIn(false)
-                // setLoggedIn(tempLoggedIn)
-                setPasswordVerify("")
-                setPasswordInput("")
-                setEmail("")
-                setOutputMessage("")
-            }
-        })
-    }
+    //             // const tempLoggedIn = false
+    //             // alert("logged out")
+    //             // console.log("logged out")
+    //             // loggedIn.current = false
+    //             setLoggedIn(false)
+    //             // setLoggedIn(tempLoggedIn)
+    //             setPasswordVerify("")
+    //             setPasswordInput("")
+    //             setEmail("")
+    //             setOutputMessage("")
+    //         }
+    //     })
+    // }
 
     const logout = async () => {
         // alert(auth.currentUser.email)
@@ -125,10 +125,40 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+        const monitorAuthState = async () => {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    // const tempLoggedIn = true
+                    setLoggedIn(true)
+                    console.log(user)
+                    // loggedIn.current = true
+                    setPasswordVerify("")
+                    setPasswordInput("")
+                    setEmail("")
+                    setOutputMessage("")
+                    if (prompt === "trips") {
+                        navigate('/trips')
+                    }
+                    // setOutputMessage("Welcome " + user.displayName + "!")
+                } else {
+    
+                    // const tempLoggedIn = false
+                    // alert("logged out")
+                    // console.log("logged out")
+                    // loggedIn.current = false
+                    setLoggedIn(false)
+                    // setLoggedIn(tempLoggedIn)
+                    setPasswordVerify("")
+                    setPasswordInput("")
+                    setEmail("")
+                    setOutputMessage("")
+                }
+            })
+        }
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
         monitorAuthState();
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
-    }, []);
+    },[navigate, prompt]);
     // monitorAuthState()
     return (
 
