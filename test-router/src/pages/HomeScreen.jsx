@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase.js"
 
-import { useState, /*useRef, useEffect*/ } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function HomeScreen() {
     const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ export default function HomeScreen() {
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
     const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
+    // const loggedIn = useRef(auth.currentUser !== null);
     const [promptLoginTrue, setPromptLoginTrue] = useState(false);
     const [prompt, setPrompt] = useState("");
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
@@ -38,7 +39,7 @@ export default function HomeScreen() {
             const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
             console.log(userCredential.user)
             setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
-            monitorAuthState()
+            // monitorAuthState()
         } catch (error) {
             console.log(error)
             showLoginError(error)
@@ -58,7 +59,7 @@ export default function HomeScreen() {
                 alert("created new account! Welcome " +
                     userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
                 + "!")
-                monitorAuthState()
+                // monitorAuthState()
             } catch (error) {
                 console.log(error)
                 showLoginError(error)
@@ -69,7 +70,10 @@ export default function HomeScreen() {
     const monitorAuthState = async () => {
         onAuthStateChanged(auth, user => {
             if (user) {
+                // const tempLoggedIn = true
                 setLoggedIn(true)
+                console.log(user)
+                // loggedIn.current = true
                 setPasswordVerify("")
                 setPasswordInput("")
                 setEmail("")
@@ -79,8 +83,13 @@ export default function HomeScreen() {
                 }
                 // setOutputMessage("Welcome " + user.displayName + "!")
             } else {
-                alert("logged out")
+
+                // const tempLoggedIn = false
+                // alert("logged out")
+                // console.log("logged out")
+                // loggedIn.current = false
                 setLoggedIn(false)
+                // setLoggedIn(tempLoggedIn)
                 setPasswordVerify("")
                 setPasswordInput("")
                 setEmail("")
@@ -90,7 +99,10 @@ export default function HomeScreen() {
     }
 
     const logout = async () => {
+        // alert(auth.currentUser.email)
         await signOut(auth)
+        // alert(auth.currentUser)
+        // monitorAuthState()
     }
 
     function switchAuth() {
@@ -107,16 +119,26 @@ export default function HomeScreen() {
     }
     //pass in paramater into function
     function promptLogin() {
-        // alert("Please log in to view your trips")
         setPromptLoginTrue(!promptLoginTrue)
         setPrompt("trips")
         setPromptMessage("Please log in to view your trips")
     }
 
+    useEffect(() => {
+        // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
+        monitorAuthState();
+        // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
+    }, []);
+    // monitorAuthState()
     return (
+
+
+        // { monitorAuthState() }
         <div>
             <div style={{ display: promptLoginTrue ? "none" : null }}>
                 {/* <h1>HomeScreen!</h1> */}
+                {/* <h1 style={{ backgroundColor: 'green' }}>{(auth.currentUser!==null).toString()}</h1> */}
+                {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()}</h1> */}
                 <h1 style={{ backgroundColor: 'green' }}>Title</h1>
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
                 <div>
