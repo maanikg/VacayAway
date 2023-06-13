@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
 import './css/App.css'
 import Trips from './pages/Trips';
-import Plan from './pages/Plan';
+import Plan from './pages/plan/Plan';
 // import AuthPage from './pages/AuthPage';
 
 export default function App() {
