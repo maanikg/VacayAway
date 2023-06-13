@@ -5,6 +5,7 @@ import {
     createUserWithEmailAndPassword,
     onAuthStateChanged,
     signOut,
+    sendEmailVerification
     /*getAuth*/
 } from "firebase/auth";
 import { auth } from "./firebase.js"
@@ -52,6 +53,9 @@ export default function HomeScreen() {
         } else {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, passwordInput)
+                // sendEmailVerification(auth.currentUser)
+                //     .then(() => {
+                //     })
                 console.log(userCredential.user)
                 setOutputMessage("created new account! Welcome " +
                     userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName

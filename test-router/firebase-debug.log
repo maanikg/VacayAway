@@ -1000,3 +1000,5 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[info] i  To verify the email address test1234@mail.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=JWC3TcetkLKpCxsA3ca4MpqvY1oIhURHc1L1CnqVx_udqzBFchvdjb&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address test1234@mail.test, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=JWC3TcetkLKpCxsA3ca4MpqvY1oIhURHc1L1CnqVx_udqzBFchvdjb&apiKey=fake-api-key"}}
+[info] i  To verify the email address gognamaanik@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=yhL_pmvhrqDMJLTejyBoP18ZvBhqHuW0W0ZI4jT-rp6oKQxS9qCDsg&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address gognamaanik@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=yhL_pmvhrqDMJLTejyBoP18ZvBhqHuW0W0ZI4jT-rp6oKQxS9qCDsg&apiKey=fake-api-key"}}
