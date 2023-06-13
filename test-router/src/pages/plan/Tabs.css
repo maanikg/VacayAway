@@ -1,8 +1,9 @@
-/* * {
-    margin: 0;
+* {
+    /* margin: 0;
     padding: 0;
-    box-sizing: border-box;
-} */
+    box-sizing: border-box; */
+    /* background-color: #000000; */
+}
 
 /* body {
     background-color: black;
@@ -46,8 +47,8 @@
 }
 
 .tabs button:hover {
-    color: rgb(255, 0, 0);
-    background-color: rgba(229, 22, 22, 0.15);
+    color: rgb(0, 60, 255);
+    background-color: rgba(22, 146, 229, 0.705);
 }
 
 .tabs button:disabled {
