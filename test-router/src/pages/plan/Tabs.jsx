@@ -33,7 +33,7 @@ const Tabs = () => {
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
-
+    const widthChange = "50%"
     return (
         <div className='container'
         // style={{ height: '20vh' }}
@@ -60,7 +60,10 @@ const Tabs = () => {
                             <div >
                                 <p className='title'>{tab.title}</p>
                                 <p /*style={{background:"orange"}}*/>{tab.content}</p>
-                                <div style={{ display: 'flex' }}>
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                }}>
                                     <button
                                         // style={{
                                         //     /*borderColor: 'transparent'*/
@@ -72,7 +75,28 @@ const Tabs = () => {
                                         //     //     // borderColor: 'transparent',
                                         //     // }
                                         // }}
-                                        style={{ flex: '0 1 50%' }}
+                                        // style={{ flex: '0 1 50%' }}
+                                        style={{
+                                            flex: '50%',
+                                            width: widthChange
+                                            // width: "100%"
+                                        }}
+                                        onClick={() => {
+                                            console.log('click')
+                                        }}
+
+                                    >
+                                        <img src={myImage} alt="my image"
+                                            width='500vh'
+
+                                        />
+                                    </button>
+                                    <button
+                                        // style={{ flex: '0 1 50%' }}
+                                        style={{
+                                            flex: '50%',
+                                            width: widthChange
+                                        }}
                                         onClick={() => {
                                             console.log('click')
                                         }}
@@ -81,42 +105,30 @@ const Tabs = () => {
                                         <img src={myImage} alt="my image" width='500vh' />
                                     </button>
                                     <button
-                                        style={{ flex: '0 1 50%' }}
-                                        // style={{
-                                        //     /*borderColor: 'transparent'*/
-                                        //     backgroundColor: 'white',
-                                        //     borderRadius: 0,
-                                        //     // borderColor: 'transparent',
-                                        //     // hover: {
-                                        //     //     backgroundColor: 'black',
-                                        //     //     // borderColor: 'transparent',
-                                        //     // }
-                                        // }}
+                                        // style={{ flex: '0 1 50%' }}
+                                        style={{
+                                            flex: '50%',
+                                            width: widthChange
+                                        }}
                                         onClick={() => {
                                             console.log('click')
                                         }}
-
                                     >
-                                        <img src={myImage} alt="my image" width='500vh' />
+                                        <img src={"https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"} alt="my image" width='500vh' />
+                                        {/* <img src={"http://www.google.com/search?q=budapest&tbm=isch"} alt="my image" width='500vh' /> */}
                                     </button>
                                     <button
-                                        style={{ flex: '0 1 50%' }}
-                                        // style={{
-                                        //     /*borderColor: 'transparent'*/
-                                        //     backgroundColor: 'white',
-                                        //     borderRadius: 0,
-                                        //     // borderColor: 'transparent',
-                                        //     // hover: {
-                                        //     //     backgroundColor: 'black',
-                                        //     //     // borderColor: 'transparent',
-                                        //     // }
-                                        // }}
+                                        // style={{ flex: '0 1 50%' }}
+                                        style={{
+                                            flex: '50%',
+                                            width: widthChange
+                                        }}
                                         onClick={() => {
                                             console.log('click')
                                         }}
-
                                     >
-                                        <img src={myImage} alt="my image" width='500vh' />
+                                        <img src={"https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"} alt="my image" width='500vh' />
+                                        {/* <img src={"http://www.google.com/search?q=budapest&tbm=isch"} alt="my image" width='500vh' /> */}
                                     </button>
                                 </div>
                             </div>}
