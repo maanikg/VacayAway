@@ -3,6 +3,7 @@ import myImage from "./541316.jpg"
 const Tabs = () => {
 
     const [currentTab, setCurrentTab] = useState('1');
+    // const [hoveredCity, setHoveredCity] = useState(null);
     const tabs = [
         {
             id: 1,
@@ -159,9 +160,15 @@ const Tabs = () => {
     const widthChange = "50%"
     return (
         <div className='container'
+            // display='flex'
+            width='100%'
+        // width={widthChange}
         // style={{ height: '20vh' }}
         >
-            <div className='tabs'>
+            <div className='tabs'
+            // style={{ display: 'flex', justifyContent: 'space-between' }}
+            >
+
                 {tabs.map((tab, i) =>
                     <button
                         key={i}
@@ -177,6 +184,7 @@ const Tabs = () => {
                 // display: 'flex',
                 //NOTE: THIS CONTROLS HEIGHT OF CONTENT
                 height: '40vh',
+                // width: '100%',
                 overflowY: 'scroll',
                 // overflowX: 'scroll',
             }} >
@@ -190,9 +198,10 @@ const Tabs = () => {
                                     <div style={{
                                         display: 'flex',
                                         flexWrap: 'wrap',
+
                                         // flex: '50%'
                                         alignItems: 'center',
-                                        // justifyContent: 'flex-start',
+                                        // justifyContent: 'center',
                                         // flexWrap: 'wrap',
                                     }}>
                                         {sampleCities.map((city, j) =>
@@ -200,13 +209,18 @@ const Tabs = () => {
                                                 <button
                                                     style={{
                                                         flex: '10%',
-
+                                                        // flexGrow: '1',
                                                         // width: widthChange
                                                     }}
+
+                                                // onMouseEnter={
+                                                //     () => setHoveredCity(city.city)
+                                                // }
                                                 >
                                                     <img src={city.url} alt={city.city + city.country}
                                                         width='300vh'
                                                     />
+                                                    {/* <text>{city.city}</text> */}
                                                 </button>
                                                 {/* <h1>hi</h1> */}
                                             </div>
