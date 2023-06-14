@@ -224,7 +224,7 @@ const Tabs = () => {
                                                         <img src={city.url} alt={city.city + city.country}
                                                             width='300vh'
                                                         />
-                                                        {/* <text>{city.city}</text> */}
+                                                        {/* <p>{city.city}</p> */}
 
                                                     </button>
                                                     {/* <h1>hi</h1> */}

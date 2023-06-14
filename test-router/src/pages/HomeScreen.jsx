@@ -145,7 +145,7 @@ export default function HomeScreen() {
                     }
                     // setOutputMessage("Welcome " + user.displayName + "!")
                 } else {
-    
+
                     // const tempLoggedIn = false
                     // alert("logged out")
                     // console.log("logged out")
@@ -162,7 +162,7 @@ export default function HomeScreen() {
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
         monitorAuthState();
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
-    },[navigate, prompt]);
+    }, [navigate, prompt]);
     // monitorAuthState()
     return (
 
@@ -195,7 +195,7 @@ export default function HomeScreen() {
                 {!loggedIn ?
                     <>
                         <div>
-                            <text>{promptMessage}</text>
+                            <p>{promptMessage}</p>
                         </div>
                         <div style={{ display: 'flex' }}>
                             <input
@@ -231,7 +231,7 @@ export default function HomeScreen() {
                             <div>{outputMessage}</div>
                         </div>
                         <div>
-                            <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
+                            <p style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</p>
                         </div>
                         <button onClick={() =>
                             setPromptLoginTrue(!promptLoginTrue)
