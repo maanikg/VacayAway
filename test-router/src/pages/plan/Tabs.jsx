@@ -159,79 +159,85 @@ const Tabs = () => {
     }
     const widthChange = "50%"
     return (
-        <div className='container'
+        <>
+            {/* <h1 style={{ background: "green" }}>hi</h1> */}
+            <div className='container'
+            // style={{ background: 'red' }}
+            //WIDTH SET IN CSS
             // display='flex'
-            width='100%'
-        // width={widthChange}
-        // style={{ height: '20vh' }}
-        >
-            <div className='tabs'
-            // style={{ display: 'flex', justifyContent: 'space-between' }}
+            // style={{ height: '20vh' }}
             >
+                <div className='tabs'
+                // style={{ background: 'blue' }}
+                // style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
 
-                {tabs.map((tab, i) =>
-                    <button
-                        key={i}
-                        id={tab.id}
-                        disabled={currentTab === `${tab.id}`}
-                        onClick={(handleTabClick)}>{tab.tabTitle}</button>
-                )}
+                    {tabs.map((tab, i) =>
+                        <button
+                            key={i}
+                            id={tab.id}
+                            disabled={currentTab === `${tab.id}`}
+                            onClick={(handleTabClick)}>{tab.tabTitle}</button>
+                    )}
+                </div>
+                <div className='content' style={{
+                    // background: "blue",
+                    border: '1px solid rgb(0, 0, 0)',
+                    // style: 'flex',
+                    // display: 'flex',
+                    //NOTE: THIS CONTROLS HEIGHT OF CONTENT
+                    height: '40vh',
+                    // width: '100%',
+                    overflowY: 'scroll',
+                    // overflowX: 'scroll',
+                }} >
+                    {tabs.map((tab, i) =>
+                        <div key={i} >
+                            {currentTab === `${tab.id}` &&
+                                <div >
+                                    <p className='title'>{tab.title}</p>
+                                    <p /*style={{background:"orange"}}*/>{tab.content}</p>
+                                    {currentTab === '1' &&
+                                        <div style={{
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+
+                                            // flex: '50%'
+                                            alignItems: 'center',
+                                            // justifyContent: 'center',
+                                            // flexWrap: 'wrap',
+                                        }}>
+                                            {sampleCities.map((city, j) =>
+                                                <div key={j}>
+                                                    <button
+                                                        style={{
+                                                            flex: '10%',
+                                                            // flexGrow: '1',
+                                                            // width: widthChange
+                                                        }}
+                                                        onClick={() => console.log(city.city)}
+
+                                                    // onMouseEnter={
+                                                    //     () => setHoveredCity(city.city)
+                                                    // }
+                                                    >
+                                                        <img src={city.url} alt={city.city + city.country}
+                                                            width='300vh'
+                                                        />
+                                                        {/* <text>{city.city}</text> */}
+
+                                                    </button>
+                                                    {/* <h1>hi</h1> */}
+                                                </div>
+                                            )}
+                                        </div>
+                                    }
+                                </div>}
+                        </div>
+                    )}
+                </div>
             </div>
-            <div className='content' style={{
-                // background: "blue",
-                border: '1px solid rgb(0, 0, 0)',
-                // style: 'flex',
-                // display: 'flex',
-                //NOTE: THIS CONTROLS HEIGHT OF CONTENT
-                height: '40vh',
-                // width: '100%',
-                overflowY: 'scroll',
-                // overflowX: 'scroll',
-            }} >
-                {tabs.map((tab, i) =>
-                    <div key={i} >
-                        {currentTab === `${tab.id}` &&
-                            <div >
-                                <p className='title'>{tab.title}</p>
-                                <p /*style={{background:"orange"}}*/>{tab.content}</p>
-                                {currentTab === '1' &&
-                                    <div style={{
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-
-                                        // flex: '50%'
-                                        alignItems: 'center',
-                                        // justifyContent: 'center',
-                                        // flexWrap: 'wrap',
-                                    }}>
-                                        {sampleCities.map((city, j) =>
-                                            <div key={j}>
-                                                <button
-                                                    style={{
-                                                        flex: '10%',
-                                                        // flexGrow: '1',
-                                                        // width: widthChange
-                                                    }}
-
-                                                // onMouseEnter={
-                                                //     () => setHoveredCity(city.city)
-                                                // }
-                                                >
-                                                    <img src={city.url} alt={city.city + city.country}
-                                                        width='300vh'
-                                                    />
-                                                    {/* <text>{city.city}</text> */}
-                                                </button>
-                                                {/* <h1>hi</h1> */}
-                                            </div>
-                                        )}
-                                    </div>
-                                }
-                            </div>}
-                    </div>
-                )}
-            </div>
-        </div>
+        </>
     );
 }
 
