@@ -29,7 +29,7 @@ const Tabs = () => {
         //     content: 'Contenido de tab 4.'
         // }
     ];
-    const sampleCitiesURLs = [
+    const sampleCities = [
         {
             city: "Budapest",
             country: "Hungary",
@@ -46,7 +46,7 @@ const Tabs = () => {
             city: "Paris",
             country: "France",
             locationID: "187147",
-            url: "https://media-cdn.tripadvisor.com/media/photo-s/02/57/44/0c/filename-img-1097-jpg.jpg"
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/c2/86/0e/caption.jpg"
         },
         {
             city: "Rome",
@@ -173,9 +173,12 @@ const Tabs = () => {
             <div className='content' style={{
                 // background: "blue",
                 border: '1px solid rgb(0, 0, 0)',
-                height: '20vh',
+                // style: 'flex',
+                // display: 'flex',
+                //NOTE: THIS CONTROLS HEIGHT OF CONTENT
+                height: '40vh',
                 overflowY: 'scroll',
-                overflowX: 'scroll'
+                // overflowX: 'scroll',
             }} >
                 {tabs.map((tab, i) =>
                     <div key={i} >
@@ -183,77 +186,33 @@ const Tabs = () => {
                             <div >
                                 <p className='title'>{tab.title}</p>
                                 <p /*style={{background:"orange"}}*/>{tab.content}</p>
-                                <div style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                }}>
-                                    <button
-                                        // style={{
-                                        //     /*borderColor: 'transparent'*/
-                                        //     backgroundColor: 'white',
-                                        //     borderRadius: 0,
-                                        //     // borderColor: 'transparent',
-                                        //     // hover: {
-                                        //     //     backgroundColor: 'black',
-                                        //     //     // borderColor: 'transparent',
-                                        //     // }
-                                        // }}
-                                        // style={{ flex: '0 1 50%' }}
-                                        style={{
-                                            flex: '50%',
-                                            width: widthChange
-                                            // width: "100%"
-                                        }}
-                                        onClick={() => {
-                                            console.log('click')
-                                        }}
+                                {currentTab === '1' &&
+                                    <div style={{
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        // flex: '50%'
+                                        alignItems: 'center',
+                                        // justifyContent: 'flex-start',
+                                        // flexWrap: 'wrap',
+                                    }}>
+                                        {sampleCities.map((city, j) =>
+                                            <div key={j}>
+                                                <button
+                                                    style={{
+                                                        flex: '10%',
 
-                                    >
-                                        <img src={myImage} alt="my image"
-                                            width='500vh'
-
-                                        />
-                                    </button>
-                                    <button
-                                        // style={{ flex: '0 1 50%' }}
-                                        style={{
-                                            flex: '50%',
-                                            width: widthChange
-                                        }}
-                                        onClick={() => {
-                                            console.log('click')
-                                        }}
-
-                                    >
-                                        <img src={myImage} alt="my image" width='500vh' />
-                                    </button>
-                                    <button
-                                        // style={{ flex: '0 1 50%' }}
-                                        style={{
-                                            flex: '50%',
-                                            width: widthChange
-                                        }}
-                                        onClick={() => {
-                                            console.log('click')
-                                        }}
-                                    >
-                                        <img src={"https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"} alt="my image" width='500vh' />
-                                        {/* <img src={"http://www.google.com/search?q=budapest&tbm=isch"} alt="my image" width='500vh' /> */}
-                                    </button>
-                                    <button
-                                        // style={{ flex: '0 1 50%' }}
-                                        style={{
-                                            flex: '50%',
-                                            width: widthChange
-                                        }}
-                                        onClick={() => {
-                                            console.log('click')
-                                        }}
-                                    >
-                                        <img src={"https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"} alt="my image" width='500vh' />
-                                        {/* <img src={"http://www.google.com/search?q=budapest&tbm=isch"} alt="my image" width='500vh' /> */}
-                                    </button>
-                                </div>
+                                                        // width: widthChange
+                                                    }}
+                                                >
+                                                    <img src={city.url} alt={city.city + city.country}
+                                                        width='300vh'
+                                                    />
+                                                </button>
+                                                {/* <h1>hi</h1> */}
+                                            </div>
+                                        )}
+                                    </div>
+                                }
                             </div>}
                     </div>
                 )}
