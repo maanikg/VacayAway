@@ -1,8 +1,7 @@
-15:33:10.544 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-15:33:10.684 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-15:33:24.779 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 148ms, init: 0ms
-15:49:56.007 [FirebaseWorkerPool-1-4] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested 
-namespace vacayaway-default-rtdb, but the emulator is configured for vacayaway. To 
-opt-out of single project mode add/set the singleProjectMode: false property in 
-the firebase.json emulators config. 
-15:49:56.048 [NamespaceSystem-akka.actor.default-dispatcher-25] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 9ms, init: 0ms
+17:35:08.910 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+17:35:09.043 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+17:35:23.798 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 180ms, init: 0ms
+17:42:22.313 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+17:42:22.344 [NamespaceSystem-akka.actor.default-dispatcher-13] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: vacayaway
+17:42:22.350 [NamespaceSystem-akka.actor.default-dispatcher-13] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for vacayaway
+17:42:22.354 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { db } from '../firebase';
-import { getDatabase, ref, set, onValue, connectDatabaseEmulator } from "firebase/database";
+// import { db } from '../firebase';
+// import { getDatabase, ref, set, onValue, connectDatabaseEmulator } from "firebase/database";
 
-import { getCityData, writeCityData } from "../firebase";
+// import { getCityData, writeCityData } from "../firebase";
 // import {addDoc, collection, getDocs, query, where} from "firebase/firestore";
 import myImage from "./541316.jpg"
 const Tabs = () => {
@@ -165,19 +165,19 @@ const Tabs = () => {
     }
 
     //loop through sampleCities, add to firebase database
-    function writeCityData(cityName, countryName, locationId, url) {
-        const reference = ref(db, 'places/' + cityName);
-        set(reference, {
-            name: cityName,
-            country: countryName,
-            locationID: locationId,
-            url: url
-        });
-    }
+    // function writeCityData(cityName, countryName, locationId, url) {
+    // const reference = ref(db, 'places/' + cityName);
+    // set(reference, {
+    //     name: cityName,
+    //     country: countryName,
+    //     locationID: locationId,
+    //     url: url
+    // });
+    // }
     // const cityRef = ref(db, 'places/' + cityName + '/country');
-    sampleCities.forEach((city) =>
-        writeCityData(city.city, city.country, city.locationID, city.url)
-    )
+    // sampleCities.forEach((city) =>
+    //     writeCityData(city.city, city.country, city.locationID, city.url)
+    // )
 
 
     const widthChange = "50%"
@@ -241,7 +241,7 @@ const Tabs = () => {
                                                         onClick={
                                                             () => {
                                                                 console.log(city.city)
-                                                                getCityData(city.city)
+                                                                // getCityData(city.city)
                                                                 // console.log(getCityData(city.city))
                                                             }
 
