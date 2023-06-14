@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
+import { db } from '../firebase';
+import { getDatabase, ref, set, onValue, connectDatabaseEmulator } from "firebase/database";
+
+import { getCityData, writeCityData } from "../firebase";
+// import {addDoc, collection, getDocs, query, where} from "firebase/firestore";
 import myImage from "./541316.jpg"
 const Tabs = () => {
+    // getCityData('New York City')
 
     const [currentTab, setCurrentTab] = useState('1');
     // const [hoveredCity, setHoveredCity] = useState(null);
@@ -157,6 +163,23 @@ const Tabs = () => {
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
+
+    //loop through sampleCities, add to firebase database
+    function writeCityData(cityName, countryName, locationId, url) {
+        const reference = ref(db, 'places/' + cityName);
+        set(reference, {
+            name: cityName,
+            country: countryName,
+            locationID: locationId,
+            url: url
+        });
+    }
+    // const cityRef = ref(db, 'places/' + cityName + '/country');
+    sampleCities.forEach((city) =>
+        writeCityData(city.city, city.country, city.locationID, city.url)
+    )
+
+
     const widthChange = "50%"
     return (
         <>
@@ -215,7 +238,14 @@ const Tabs = () => {
                                                             // flexGrow: '1',
                                                             // width: widthChange
                                                         }}
-                                                        onClick={() => console.log(city.city)}
+                                                        onClick={
+                                                            () => {
+                                                                console.log(city.city)
+                                                                getCityData(city.city)
+                                                                // console.log(getCityData(city.city))
+                                                            }
+
+                                                        }
 
                                                     // onMouseEnter={
                                                     //     () => setHoveredCity(city.city)
