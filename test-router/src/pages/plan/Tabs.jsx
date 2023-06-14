@@ -29,6 +29,115 @@ const Tabs = () => {
         //     content: 'Contenido de tab 4.'
         // }
     ];
+    const sampleCitiesURLs = [
+        {
+            city: "Budapest",
+            country: "Hungary",
+            locationID: "274887",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1b/36/37/32/caption.jpg"
+        },
+        {
+            city: "London",
+            country: "United Kingdom",
+            locationID: "186338",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/02/57/44/0c/filename-img-1097-jpg.jpg"
+        },
+        {
+            city: "Paris",
+            country: "France",
+            locationID: "187147",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/02/57/44/0c/filename-img-1097-jpg.jpg"
+        },
+        {
+            city: "Rome",
+            country: "Italy",
+            url: ""
+        },
+        {
+            city: "Barcelona",
+            country: "Spain",
+            url: ""
+        },
+        {
+            city: "Berlin",
+            country: "Germany",
+            url: ""
+        },
+        {
+            city: "Amsterdam",
+            country: "Netherlands",
+            url: ""
+        },
+        {
+            city: "Prague",
+            country: "Czech Republic",
+            url: ""
+        },
+        {
+            city: "Vienna",
+            country: "Austria",
+            url: ""
+        },
+        {
+            city: "Dublin",
+
+            country: "Ireland",
+            url: ""
+        },
+        {
+            city: 'Tokyo',
+            country: 'Japan',
+            url: ''
+
+        },
+        {
+            city: 'Vancouver',
+            country: 'Canada',
+            url: ''
+        },
+        {
+            city: 'New York City',
+            country: 'United States',
+            url: ''
+        },
+        {
+            city: 'Mexico City',
+            country: 'Mexico',
+            url: ''
+
+        },
+        {
+            city: 'Rio de Janeiro',
+
+            country: 'Brazil',
+            url: ''
+        },
+        {
+            city: 'Jerusalem',
+            country: 'Israel',
+            url: ''
+        },
+        {
+            city: 'Cairo',
+            country: 'Egypt',
+            url: ''
+        },
+        {
+            city: 'New Delhi',
+            country: 'India',
+            url: ''
+        },
+        {
+            city: 'Beijing',
+            country: 'China',
+            url: ''
+        },
+        {
+            city: 'Sydney',
+            country: 'Australia',
+            url: ''
+        }
+    ]
 
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
