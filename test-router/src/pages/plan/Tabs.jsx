@@ -51,91 +51,105 @@ const Tabs = () => {
         {
             city: "Rome",
             country: "Italy",
-            url: ""
+            locationID: "187791",
+            url: "https://media-cdn.tripadvisor.com/media/photo-m/1280/1c/c9/6c/08/caption.jpg"
         },
         {
             city: "Barcelona",
             country: "Spain",
-            url: ""
+            locationID: "187497",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/ae/5d/da/caption.jpg"
         },
         {
             city: "Berlin",
             country: "Germany",
-            url: ""
+            locationID: "187323",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1b/33/f5/c6/caption.jpg"
         },
         {
             city: "Amsterdam",
             country: "Netherlands",
-            url: ""
+            locationID: "188590",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/28/74/c9/cf/caption.jpg"
         },
         {
             city: "Prague",
             country: "Czech Republic",
-            url: ""
+            locationID: "274707",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/cc/d0/42/caption.jpg"
         },
         {
             city: "Vienna",
             country: "Austria",
-            url: ""
+            locationID: "190454",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/af/10/b8/caption.jpg"
         },
         {
             city: "Dublin",
-
             country: "Ireland",
-            url: ""
+            locationID: "186605",
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/bf/9e/c4/caption.jpg"
         },
         {
             city: 'Tokyo',
             country: 'Japan',
-            url: ''
-
+            locationID: '298184',
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/27/84/4b/d7/caption.jpg"
         },
         {
             city: 'Vancouver',
             country: 'Canada',
-            url: ''
+            locationID: '154943',
+            url: "https://media-cdn.tripadvisor.com/media/photo-s/1c/cc/d6/65/caption.jpg"
         },
         {
             city: 'New York City',
             country: 'United States',
-            url: ''
+            locationID: '60763',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/1c/c5/7c/68/caption.jpg'
         },
         {
             city: 'Mexico City',
             country: 'Mexico',
-            url: ''
+            locationID: '150800',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/33/f3/96/caption.jpg'
 
         },
         {
             city: 'Rio de Janeiro',
-
             country: 'Brazil',
-            url: ''
+            locationID: '303506',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/1b/33/f4/3d/caption.jpg'
         },
         {
             city: 'Jerusalem',
             country: 'Israel',
-            url: ''
+            locationID: '293983',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/10/24/61/96/western-wall-temple-mount.jpg'
         },
         {
             city: 'Cairo',
             country: 'Egypt',
-            url: ''
+            locationID: '294201',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/03/9b/2f/5b/cairo.jpg'
         },
         {
             city: 'New Delhi',
             country: 'India',
-            url: ''
+            locationID: '304551',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/24/03/3f/fd/caption.jpg'
         },
         {
             city: 'Beijing',
             country: 'China',
-            url: ''
+            locationID: '294212',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/14/10/2d/f1/beijing.jpg'
         },
         {
             city: 'Sydney',
             country: 'Australia',
-            url: ''
+            locationID: '255060',
+            url: 'https://media-cdn.tripadvisor.com/media/photo-s/27/84/4c/88/caption.jpg'
         }
     ]
 
