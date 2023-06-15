@@ -1,39 +1,7 @@
 import React, { useState } from 'react';
 import myImage from "./541316.jpg"
 function Tabs(props) {
-
-    const [currentTab, setCurrentTab] = useState('1');
     // const [hoveredCity, setHoveredCity] = useState(null);
-    const tabs = [
-        {
-            id: 1,
-            tabTitle: 'Destinations',
-            title: 'Plan by Destination',
-            content: 'Curate your plan based on the destination of your choice.'
-        },
-        {
-            id: 2,
-            tabTitle: 'Vacation Type',
-            title: 'Plan by Vacation Type',
-            content: 'Contenido de tab 2.'
-        },
-        {
-            id: 3,
-            tabTitle: 'Budget and Duration',
-            title: 'Plan by Other Options',
-            content: 'Contenido de tab 3.'
-        },
-        // {
-        //     id: 4,
-        //     tabTitle: 'Tab 4',
-        //     title: 'Title 4',
-        //     content: 'Contenido de tab 4.'
-        // }
-    ];
-    const handleTabClick = (e) => {
-        setCurrentTab(e.target.id);
-    }
-
 
     const widthChange = "50%"
     return (
@@ -50,12 +18,12 @@ function Tabs(props) {
                 // style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
 
-                    {tabs.map((tab, i) =>
+                    {props.tabs.map((tab, i) =>
                         <button
                             key={i}
                             id={tab.id}
-                            disabled={currentTab === `${tab.id}`}
-                            onClick={(handleTabClick)}>{tab.tabTitle}</button>
+                            disabled={props.currentTab === `${tab.id}`}
+                            onClick={(props.handleTabClick)}>{tab.tabTitle}</button>
                     )}
                 </div>
                 <div className='content' style={{
@@ -69,13 +37,13 @@ function Tabs(props) {
                     overflowY: 'scroll',
                     // overflowX: 'scroll',
                 }} >
-                    {tabs.map((tab, i) =>
+                    {props.tabs.map((tab, i) =>
                         <div key={i} >
-                            {currentTab === `${tab.id}` &&
+                            {props.currentTab === `${tab.id}` &&
                                 <div >
                                     <p className='title'>{tab.title}</p>
                                     <p /*style={{background:"orange"}}*/>{tab.content}</p>
-                                    {currentTab === '1' &&
+                                    {props.currentTab === '1' &&
                                         <div style={{
                                             display: 'flex',
                                             flexWrap: 'wrap',

@@ -165,11 +165,42 @@ const initialSampleCities = [
         checked: false
     }
 ]
+const tabs = [
+    {
+        id: 1,
+        tabTitle: 'Destinations',
+        title: 'Plan by Destination',
+        content: 'Curate your plan based on the destination of your choice.'
+    },
+    {
+        id: 2,
+        tabTitle: 'Vacation Type',
+        title: 'Plan by Vacation Type',
+        content: 'Contenido de tab 2.'
+    },
+    {
+        id: 3,
+        tabTitle: 'Budget and Duration',
+        title: 'Plan by Other Options',
+        content: 'Contenido de tab 3.'
+    },
+    // {
+    //     id: 4,
+    //     tabTitle: 'Tab 4',
+    //     title: 'Title 4',
+    //     content: 'Contenido de tab 4.'
+    // }
+];
+
 
 export default function Plan() {
     const [anyCheckedCity, setAnyCheckedCity] = useState(false);
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
     const [destArray, setDestArray] = useState([]);
+    const [currentTab, setCurrentTab] = useState('1');
+    const handleTabClick = (e) => {
+        setCurrentTab(e.target.id);
+    }
     const updateCheckedCity = (e) => {
         setAnyCheckedCity(false)
         setDestArray([])
@@ -193,12 +224,16 @@ export default function Plan() {
             <Tabs
                 sampleCities={sampleCities}
                 updateCheckedCity={updateCheckedCity}
+                tabs={tabs}
+                handleTabClick={handleTabClick}
+                currentTab={currentTab}
             />
             <button onClick={() => navigate('/')}>Go Home</button>
             <button
                 style={{
                     display: anyCheckedCity ? "block" : "none",
                 }}
+            // onClick={{}}
             >
                 Proceed
                 {/* {destArray.length > 10 ? "hi" : "bye"} */}
