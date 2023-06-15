@@ -16,6 +16,7 @@ export default function HomeScreen() {
     const [email, setEmail] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [passwordVerify, setPasswordVerify] = useState("");
+    const [passwordVerifyColour, setPasswordVerifyColour] = useState("white");
     const [outputMessage, setOutputMessage] = useState("");
     const [loggingIn, setLoggingIn] = useState(false);
     const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
@@ -145,7 +146,7 @@ export default function HomeScreen() {
                     }
                     // setOutputMessage("Welcome " + user.displayName + "!")
                 } else {
-    
+
                     // const tempLoggedIn = false
                     // alert("logged out")
                     // console.log("logged out")
@@ -162,7 +163,7 @@ export default function HomeScreen() {
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
         monitorAuthState();
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
-    },[navigate, prompt]);
+    }, [navigate, prompt]);
     // monitorAuthState()
     return (
 
@@ -208,20 +209,48 @@ export default function HomeScreen() {
                             />
                             <input
                                 name="passwordInput"
+                                style={{ backgroundColor: passwordVerifyColour }}
                                 type="password"
                                 placeholder="Password"
                                 autoComplete="false"
                                 value={passwordInput}
-                                onChange={e => setPasswordInput(e.target.value)}
+                                onChange={e => {
+                                    setPasswordInput(e.target.value)
+                                    if (!loggingIn) {
+                                        setPasswordVerifyColour("white")
+                                    } else {
+                                        if (!(e.target.value.length > 0 && passwordVerify.length > 0)) {
+                                            setPasswordVerifyColour("white")
+                                        } else if (e.target.value != passwordVerify) {
+                                            setPasswordVerifyColour("red")
+                                        } else {
+                                            setPasswordVerifyColour("green")
+                                        }
+                                    }
+                                }
+                                }
                             />
                             {loggingIn ?
                                 <input
+                                    style={{
+                                        backgroundColor: passwordVerifyColour
+                                    }}
                                     name="passwordVerify"
                                     type="password"
                                     placeholder="Verify Password"
                                     autoComplete="false"
                                     value={passwordVerify}
-                                    onChange={(e) => setPasswordVerify(e.target.value)}
+                                    onChange={(e) => {
+                                        setPasswordVerify(e.target.value)
+                                        if (!(e.target.value.length > 0 && passwordInput.length > 0)) {
+                                            setPasswordVerifyColour("white")
+                                        } else if (e.target.value != passwordInput) {
+                                            setPasswordVerifyColour("red")
+                                        } else {
+                                            setPasswordVerifyColour("green")
+                                        }
+                                    }
+                                    }
                                 />
                                 : null
                             }
