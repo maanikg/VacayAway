@@ -1,8 +1,7 @@
-import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Tabs from "./Tabs";
-// import { anyCheckedCity } from "./Tabs";
-import './tabs.css'
 import { useState } from "react";
+import './tabs.css';
 
 const initialSampleCities = [
     {
@@ -170,19 +169,18 @@ const initialSampleCities = [
 export default function Plan() {
     const [anyCheckedCity, setAnyCheckedCity] = useState(false);
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
+    const [destArray, setDestArray] = useState([]);
     const updateCheckedCity = (e) => {
-        // console.log(e.target)
-        // console.log(city.city)
-        // alert(e.target.id)
         setAnyCheckedCity(false)
+        setDestArray([])
+
         const updatedCities = sampleCities.map((city) => {
             if (city.city === e.target.id || city.city === e.target.alt) {
                 city.checked = !city.checked;
-                if (city.checked) {
-                    setAnyCheckedCity(true)
-                }
-            } else if (city.checked) {
+            }
+            if (city.checked) {
                 setAnyCheckedCity(true)
+                setDestArray(destArray => [...destArray, city])
             }
             return city;
         })
@@ -203,7 +201,26 @@ export default function Plan() {
                 }}
             >
                 Proceed
+                {/* {destArray.length > 10 ? "hi" : "bye"} */}
+                {/* {anyCheckedCity ? "Proceed" : "Please select a city"} */}
             </button>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}
+            >
+
+                {destArray.map((city, i) => {
+                    return (
+                        <div
+                            key={i}
+                        >
+                            <p>{" " + city.city + " "}</p>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
     )
 }
