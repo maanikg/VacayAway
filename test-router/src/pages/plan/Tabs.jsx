@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import myImage from "./541316.jpg"
-function Tabs(props) {
+function InitialSelectCriteriaTabs(props) {
     // const [hoveredCity, setHoveredCity] = useState(null);
 
     const widthChange = "50%"
@@ -105,4 +105,4 @@ function Tabs(props) {
     );
 }
 
-export default Tabs;
+export default InitialSelectCriteriaTabs;

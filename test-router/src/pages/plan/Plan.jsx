@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Tabs from "./Tabs";
+import InitialSelectCriteriaTabs from "./Tabs";
 import { useState } from "react";
 import './tabs.css';
 
@@ -192,7 +192,6 @@ const tabs = [
     // }
 ];
 
-
 export default function Plan() {
     const [anyCheckedCity, setAnyCheckedCity] = useState(false);
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
@@ -230,7 +229,7 @@ export default function Plan() {
     return (
         <div >
             <h1 style={{ background: "lightblue" }}>Plan</h1>
-            <Tabs
+            <InitialSelectCriteriaTabs
                 display={destinationSelected ? "none" : "block"}
                 sampleCities={sampleCities}
                 updateCheckedCity={updateCheckedCity}
