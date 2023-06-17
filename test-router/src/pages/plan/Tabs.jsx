@@ -5,7 +5,11 @@ function Tabs(props) {
 
     const widthChange = "50%"
     return (
-        <>
+        <div
+            // display={props.display}
+            style={{ display: props.display }}
+        // display='none'
+        >
             {/* <h1 style={{ background: "green" }}>hi</h1> */}
             <div className='container'
             // style={{ background: 'red' }}
@@ -68,12 +72,6 @@ function Tabs(props) {
                                                     onClick={
                                                         props.updateCheckedCity
                                                     }
-                                                // {() => {
-                                                // console.log(city.city)
-                                                // updateCheckedCity
-                                                // city.checked = !city.checked
-                                                // }
-                                                // }
 
                                                 // onMouseEnter={
                                                 //     () => setHoveredCity(city.city)
@@ -103,7 +101,7 @@ function Tabs(props) {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

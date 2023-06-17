@@ -198,6 +198,7 @@ export default function Plan() {
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
     const [destArray, setDestArray] = useState([]);
     const [currentTab, setCurrentTab] = useState('1');
+    const [destinationSelected, setDestinationSelected] = useState(false);
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
@@ -217,11 +218,20 @@ export default function Plan() {
         })
         setSampleCities(updatedCities);
     }
+
+    const proceed = () => {
+        setDestinationSelected(!destinationSelected)
+    }
+    // function destinationSelected() {
+
+    // }
+
     const navigate = useNavigate();
     return (
         <div >
             <h1 style={{ background: "lightblue" }}>Plan</h1>
             <Tabs
+                display={destinationSelected ? "none" : "block"}
                 sampleCities={sampleCities}
                 updateCheckedCity={updateCheckedCity}
                 tabs={tabs}
@@ -233,11 +243,12 @@ export default function Plan() {
                 style={{
                     display: anyCheckedCity ? "block" : "none",
                 }}
-            // onClick={{}}
+                onClick={
+                    proceed
+                }
             >
-                Proceed
-                {/* {destArray.length > 10 ? "hi" : "bye"} */}
-                {/* {anyCheckedCity ? "Proceed" : "Please select a city"} */}
+                {!destinationSelected ? "Proceed" : "Go back to select a destination"}
+                {/* Proceed */}
             </button>
             <div
                 style={{
@@ -245,13 +256,14 @@ export default function Plan() {
                     justifyContent: "space-between"
                 }}
             >
-
                 {destArray.map((city, i) => {
                     return (
                         <div
                             key={i}
                         >
-                            <p>{" " + city.city + " "}</p>
+                            <p>
+                                {" " + city.city + " "}
+                            </p>
                         </div>
                     )
                 })}
