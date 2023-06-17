@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import InitialSelectCriteriaTabs from "./Tabs";
+import InitialSelectCriteriaTabs from "./InitialSelectCriteraTabs";
 import { useState } from "react";
 import './tabs.css';
+import DestinationSelectedScreen from "./DestinationSelectedScreen";
 
 const initialSampleCities = [
     {
@@ -198,6 +199,7 @@ export default function Plan() {
     const [destArray, setDestArray] = useState([]);
     const [currentTab, setCurrentTab] = useState('1');
     const [destinationSelected, setDestinationSelected] = useState(false);
+    const [departureDate, setDepartureDate] = useState(new Date());
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
@@ -237,6 +239,10 @@ export default function Plan() {
                 handleTabClick={handleTabClick}
                 currentTab={currentTab}
             />
+            <DestinationSelectedScreen
+                display={!destinationSelected ? "none" : "block"}
+                destArray={destArray}
+            />
             <button onClick={() => navigate('/')}>Go Home</button>
             <button
                 style={{
@@ -255,7 +261,7 @@ export default function Plan() {
                     justifyContent: "space-between"
                 }}
             >
-                {destArray.map((city, i) => {
+                {!destinationSelected && destArray.map((city, i) => {
                     return (
                         <div
                             key={i}
