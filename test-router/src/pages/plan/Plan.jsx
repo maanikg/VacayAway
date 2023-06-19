@@ -198,7 +198,7 @@ export default function Plan() {
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
     const [destArray, setDestArray] = useState([]);
     const [currentTab, setCurrentTab] = useState('1');
-    const [destinationSelected, setDestinationSelected] = useState(false);
+    // const [destinationSelected, setDestinationSelected] = useState(false);
     const [departureDate, setDepartureDate] = useState(new Date());
     const [returnDate, setReturnDate] = useState(new Date());
     const [datesValid, setDatesValid] = useState(false);
@@ -239,7 +239,7 @@ export default function Plan() {
             <h1 style={{ background: "lightblue" }}>Plan</h1>
             <InitialSelectCriteriaTabs
                 // display={destinationSelected ? "none" : "block"}
-                display={currentScreen == 0 ? "block" : "none"}
+                display={currentScreen === 0 ? "block" : "none"}
                 currentScreen={currentScreen}
                 setCurrentScreen={setCurrentScreen}
                 sampleCities={sampleCities}
@@ -250,7 +250,7 @@ export default function Plan() {
             />
             <DestinationSelectedScreen
                 // display={!destinationSelected ? "none" : "block"}
-                display={currentScreen == 1 ? "block" : "none"}
+                display={currentScreen === 1 ? "block" : "none"}
                 currentScreen={currentScreen}
                 setCurrentScreen={setCurrentScreen}
                 destArray={destArray}
@@ -266,21 +266,21 @@ export default function Plan() {
                 style={{
                     // display: (currentScreen == 0 && anyCheckedCity && "block" ? "block" : "none")
                     display: (
-                        (currentScreen == 0 && ((anyCheckedCity && "block") || (!anyCheckedCity && "none"))) ||
-                        (currentScreen == 1 && (datesValid && "block") || (!datesValid && "none"))
+                        (currentScreen === 0 && ((anyCheckedCity && "block") || (!anyCheckedCity && "none"))) ||
+                        (currentScreen === 1 && ((datesValid && "block") || (!datesValid && "none")))
                     )
                 }}
                 onClick={proceed}
             >
                 {
-                    (currentScreen == 0 && "Proceed to select dates") ||
-                    (currentScreen == 1 && datesValid && "Proceed to generate trip")
+                    (currentScreen === 0 && "Proceed to select dates") ||
+                    (currentScreen === 1 && datesValid && "Proceed to generate trip")
                 }
             </button>
             <button
                 style={{
                     display: (
-                        currentScreen == 0 ? "none" : "block"
+                        currentScreen === 0 ? "none" : "block"
                     )
                 }}
                 onClick={goBack}
@@ -295,7 +295,7 @@ export default function Plan() {
                 }}
             >
                 {/* {!destinationSelected && destArray.map((city, i) => { */}
-                {currentScreen == 0 && destArray.map((city, i) => {
+                {currentScreen === 0 && destArray.map((city, i) => {
                     return (
                         <div
                             key={i}
