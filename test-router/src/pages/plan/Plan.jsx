@@ -200,6 +200,7 @@ export default function Plan() {
     const [currentTab, setCurrentTab] = useState('1');
     const [destinationSelected, setDestinationSelected] = useState(false);
     const [departureDate, setDepartureDate] = useState(new Date());
+    const [returnDate, setReturnDate] = useState(new Date());
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
@@ -219,6 +220,7 @@ export default function Plan() {
         })
         setSampleCities(updatedCities);
     }
+
 
     const proceed = () => {
         setDestinationSelected(!destinationSelected)
@@ -242,6 +244,10 @@ export default function Plan() {
             <DestinationSelectedScreen
                 display={!destinationSelected ? "none" : "block"}
                 destArray={destArray}
+                departureDate={departureDate}
+                setDepartureDate={setDepartureDate}
+                returnDate={returnDate}
+                setReturnDate={setReturnDate}
             />
             <button onClick={() => navigate('/')}>Go Home</button>
             <button
