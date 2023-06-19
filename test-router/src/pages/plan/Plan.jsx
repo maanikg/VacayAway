@@ -301,22 +301,11 @@ export default function Plan() {
                 datesValid={datesValid}
                 setDatesValid={setDatesValid}
             />
-            <button onClick={() => navigate('/')}>Go Home</button>
-            <button
-                style={{
-                    // display: (currentScreen == 0 && anyCheckedCity && "block" ? "block" : "none")
-                    display: (
-                        (currentScreen === 0 && ((anyCheckedCity && "block") || (!anyCheckedCity && "none"))) ||
-                        (currentScreen === 1 && ((datesValid && "block") || (!datesValid && "none")))
-                    )
-                }}
-                onClick={proceed}
-            >
-                {
-                    (currentScreen === 0 && "Proceed to select dates") ||
-                    (currentScreen === 1 && datesValid && "Proceed to generate trip")
-                }
-            </button>
+            <button onClick={() => {
+                setDestArray([])
+                navigate('/')
+            }
+            }>Go Home</button>
             <button
                 style={{
                     display: (
@@ -327,13 +316,29 @@ export default function Plan() {
             >
                 Go back to previous page
             </button>
+            <button
+                style={{
+                    // display: (currentScreen == 0 && anyCheckedCity && "block" ? "block" : "none")
+                    display: (
+                        (currentScreen === 0 && ((anyCheckedCity && "block") || (!anyCheckedCity && "none"))) ||
+                        (currentScreen === 1 && ((datesValid && "block") || (!datesValid && "none"))) ||
+                        (currentScreen === 2 && "none")
+                    )
+                }}
+                onClick={proceed}
+            >
+                {
+                    (currentScreen === 0 && "Proceed to select dates") ||
+                    (currentScreen === 1 && datesValid && "Proceed to generate trip")
+                }
+            </button>
 
             <div
                 style={{
                     display: "flex",
                     justifyContent: "space-between"
                 }}
-             >
+            >
                 {/* {!destinationSelected && destArray.map((city, i) => { */}
                 {currentScreen === 0 && destArray.map((city, i) => {
                     return (

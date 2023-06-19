@@ -64,15 +64,6 @@ export default function DestinationSelectedScreen(props) {
             }}
         >
             <div style={{ backgroundColor: "lightblue" }}>
-                <p>
-                    {props.departureDate.toString()}
-                </p>
-                <p>
-                    {Date(Date.now())}
-                </p>
-                <p>
-                    {props.datesValid.toString()}
-                </p>
                 <p>You have selected:</p>
                 {
                     props.destArray.map((city) => {
