@@ -2,6 +2,7 @@ import React from "react"
 // import { useState } from "react"
 export default function DestinationSelectedScreen(props) {
     const checkDepartureDate = (e) => {
+        // props.setDatesValid(false)
         const departureDateParts = e.target.value.split("-")
         const departureYear = parseInt(departureDateParts[0])
         const departureMonth = parseInt(departureDateParts[1]) - 1
@@ -30,13 +31,16 @@ export default function DestinationSelectedScreen(props) {
             console.log("Please select a date in the future.")
             //CONFIGURE ALERT
             // alert("Please select a date in the future.")
+            props.setDatesValid(false)
         } else if (returnSelectedDate < props.departureDate) {
             console.log("Please select a date after your departure date.")
             //CONFIGURE ALERT
             // alert("Please select a date after your departure date.")
+            props.setDatesValid(false)
         } else {
             console.log("Return date is valid")
             props.setReturnDate(returnSelectedDate)
+            props.setDatesValid(true)
         }
     }
 
@@ -66,6 +70,9 @@ export default function DestinationSelectedScreen(props) {
                 <p>
                     {Date(Date.now())}
                 </p>
+                <p>
+                    {props.datesValid.toString()}
+                </p>
                 <p>You have selected:</p>
                 {
                     props.destArray.map((city) => {
@@ -77,24 +84,30 @@ export default function DestinationSelectedScreen(props) {
                     })
                 }
             </div>
-            <div
-                style={{ display: "flex" }}
-            >
-                <p>When do you want to go?</p>
-                <input
-                    type="date"
-                    onChange={checkDepartureDate}
-                />
-            </div>
-            <div
-                style={{ display: "flex" }}
-            >
-                <p>When do you want to come back?</p>
-                <input
-                    type="date"
-                    onChange={checkReturnDate}
-                    disabled={disableReturnDate()}
-                />
+            <div>
+                <div
+                    style={{ display: "flex" }}
+                >
+                    <p>When do you want to go?</p>
+                    <input
+                        type="date"
+                        onChange={checkDepartureDate}
+                    />
+                </div>
+                <div
+                    style={{ display: "flex" }}
+                >
+                    <p>When do you want to come back?</p>
+                    <input
+                        type="date"
+                        onChange={checkReturnDate}
+                        disabled={disableReturnDate()}
+                    />
+                </div>
+                {/* <button
+                    style={{ display: props.datesValid ? "block" : "none" }}
+                    // onClick={}
+                >Continue</button> */}
             </div>
         </div >
     )

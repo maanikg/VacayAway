@@ -201,6 +201,8 @@ export default function Plan() {
     const [destinationSelected, setDestinationSelected] = useState(false);
     const [departureDate, setDepartureDate] = useState(new Date());
     const [returnDate, setReturnDate] = useState(new Date());
+    const [datesValid, setDatesValid] = useState(false);
+    const [currentScreen, setCurrentScreen] = useState(0)
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
@@ -223,18 +225,23 @@ export default function Plan() {
 
 
     const proceed = () => {
-        setDestinationSelected(!destinationSelected)
+        // setDestinationSelected(!destinationSelected)
+        setCurrentScreen(currentScreen + 1)
     }
-    // function destinationSelected() {
 
-    // }
+    const goBack = () => {
+        setCurrentScreen(currentScreen - 1)
+    }
 
     const navigate = useNavigate();
     return (
         <div >
             <h1 style={{ background: "lightblue" }}>Plan</h1>
             <InitialSelectCriteriaTabs
-                display={destinationSelected ? "none" : "block"}
+                // display={destinationSelected ? "none" : "block"}
+                display={currentScreen == 0 ? "block" : "none"}
+                currentScreen={currentScreen}
+                setCurrentScreen={setCurrentScreen}
                 sampleCities={sampleCities}
                 updateCheckedCity={updateCheckedCity}
                 tabs={tabs}
@@ -242,32 +249,53 @@ export default function Plan() {
                 currentTab={currentTab}
             />
             <DestinationSelectedScreen
-                display={!destinationSelected ? "none" : "block"}
+                // display={!destinationSelected ? "none" : "block"}
+                display={currentScreen == 1 ? "block" : "none"}
+                currentScreen={currentScreen}
+                setCurrentScreen={setCurrentScreen}
                 destArray={destArray}
                 departureDate={departureDate}
                 setDepartureDate={setDepartureDate}
                 returnDate={returnDate}
                 setReturnDate={setReturnDate}
+                datesValid={datesValid}
+                setDatesValid={setDatesValid}
             />
             <button onClick={() => navigate('/')}>Go Home</button>
             <button
                 style={{
-                    display: anyCheckedCity ? "block" : "none",
+                    // display: (currentScreen == 0 && anyCheckedCity && "block" ? "block" : "none")
+                    display: (
+                        (currentScreen == 0 && ((anyCheckedCity && "block") || (!anyCheckedCity && "none"))) ||
+                        (currentScreen == 1 && (datesValid && "block") || (!datesValid && "none"))
+                    )
                 }}
-                onClick={
-                    proceed
-                }
+                onClick={proceed}
             >
-                {!destinationSelected ? "Proceed" : "Go back to select a destination"}
-                {/* Proceed */}
+                {
+                    (currentScreen == 0 && "Proceed to select dates") ||
+                    (currentScreen == 1 && datesValid && "Proceed to generate trip")
+                }
             </button>
+            <button
+                style={{
+                    display: (
+                        currentScreen == 0 ? "none" : "block"
+                    )
+                }}
+                onClick={goBack}
+            >
+                Go back to previous page
+            </button>
+
             <div
                 style={{
                     display: "flex",
                     justifyContent: "space-between"
                 }}
             >
-                {!destinationSelected && destArray.map((city, i) => {
+                {/* {!destinationSelected && destArray.map((city, i) => { */}
+                {currentScreen == 0 && destArray.map((city, i) => {
                     return (
                         <div
                             key={i}
