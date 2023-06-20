@@ -8,7 +8,9 @@ import {
     sendEmailVerification
     /*getAuth*/
 } from "firebase/auth";
-import { auth } from "./firebase.js"
+import { auth, db } from "./firebase.js"
+import { ref, set, onValue } from "firebase/database";
+// import { GeolocationPosition } from "react-geolocation";
 
 import { useState,/* useRef,*/ useEffect } from "react";
 
@@ -26,26 +28,50 @@ export default function HomeScreen() {
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const [locationInput, setLocationInput] = useState("");
-    const [userLocation, setUserLocation] = useState(null);
+    const [userLocation, setUserLocation] = useState({});
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
     const navigate = useNavigate();
 
     const showLoginError = (error) => {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
             setOutputMessage("Wrong password, try again.")
         }
-        else {
+        else if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
+            setOutputMessage("Email already exists. Please try again.")
+        } else {
             setOutputMessage(error.message)
+
         }
     }
 
     const loginEmailPassword = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
-            console.log(userCredential.user)
-            setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
+            //set user location with the latitude and longitude
+            // console.log(userCredential.user.uid)
+            // console.log("here")
+            const latitutdeRef = ref(db, 'users/' + userCredential.user.uid + '/latitude')
+            const longitudeRef = ref(db, 'users/' + userCredential.user.uid + '/longitude')
+            // var latitude = null, longitude = null
+            onValue(latitutdeRef, (snapshot) => {
+                setLatitude(snapshot.val())
+            })
+            onValue(longitudeRef, (snapshot) => {
+                setLongitude(snapshot.val())
+            })
+            console.log(latitude)
+            console.log(longitude)
+            setUserLocation({ latitude: latitude, longitude: longitude })
+            // console.log("---")
+            // console.log(userLocation)
+            // console.log(userLocation.latitude)
+            // console.log(userLocation.longitude)
+            // console.log("---")
+            // setUserLocation(new Location())
+            // setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
             // monitorAuthState()
         } catch (error) {
-            console.log(error)
             showLoginError(error)
         }
     }
@@ -56,19 +82,24 @@ export default function HomeScreen() {
         } else {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, passwordInput)
-                // sendEmailVerification(auth.currentUser)
-                //     .then(() => {
-                //     })
-                console.log(userCredential.user)
-                setOutputMessage("created new account! Welcome " +
-                    userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
-                + "!");
+                console.log(userCredential.user.uid)
+                const userRef = ref(db, 'users/' + userCredential.user.uid)
+                set(userRef, {
+                    latitude: userLocation.latitude,
+                    longitude: userLocation.longitude
+                    // latitude: userLocation.coords.latitude,
+                    // longitude: userLocation.coords.longitude
+                })
+                // setLocationData(userCredential.user.uid, userLocation.coords.latitude, userLocation.coords.longitude)
+
+                // setOutputMessage("created new account! Welcome " +
+                //     (userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName)
+                //     + "!")
                 alert("created new account! Welcome " +
-                    userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName
-                + "!")
+                    (userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName)
+                    + "!")
                 // monitorAuthState()
             } catch (error) {
-                console.log(error)
                 showLoginError(error)
             }
         }
@@ -87,7 +118,8 @@ export default function HomeScreen() {
         setPasswordVerifyColour("white")
         setPasswordInput("")
         setEmail("")
-        setUserLocation(null)
+        setUserLocation({})
+        // setUserLocation(null)
         // dispatchEvent()
         if (loggingIn) {
             setAuthMessage("Don't have an account? Click here to sign up!")
@@ -103,18 +135,20 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+        // console.log(userLocation)
+        setPasswordVerifyColour("white")
         const monitorAuthState = async () => {
             onAuthStateChanged(auth, user => {
                 if (user) {
                     // const tempLoggedIn = true
                     setLoggedIn(true)
-                    console.log(user)
+                    // console.log(user)
                     // loggedIn.current = true
                     setPasswordVerify("")
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
-                    setUserLocation(null)
+                    // setUserLocation(null)
                     if (prompt === "trips") {
                         navigate('/trips')
                     }
@@ -131,7 +165,8 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
-                    setUserLocation(null)
+                    // setUserLocation(null)
+                    setUserLocation({})
                 }
             })
         }
@@ -155,7 +190,9 @@ export default function HomeScreen() {
             console.log(position)
             console.log(position.coords.latitude)
             console.log(position.coords.longitude)
-            setUserLocation(position)
+            setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+            // setUserLocation(position.coords.latitude, position.coords.longitude)
+            // setUserLocation(position.coords.latitude, position.coords.longitude)
             // fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
             //     .then(response => response.json())
             //     .then(data => {
@@ -172,15 +209,23 @@ export default function HomeScreen() {
 
         // { monitorAuthState() }
         <div>
+            <p>
+                {userLocation !== null ? userLocation.latitude : null}
+            </p>
+            <p>
+                {userLocation !== null ? userLocation.longitude : null}
+            </p>
             <div style={{ display: promptLoginTrue ? "none" : null }}>
                 {/* <h1>HomeScreen!</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(auth.currentUser!==null).toString()}</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()}</h1> */}
-                <h1 style={{ backgroundColor: 'green' }}>Title</h1>
+                <h1 style={{ backgroundColor: 'green' }}>Title {userLocation !== null ? userLocation.latitude : null} {userLocation !== null ? userLocation.longitude : null}</h1>
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
                 <div>
                     <button
-                        onClick={() => navigate('/map')}
+                        onClick={
+                            () => navigate('/map')
+                        }
                     >Explore!</button>
                 </div>
                 <div>
@@ -256,7 +301,12 @@ export default function HomeScreen() {
                                 />
                                 : null
                             }
-                            <button onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
+                            <button
+                                style={{
+                                    display: (loggingIn && passwordVerifyColour === "green" && userLocation !== null && email !== null && passwordInput !== null && "block")
+                                        || (loggingIn && "none") || (!loggingIn && "block")
+                                }}
+                                onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
                                 {!loggingIn ? "Log In" : "Sign Up"}
                             </button>
                             <div>{outputMessage}</div>
@@ -267,7 +317,7 @@ export default function HomeScreen() {
                             }}>
                             <p>
                                 Enter your location:
-                                {userLocation ? " " + userLocation.coords.latitude + ", " + userLocation.coords.longitude : null}
+                                {userLocation ? " " + userLocation.latitude + ", " + userLocation.longitude : null}
                             </p>
                             <input
                                 name="locationInput"
