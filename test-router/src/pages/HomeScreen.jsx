@@ -25,6 +25,8 @@ export default function HomeScreen() {
     const [prompt, setPrompt] = useState("");
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
+    const [locationInput, setLocationInput] = useState("");
+    const [userLocation, setUserLocation] = useState(null);
     const navigate = useNavigate();
 
     const showLoginError = (error) => {
@@ -72,37 +74,6 @@ export default function HomeScreen() {
         }
     }
 
-    // const monitorAuthState = async () => {
-    //     onAuthStateChanged(auth, user => {
-    //         if (user) {
-    //             // const tempLoggedIn = true
-    //             setLoggedIn(true)
-    //             console.log(user)
-    //             // loggedIn.current = true
-    //             setPasswordVerify("")
-    //             setPasswordInput("")
-    //             setEmail("")
-    //             setOutputMessage("")
-    //             if (prompt === "trips") {
-    //                 navigate('/trips')
-    //             }
-    //             // setOutputMessage("Welcome " + user.displayName + "!")
-    //         } else {
-
-    //             // const tempLoggedIn = false
-    //             // alert("logged out")
-    //             // console.log("logged out")
-    //             // loggedIn.current = false
-    //             setLoggedIn(false)
-    //             // setLoggedIn(tempLoggedIn)
-    //             setPasswordVerify("")
-    //             setPasswordInput("")
-    //             setEmail("")
-    //             setOutputMessage("")
-    //         }
-    //     })
-    // }
-
     const logout = async () => {
         // alert(auth.currentUser.email)
         await signOut(auth)
@@ -115,6 +86,7 @@ export default function HomeScreen() {
         setPasswordVerify("")
         setPasswordInput("")
         setEmail("")
+        setUserLocation(null)
         // dispatchEvent()
         if (loggingIn) {
             setAuthMessage("Don't have an account? Click here to sign up!")
@@ -141,6 +113,7 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
+                    setUserLocation(null)
                     if (prompt === "trips") {
                         navigate('/trips')
                     }
@@ -157,6 +130,7 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
+                    setUserLocation(null)
                 }
             })
         }
@@ -165,6 +139,33 @@ export default function HomeScreen() {
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
     }, [navigate, prompt]);
     // monitorAuthState()
+
+
+    function setLocation() {
+        const options = {
+            method: 'GET', headers: {
+                accept: 'application/json',
+                // origin: "http://localhost:3000",
+                // referer: "http://localhost:3000"
+            }
+        };
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position)
+            console.log(position.coords.latitude)
+            console.log(position.coords.longitude)
+            setUserLocation(position)
+            // fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         console.log(data)
+            //     })
+            //     // .then(response => console.log(response))
+            //     .catch(err => console.error(err))
+        })
+    }
+
+
     return (
 
 
@@ -196,7 +197,7 @@ export default function HomeScreen() {
                 {!loggedIn ?
                     <>
                         <div>
-                            <text>{promptMessage}</text>
+                            <p>{promptMessage}</p>
                         </div>
                         <div style={{ display: 'flex' }}>
                             <input
@@ -259,8 +260,29 @@ export default function HomeScreen() {
                             </button>
                             <div>{outputMessage}</div>
                         </div>
+                        <div
+                            style={{
+                                display: loggingIn ? "flex" : "none"
+                            }}>
+                            <p>
+                                Enter your location:
+                                {userLocation ? " " + userLocation.coords.latitude + ", " + userLocation.coords.longitude : null}
+                            </p>
+                            <input
+                                name="locationInput"
+                                type="text"
+                                placeholder="Location"
+                                autoComplete="false"
+                                onChange={e => setLocationInput(e.target.value)}
+                                value={locationInput}
+                            >
+                            </input>
+                            <button
+                                onClick={setLocation}
+                            >Use current location</button>
+                        </div>
                         <div>
-                            <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
+                            <p style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</p>
                         </div>
                         <button onClick={() => {
                             setPromptLoginTrue(!promptLoginTrue)
