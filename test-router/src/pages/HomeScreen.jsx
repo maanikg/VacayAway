@@ -26,9 +26,8 @@ export default function HomeScreen() {
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const [locationInput, setLocationInput] = useState("");
+    const [userLocation, setUserLocation] = useState(null);
     const navigate = useNavigate();
-
-
 
     const showLoginError = (error) => {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
@@ -87,6 +86,7 @@ export default function HomeScreen() {
         setPasswordVerify("")
         setPasswordInput("")
         setEmail("")
+        setUserLocation(null)
         // dispatchEvent()
         if (loggingIn) {
             setAuthMessage("Don't have an account? Click here to sign up!")
@@ -113,6 +113,7 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
+                    setUserLocation(null)
                     if (prompt === "trips") {
                         navigate('/trips')
                     }
@@ -129,6 +130,7 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
+                    setUserLocation(null)
                 }
             })
         }
@@ -140,16 +142,26 @@ export default function HomeScreen() {
 
 
     function setLocation() {
-        const options = { method: 'GET', headers: { accept: 'application/json' } };
+        const options = {
+            method: 'GET', headers: {
+                accept: 'application/json',
+                // origin: "http://localhost:3000",
+                // referer: "http://localhost:3000"
+            }
+        };
 
         navigator.geolocation.getCurrentPosition(function (position) {
             console.log(position)
             console.log(position.coords.latitude)
             console.log(position.coords.longitude)
-            fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
-                .then(response => response.json())
-                .then(response => console.log(response))
-                .catch(err => console.error(err))
+            setUserLocation(position)
+            // fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         console.log(data)
+            //     })
+            //     // .then(response => console.log(response))
+            //     .catch(err => console.error(err))
         })
     }
 
@@ -254,12 +266,14 @@ export default function HomeScreen() {
                             }}>
                             <p>
                                 Enter your location:
+                                {userLocation ? " " + userLocation.coords.latitude + ", " + userLocation.coords.longitude : null}
                             </p>
                             <input
                                 name="locationInput"
                                 type="text"
                                 placeholder="Location"
                                 autoComplete="false"
+                                onChange={e => setLocationInput(e.target.value)}
                                 value={locationInput}
                             >
                             </input>
