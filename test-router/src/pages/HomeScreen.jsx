@@ -84,6 +84,7 @@ export default function HomeScreen() {
     function switchAuth() {
         setLoggingIn(!loggingIn)
         setPasswordVerify("")
+        setPasswordVerifyColour("white")
         setPasswordInput("")
         setEmail("")
         setUserLocation(null)
