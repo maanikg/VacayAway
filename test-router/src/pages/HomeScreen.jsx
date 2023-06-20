@@ -262,8 +262,14 @@ export default function HomeScreen() {
                         <div>
                             <text style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</text>
                         </div>
-                        <button onClick={() =>
+                        <button onClick={() => {
                             setPromptLoginTrue(!promptLoginTrue)
+                            setPasswordVerify("")
+                            setPasswordInput("")
+                            setEmail("")
+                            setPasswordVerifyColour("white")
+                            setLoggingIn(false)
+                        }
                         }>Back</button>
                     </> : null
                 }
