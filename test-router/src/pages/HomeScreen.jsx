@@ -29,8 +29,6 @@ export default function HomeScreen() {
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const [locationInput, setLocationInput] = useState("");
     const [userLocation, setUserLocation] = useState({});
-    const [latitude, setLatitude] = useState(null);
-    const [longitude, setLongitude] = useState(null);
     const navigate = useNavigate();
 
     const showLoginError = (error) => {
@@ -45,32 +43,27 @@ export default function HomeScreen() {
         }
     }
 
+    function locationSetter() {
+        const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
+        const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
+        onValue(latitutdeRef, (snapshot) => {
+            setUserLocation(userLocation => ({
+                ...userLocation,
+                latitude: snapshot.val()
+            }))
+        })
+        onValue(longitudeRef, (snapshot) => {
+            setUserLocation(userLocation => ({
+                ...userLocation,
+                longitude: snapshot.val()
+            }))
+        })
+    }
+
     const loginEmailPassword = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
-            //set user location with the latitude and longitude
-            // console.log(userCredential.user.uid)
-            // console.log("here")
-            const latitutdeRef = ref(db, 'users/' + userCredential.user.uid + '/latitude')
-            const longitudeRef = ref(db, 'users/' + userCredential.user.uid + '/longitude')
-            // var latitude = null, longitude = null
-            onValue(latitutdeRef, (snapshot) => {
-                setLatitude(snapshot.val())
-            })
-            onValue(longitudeRef, (snapshot) => {
-                setLongitude(snapshot.val())
-            })
-            console.log(latitude)
-            console.log(longitude)
-            setUserLocation({ latitude: latitude, longitude: longitude })
-            // console.log("---")
-            // console.log(userLocation)
-            // console.log(userLocation.latitude)
-            // console.log(userLocation.longitude)
-            // console.log("---")
-            // setUserLocation(new Location())
-            // setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
-            // monitorAuthState()
+            setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
         } catch (error) {
             showLoginError(error)
         }
@@ -82,15 +75,12 @@ export default function HomeScreen() {
         } else {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, passwordInput)
-                console.log(userCredential.user.uid)
+
                 const userRef = ref(db, 'users/' + userCredential.user.uid)
                 set(userRef, {
                     latitude: userLocation.latitude,
                     longitude: userLocation.longitude
-                    // latitude: userLocation.coords.latitude,
-                    // longitude: userLocation.coords.longitude
                 })
-                // setLocationData(userCredential.user.uid, userLocation.coords.latitude, userLocation.coords.longitude)
 
                 // setOutputMessage("created new account! Welcome " +
                 //     (userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName)
@@ -135,20 +125,16 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
-        // console.log(userLocation)
         setPasswordVerifyColour("white")
         const monitorAuthState = async () => {
             onAuthStateChanged(auth, user => {
                 if (user) {
-                    // const tempLoggedIn = true
                     setLoggedIn(true)
-                    // console.log(user)
-                    // loggedIn.current = true
                     setPasswordVerify("")
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
-                    // setUserLocation(null)
+                    locationSetter()
                     if (prompt === "trips") {
                         navigate('/trips')
                     }
@@ -158,23 +144,18 @@ export default function HomeScreen() {
                     // const tempLoggedIn = false
                     // alert("logged out")
                     // console.log("logged out")
-                    // loggedIn.current = false
                     setLoggedIn(false)
-                    // setLoggedIn(tempLoggedIn)
                     setPasswordVerify("")
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
-                    // setUserLocation(null)
                     setUserLocation({})
                 }
             })
         }
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
         monitorAuthState();
-        // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
     }, [navigate, prompt]);
-    // monitorAuthState()
 
 
     function setLocation() {
@@ -187,9 +168,9 @@ export default function HomeScreen() {
         };
 
         navigator.geolocation.getCurrentPosition(function (position) {
-            console.log(position)
-            console.log(position.coords.latitude)
-            console.log(position.coords.longitude)
+            // console.log(position)
+            // console.log(position.coords.latitude)
+            // console.log(position.coords.longitude)
             setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
             // setUserLocation(position.coords.latitude, position.coords.longitude)
             // setUserLocation(position.coords.latitude, position.coords.longitude)
@@ -207,19 +188,14 @@ export default function HomeScreen() {
     return (
 
 
-        // { monitorAuthState() }
         <div>
-            <p>
-                {userLocation !== null ? userLocation.latitude : null}
-            </p>
-            <p>
-                {userLocation !== null ? userLocation.longitude : null}
-            </p>
             <div style={{ display: promptLoginTrue ? "none" : null }}>
                 {/* <h1>HomeScreen!</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(auth.currentUser!==null).toString()}</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()}</h1> */}
-                <h1 style={{ backgroundColor: 'green' }}>Title {userLocation !== null ? userLocation.latitude : null} {userLocation !== null ? userLocation.longitude : null}</h1>
+                <h1 style={{ backgroundColor: 'green' }}>Title </h1>
+                <h2>{userLocation !== null ? "h1" + userLocation.latitude : null}</h2>
+                <h2>{userLocation !== null ? "h2" + userLocation.longitude : null}</h2>
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
                 <div>
                     <button
@@ -347,6 +323,11 @@ export default function HomeScreen() {
                     </> : null
                 }
             </div>
+            {/* <Latitude /> */}
+            {/* <p>
+                {latitude}
+                {longitude}
+            </p> */}
             <div style={{ display: !loggedIn ? "none" : null }}>
                 <button onClick={logout}>Log Out</button>
             </div>
