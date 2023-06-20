@@ -273,6 +273,13 @@ export default function Plan() {
         setCurrentScreen(currentScreen - 1)
     }
 
+    const goHome = () => {
+        setDestArray([])
+        setAnyCheckedCity(false)
+        navigate('/')
+        setSampleCities([...initialSampleCities])
+    }
+
     const navigate = useNavigate();
     return (
         <div >
@@ -301,11 +308,6 @@ export default function Plan() {
                 datesValid={datesValid}
                 setDatesValid={setDatesValid}
             />
-            <button onClick={() => {
-                setDestArray([])
-                navigate('/')
-            }
-            }>Go Home</button>
             <button
                 style={{
                     display: (
@@ -332,6 +334,9 @@ export default function Plan() {
                     (currentScreen === 1 && datesValid && "Proceed to generate trip")
                 }
             </button>
+            <button
+                onClick={goHome}
+            >Go Home</button>
 
             <div
                 style={{
@@ -352,6 +357,6 @@ export default function Plan() {
                     )
                 })}
             </div>
-        </div>
+        </div >
     )
 }
