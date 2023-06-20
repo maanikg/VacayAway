@@ -25,7 +25,10 @@ export default function HomeScreen() {
     const [prompt, setPrompt] = useState("");
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
+    const [locationInput, setLocationInput] = useState("");
     const navigate = useNavigate();
+
+
 
     const showLoginError = (error) => {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
@@ -71,37 +74,6 @@ export default function HomeScreen() {
             }
         }
     }
-
-    // const monitorAuthState = async () => {
-    //     onAuthStateChanged(auth, user => {
-    //         if (user) {
-    //             // const tempLoggedIn = true
-    //             setLoggedIn(true)
-    //             console.log(user)
-    //             // loggedIn.current = true
-    //             setPasswordVerify("")
-    //             setPasswordInput("")
-    //             setEmail("")
-    //             setOutputMessage("")
-    //             if (prompt === "trips") {
-    //                 navigate('/trips')
-    //             }
-    //             // setOutputMessage("Welcome " + user.displayName + "!")
-    //         } else {
-
-    //             // const tempLoggedIn = false
-    //             // alert("logged out")
-    //             // console.log("logged out")
-    //             // loggedIn.current = false
-    //             setLoggedIn(false)
-    //             // setLoggedIn(tempLoggedIn)
-    //             setPasswordVerify("")
-    //             setPasswordInput("")
-    //             setEmail("")
-    //             setOutputMessage("")
-    //         }
-    //     })
-    // }
 
     const logout = async () => {
         // alert(auth.currentUser.email)
@@ -165,6 +137,23 @@ export default function HomeScreen() {
         // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
     }, [navigate, prompt]);
     // monitorAuthState()
+
+
+    function setLocation() {
+        const options = { method: 'GET', headers: { accept: 'application/json' } };
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position)
+            console.log(position.coords.latitude)
+            console.log(position.coords.longitude)
+            fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
+                .then(response => response.json())
+                .then(response => console.log(response))
+                .catch(err => console.error(err))
+        })
+    }
+
+
     return (
 
 
@@ -258,6 +247,25 @@ export default function HomeScreen() {
                                 {!loggingIn ? "Log In" : "Sign Up"}
                             </button>
                             <div>{outputMessage}</div>
+                        </div>
+                        <div
+                            style={{
+                                display: loggingIn ? "flex" : "none"
+                            }}>
+                            <p>
+                                Enter your location:
+                            </p>
+                            <input
+                                name="locationInput"
+                                type="text"
+                                placeholder="Location"
+                                autoComplete="false"
+                                value={locationInput}
+                            >
+                            </input>
+                            <button
+                                onClick={setLocation}
+                            >Use current location</button>
                         </div>
                         <div>
                             <p style={{ textDecorationLine: "underline" }} onClick={switchAuth}>{authMessage}</p>
