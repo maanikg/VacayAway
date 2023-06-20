@@ -34,6 +34,7 @@ connectDatabaseEmulator(db, "localhost", 9000);
 //         // alert(data)
 //     });
 // }
+
 // writeCityData('New York City', 'United States of America', '60763', 'https://media-cdn.tripadvisor.com/media/photo-s/1c/c5/7c/68/caption.jpg')
 // writeCityData('Mexico City', 'Mexico', '150800', 'https://media-cdn.tripadvisor.com/media/photo-s/1b/33/f3/96/caption.jpg')
 // writeCityData('Tokyo', 'Japan', '298184', 'https://media-cdn.tripadvisor.com/media/photo-s/27/84/4b/d7/caption.jpg')
