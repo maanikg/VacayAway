@@ -1,6 +1,7 @@
 // import React from 'react';
 // import MapView from './pages/map/MapView';
 // import Map from './pages/map/MapView';
+import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
 import MapWithRouter from './pages/map/MapView';
 import HomeScreen from './pages/HomeScreen';
 import NoPage from './pages/NoPage';
@@ -11,36 +12,117 @@ import './css/App.css'
 import Trips from './pages/Trips';
 import Plan from './pages/plan/Plan';
 import { useState } from 'react';
+import {
+	AuthErrorCodes,
+	signInWithEmailAndPassword,
+	createUserWithEmailAndPassword,
+	onAuthStateChanged,
+	signOut,
+	sendEmailVerification
+	/*getAuth*/
+} from "firebase/auth";
+import { auth, db } from "./pages/firebase.js"
+import { ref, set, onValue } from "firebase/database";
 // import AuthPage from './pages/AuthPage';
 
 export default function App() {
-  const [userLocation, setUserLocation] = useState({});
-  return (
-    // <div style={{ backgroundColor: "blue" }}>
-    <div>
-      <NavigationBar />
-      <BrowserRouter>
-        <Routes>
-          {/* <Route index */}
-          {/* <Route path="/" element={<Layout />}> */}
-          <Route path="/" element={<Layout />}>
+	const [userLocation, setUserLocation] = useState({});
+	const [email, setEmail] = useState("");
+	const [passwordInput, setPasswordInput] = useState("");
+	const [passwordVerify, setPasswordVerify] = useState("");
+	const [passwordVerifyColour, setPasswordVerifyColour] = useState("white");
+	const [outputMessage, setOutputMessage] = useState("");
+	const [loggingIn, setLoggingIn] = useState(false);
+	const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
 
-            {/* <Route path="/" element={<HomeScreen />}> */}
-            <Route index element={<HomeScreen
-              userLocation={userLocation}
-              setUserLocation={setUserLocation}
-            />} />
-            {/* <Route path="auth" element={<AuthPage />} /> */}
-            <Route path="map" caseSensitive={true} element={<MapWithRouter />} />
-            <Route path="plan" caseSensitive={true} element={<Plan
+	// const navigate = useNavigate();
 
-            />} />
-            <Route path="trips" caseSensitive={true} element={<Trips />} />
-            <Route path="*" element={<NoPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-      {/* </div> */}
-    </div >
-  );
+	function locationSetter() {
+		const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
+		const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
+		onValue(latitutdeRef, (snapshot) => {
+			setUserLocation(userLocation => ({
+				...userLocation,
+				latitude: snapshot.val()
+			}))
+		})
+		onValue(longitudeRef, (snapshot) => {
+			setUserLocation(userLocation => ({
+				...userLocation,
+				longitude: snapshot.val()
+			}))
+		})
+	}
+	const monitorAuthState = async () => {
+		onAuthStateChanged(auth, user => {
+			if (user) {
+				setLoggedIn(true)
+				setPasswordVerify("")
+				setPasswordInput("")
+				setEmail("")
+				setOutputMessage("")
+				locationSetter()
+				// if (prompt === "trips") {
+				// navigate('/trips')
+				// }
+				// setOutputMessage("Welcome " + user.displayName + "!")
+			} else {
+
+				// const tempLoggedIn = false
+				// alert("logged out")
+				// console.log("logged out")
+				setLoggedIn(false)
+				setPasswordVerify("")
+				setPasswordInput("")
+				setEmail("")
+				setOutputMessage("")
+				setUserLocation({})
+			}
+		})
+	}
+	return (
+		// <div style={{ backgroundColor: "blue" }}>
+		<div>
+			<NavigationBar />
+			<BrowserRouter>
+				<Routes>
+					{/* <Route index */}
+					{/* <Route path="/" element={<Layout />}> */}
+					<Route path="/" element={<Layout />}>
+						{/* <button>onClick={() => navigate('/trips')}</button> */}
+
+						{/* <Route path="/" element={<HomeScreen />}> */}
+						<Route index element={<HomeScreen
+							userLocation={userLocation}
+							setUserLocation={setUserLocation}
+							monitorAuthState={monitorAuthState}
+							loggedIn={loggedIn}
+							setLoggedIn={setLoggedIn}
+							email={email}
+							setEmail={setEmail}
+							passwordInput={passwordInput}
+							setPasswordInput={setPasswordInput}
+							passwordVerify={passwordVerify}
+							setPasswordVerify={setPasswordVerify}
+							passwordVerifyColour={passwordVerifyColour}
+							setPasswordVerifyColour={setPasswordVerifyColour}
+							outputMessage={outputMessage}
+							setOutputMessage={setOutputMessage}
+							loggingIn={loggingIn}
+							setLoggingIn={setLoggingIn}
+						/>} />
+						{/* <Route path="auth" element={<AuthPage />} /> */}
+						<Route path="map" caseSensitive={true} element={<MapWithRouter />} />
+						<Route path="plan" caseSensitive={true} element={<Plan
+							userLocation={userLocation}
+							monitorAuthState={monitorAuthState}
+						/>} />
+						<Route path="trips" caseSensitive={true} element={<Trips />} />
+						<Route path="*" element={<NoPage />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+			{/* </div> */}
+		</div >
+	);
 }

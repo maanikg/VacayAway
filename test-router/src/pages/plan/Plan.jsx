@@ -234,7 +234,7 @@ const tabs = [
     // }
 ];
 
-export default function Plan() {
+export default function Plan(props) {
     const [anyCheckedCity, setAnyCheckedCity] = useState(false);
     const [sampleCities, setSampleCities] = useState(initialSampleCities);
     const [destArray, setDestArray] = useState([]);
@@ -285,6 +285,7 @@ export default function Plan() {
     return (
         <div >
             <h1 style={{ background: "lightblue" }}>Plan</h1>
+            <p>{props.userLocation.latitude}</p>
             <InitialSelectCriteriaTabs
                 // display={destinationSelected ? "none" : "block"}
                 display={currentScreen === 0 ? "block" : "none"}
@@ -316,6 +317,8 @@ export default function Plan() {
                 destArray={destArray}
                 departureDate={departureDate}
                 returnDate={returnDate}
+                userLocation={props.userLocation}
+                monitorAuthState={props.monitorAuthState}
             />
             <button
                 style={{
