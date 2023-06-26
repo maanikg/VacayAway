@@ -3,6 +3,7 @@ import InitialSelectCriteriaTabs from "./InitialSelectCriteraTabs";
 import { useState } from "react";
 import './tabs.css';
 import DestinationSelectedScreen from "./DestinationSelectedScreen";
+import PlanGenerationScreen from "./PlanGenerationScreen";
 
 const initialSampleCities = [
     {
@@ -307,6 +308,14 @@ export default function Plan() {
                 setReturnDate={setReturnDate}
                 datesValid={datesValid}
                 setDatesValid={setDatesValid}
+            />
+            <PlanGenerationScreen
+                display={currentScreen === 2 ? "block" : "none"}
+                currentScreen={currentScreen}
+                setCurrentScreen={setCurrentScreen}
+                destArray={destArray}
+                departureDate={departureDate}
+                returnDate={returnDate}
             />
             <button
                 style={{
