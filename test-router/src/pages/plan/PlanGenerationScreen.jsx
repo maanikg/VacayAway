@@ -15,6 +15,9 @@ export default function DestinationSelectedScreen(props) {
                         return (
                             <div key={city.key}>
                                 <p>{city.city}</p>
+                                <p>{city.latitude}</p>
+                                <p>{city.longitude}</p>
+                                {/* <p>{props.userLocation.latitude}</p> */}
                             </div>
                         )
                     })

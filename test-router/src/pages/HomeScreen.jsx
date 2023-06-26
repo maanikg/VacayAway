@@ -14,7 +14,7 @@ import { ref, set, onValue } from "firebase/database";
 
 import { useState,/* useRef,*/ useEffect } from "react";
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
     const [email, setEmail] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [passwordVerify, setPasswordVerify] = useState("");
@@ -28,7 +28,7 @@ export default function HomeScreen() {
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const [locationInput, setLocationInput] = useState("");
-    const [userLocation, setUserLocation] = useState({});
+    // const [userLocation, setUserLocation] = useState({});
     const navigate = useNavigate();
 
     const showLoginError = (error) => {
@@ -47,13 +47,13 @@ export default function HomeScreen() {
         const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
         const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
         onValue(latitutdeRef, (snapshot) => {
-            setUserLocation(userLocation => ({
+            props.setUserLocation(userLocation => ({
                 ...userLocation,
                 latitude: snapshot.val()
             }))
         })
         onValue(longitudeRef, (snapshot) => {
-            setUserLocation(userLocation => ({
+            props.setUserLocation(userLocation => ({
                 ...userLocation,
                 longitude: snapshot.val()
             }))
@@ -78,8 +78,8 @@ export default function HomeScreen() {
 
                 const userRef = ref(db, 'users/' + userCredential.user.uid)
                 set(userRef, {
-                    latitude: userLocation.latitude,
-                    longitude: userLocation.longitude
+                    latitude: props.userLocation.latitude,
+                    longitude: props.userLocation.longitude
                 })
 
                 // setOutputMessage("created new account! Welcome " +
@@ -108,7 +108,7 @@ export default function HomeScreen() {
         setPasswordVerifyColour("white")
         setPasswordInput("")
         setEmail("")
-        setUserLocation({})
+        props.setUserLocation({})
         // setUserLocation(null)
         // dispatchEvent()
         if (loggingIn) {
@@ -149,7 +149,7 @@ export default function HomeScreen() {
                     setPasswordInput("")
                     setEmail("")
                     setOutputMessage("")
-                    setUserLocation({})
+                    props.setUserLocation({})
                 }
             })
         }
@@ -171,7 +171,7 @@ export default function HomeScreen() {
             // console.log(position)
             // console.log(position.coords.latitude)
             // console.log(position.coords.longitude)
-            setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+            props.setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
             // setUserLocation(position.coords.latitude, position.coords.longitude)
             // setUserLocation(position.coords.latitude, position.coords.longitude)
             // fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
@@ -194,8 +194,8 @@ export default function HomeScreen() {
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(auth.currentUser!==null).toString()}</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()}</h1> */}
                 <h1 style={{ backgroundColor: 'green' }}>Title </h1>
-                <h2>{userLocation !== null ? "h1" + userLocation.latitude : null}</h2>
-                <h2>{userLocation !== null ? "h2" + userLocation.longitude : null}</h2>
+                <h2>{props.userLocation !== null ? "h1" + props.userLocation.latitude : null}</h2>
+                <h2>{props.userLocation !== null ? "h2" + props.userLocation.longitude : null}</h2>
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
                 <div>
                     <button
@@ -279,7 +279,7 @@ export default function HomeScreen() {
                             }
                             <button
                                 style={{
-                                    display: (loggingIn && passwordVerifyColour === "green" && userLocation !== null && email !== null && passwordInput !== null && "block")
+                                    display: (loggingIn && passwordVerifyColour === "green" && props.userLocation !== null && email !== null && passwordInput !== null && "block")
                                         || (loggingIn && "none") || (!loggingIn && "block")
                                 }}
                                 onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
@@ -293,7 +293,7 @@ export default function HomeScreen() {
                             }}>
                             <p>
                                 Enter your location:
-                                {userLocation ? " " + userLocation.latitude + ", " + userLocation.longitude : null}
+                                {props.userLocation ? " " + props.userLocation.latitude + ", " + props.userLocation.longitude : null}
                             </p>
                             <input
                                 name="locationInput"

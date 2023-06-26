@@ -36,6 +36,8 @@ header = {
 response = requests.request("GET", newUrl, headers=header)
 # print(response.json())
 for i in response.json()['NearestAirportResource']['Airports']['Airport']:
-    print(i)
+    if (i['Distance']['Value']<50):
+    # print(i['Distance']['Value'])
+        print(i)
 # print(response.status_code)
 # print(response.json().keys())
