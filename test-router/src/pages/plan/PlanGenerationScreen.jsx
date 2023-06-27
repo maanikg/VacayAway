@@ -3,13 +3,70 @@ import React from "react"
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { lufthansaConfig } from "../lufthansaAPI";
-// import { useState } from "react"
+import { useState } from "react"
+import { get } from "firebase/database";
+import { render } from "react-dom";
 export default function DestinationSelectedScreen(props) {
     const navigate = useNavigate();
+    const [destAirports, setDestAirports] = useState([])
+    const [departureAirports, setDepartureAirports] = useState([])
+    const [departureFlights, setDepartureFlights] = useState([])
+
+    function getDestAirports() {
+        const firstDest = props.destArray[0]
+        fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
+            headers: {
+                'Authorization': `Bearer ${props.lufthansaAccessToken}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
+                setDestAirports(filteredAirports);
+                console.log(filteredAirports)
+            })
+            .catch(error => {
+                console.error(error);
+                alert(error)
+            });
+    }
+    function getDepartureAirports() {
+        fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${props.userLocation.latitude},${props.userLocation.longitude}?lang=en`, {
+            headers: {
+                'Authorization': `Bearer ${props.lufthansaAccessToken}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
+                setDepartureAirports(filteredAirports);
+                console.log(filteredAirports)
+            })
+            .catch(error => {
+                console.error(error);
+                alert(error)
+            });
+    }
+
+    function getFlight() {
+        departureAirports.forEach(departureAirport => {
+            destAirports.forEach(destAirport => {
+                const url = 'https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${departureAirport.AirportCode}&destinationLocationCode=${destAirport.AirportCode}&departureDate=2023-07-01&adults=1&max=1';
+                // console.log(departureAirport.AirportCode + departureAirport.Names.Name.$)
+                // console.log(destAirport.AirportCode + destAirport.Names.Name.$)
+            })
+        })
+    }
+
     useEffect(() => {
         props.monitorAuthState()
-    }, [navigate])
-    console.log(props.lufthansaAccessToken)
+        if (props.destArray.length !== 0) {
+            getDestAirports()
+            getDepartureAirports()
+            // getFlight()
+        }
+    }, [navigate, props.destArray])
+
     return (
         <div
             style={{

@@ -25,7 +25,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "./pages/firebase.js"
 import { ref, set, onValue } from "firebase/database";
-// import AuthPage from './pages/AuthPage';
+import { amadeusConfig } from "./pages/amadeusAPI";
 
 export default function App() {
 	const [userLocation, setUserLocation] = useState({});
@@ -37,7 +37,7 @@ export default function App() {
 	const [loggingIn, setLoggingIn] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
 	const [lufthansaAccessToken, setLufthansaAccessToken] = useState('')
-	// const navigate = useNavigate();
+	const [amadeusAccessToken, setAmadeusAccessToken] = useState('')
 
 	function locationSetter() {
 		const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
@@ -71,6 +71,26 @@ export default function App() {
 				alert(error)
 			});
 	}
+	function setupAmadeusAPI() {
+		fetch(amadeusConfig.url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: new URLSearchParams(amadeusConfig.data)
+		})
+			.then(response => response.json())
+			.then(data => {
+				setAmadeusAccessToken(data.access_token)
+			})
+			.catch(error => {
+				alert(error);
+			});
+	}
+
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc&libraries=places">
+	</script>
 
 	const monitorAuthState = async () => {
 		onAuthStateChanged(auth, user => {
@@ -82,6 +102,7 @@ export default function App() {
 				setOutputMessage("")
 				locationSetter()
 				setupLufthansaAPI()
+				setupAmadeusAPI()
 
 				// if (prompt === "trips") {
 				// navigate('/trips')

@@ -14,20 +14,3 @@ export const lufthansaConfig = {
         "grant_type": "client_credentials"
     }
 };
-// axios.get(lufthansaConfig)
-//     .then(function (response) {
-//         console.log(JSON.stringify(response.data));
-//     })
-//     .catch(function (error) {
-//         console.log(error);
-//     });
-
-
-// console.log("hiii")
-// axios(lufthansaConfig)
-//     .then(function (response) {
-//         console.log(JSON.stringify(response.data));
-//     }
-//     ).catch(function (error) {
-//         console.log(error);
-//     });

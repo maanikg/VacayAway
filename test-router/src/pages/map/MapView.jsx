@@ -55,7 +55,6 @@ export class MapContainer extends Component {
         // navigate = useNavigate();
         // const navigate = useNavigate();
         const coords = { lat: 43.6532, lng: -79.3832 };
-
         return (
             <div >
                 <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
