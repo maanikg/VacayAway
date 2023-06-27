@@ -24,8 +24,8 @@ export default function DestinationSelectedScreen(props) {
         const returnMonth = parseInt(returnDateParts[1]) - 1
         const returnDay = parseInt(returnDateParts[2])
         const returnSelectedDate = new Date(returnYear, returnMonth, returnDay)
-        console.log(returnSelectedDate)
-        console.log(Date(Date.now()))
+        // console.log(returnSelectedDate)
+        // console.log(Date(Date.now()))
         if (returnSelectedDate < Date(Date.now())) { //THIS DOESN'T WORK
             alert("Please select a date in the future.")
             console.log("Please select a date in the future.")

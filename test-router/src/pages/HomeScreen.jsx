@@ -14,79 +14,56 @@ import { ref, set, onValue } from "firebase/database";
 
 import { useState,/* useRef,*/ useEffect } from "react";
 
-export default function HomeScreen() {
-    const [email, setEmail] = useState("");
-    const [passwordInput, setPasswordInput] = useState("");
-    const [passwordVerify, setPasswordVerify] = useState("");
-    const [passwordVerifyColour, setPasswordVerifyColour] = useState("white");
-    const [outputMessage, setOutputMessage] = useState("");
-    const [loggingIn, setLoggingIn] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
-    // const loggedIn = useRef(auth.currentUser !== null);
+export default function HomeScreen(props) {
+    // const props.loggedIn = useRef(auth.currentUser !== null);
     const [promptLoginTrue, setPromptLoginTrue] = useState(false);
     const [prompt, setPrompt] = useState("");
     const [promptMessage, setPromptMessage] = useState("Please log in to continue.")
     const [authMessage, setAuthMessage] = useState("Don't have an account? Sign up here!")
     const [locationInput, setLocationInput] = useState("");
-    const [userLocation, setUserLocation] = useState({});
+    // const [userLocation, setUserLocation] = useState({});
     const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const showLoginError = (error) => {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-            setOutputMessage("Wrong password, try again.")
+            props.setOutputMessage("Wrong password, try again.")
         }
         else if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
-            setOutputMessage("Email already exists. Please try again.")
+            props.setOutputMessage("Email already exists. Please try again.")
         } else {
-            setOutputMessage(error.message)
+            props.setOutputMessage(error.message)
 
         }
-    }
-
-    function locationSetter() {
-        const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
-        const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
-        onValue(latitutdeRef, (snapshot) => {
-            setUserLocation(userLocation => ({
-                ...userLocation,
-                latitude: snapshot.val()
-            }))
-        })
-        onValue(longitudeRef, (snapshot) => {
-            setUserLocation(userLocation => ({
-                ...userLocation,
-                longitude: snapshot.val()
-            }))
-        })
     }
 
     const loginEmailPassword = async () => {
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, passwordInput)
-            setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
+            const userCredential = await signInWithEmailAndPassword(auth, props.email, props.passwordInput)
+            props.setOutputMessage("verified! Welcome " + userCredential.user.displayName + "!");
         } catch (error) {
             showLoginError(error)
         }
     }
 
     const createUserEmailPassword = async () => {
-        if (passwordInput !== passwordVerify) {
-            setOutputMessage("Passwords do not match. Please try again.")
+        if (props.passwordInput !== props.passwordVerify) {
+            props.setOutputMessage("Passwords do not match. Please try again.")
         } else {
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, passwordInput)
+                const userCredential = await createUserWithEmailAndPassword(auth, props.email, props.passwordInput)
 
                 const userRef = ref(db, 'users/' + userCredential.user.uid)
                 set(userRef, {
-                    latitude: userLocation.latitude,
-                    longitude: userLocation.longitude
+                    latitude: props.userLocation.latitude,
+                    longitude: props.userLocation.longitude
                 })
 
-                // setOutputMessage("created new account! Welcome " +
-                //     (userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName)
+                // props.setOutputMessage("created new account! Welcome " +
+                //     (userCredential.user.displayName === null ? userCredential.user.props.email : userCredential.user.displayName)
                 //     + "!")
                 alert("created new account! Welcome " +
-                    (userCredential.user.displayName === null ? userCredential.user.email : userCredential.user.displayName)
+                    (userCredential.user.displayName === null ? userCredential.user.props.email : userCredential.user.displayName)
                     + "!")
                 // monitorAuthState()
             } catch (error) {
@@ -96,22 +73,22 @@ export default function HomeScreen() {
     }
 
     const logout = async () => {
-        // alert(auth.currentUser.email)
+        // alert(auth.currentUser.props.email)
         await signOut(auth)
         // alert(auth.currentUser)
         // monitorAuthState()
     }
 
     function switchAuth() {
-        setLoggingIn(!loggingIn)
-        setPasswordVerify("")
-        setPasswordVerifyColour("white")
-        setPasswordInput("")
-        setEmail("")
-        setUserLocation({})
+        props.setLoggingIn(!props.loggingIn)
+        props.setPasswordVerify("")
+        props.setPasswordVerifyColour("white")
+        props.setPasswordInput("")
+        props.setEmail("")
+        props.setUserLocation({})
         // setUserLocation(null)
         // dispatchEvent()
-        if (loggingIn) {
+        if (props.loggingIn) {
             setAuthMessage("Don't have an account? Click here to sign up!")
         } else {
             setAuthMessage("Already have an account? Click here to log in.")
@@ -125,36 +102,45 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
-        setPasswordVerifyColour("white")
-        const monitorAuthState = async () => {
+        props.setPasswordVerifyColour("white")
+        props.monitorAuthState()
+        // const monitorAuthState = async () => {
+        const temp = async () => {
             onAuthStateChanged(auth, user => {
-                if (user) {
-                    setLoggedIn(true)
-                    setPasswordVerify("")
-                    setPasswordInput("")
-                    setEmail("")
-                    setOutputMessage("")
-                    locationSetter()
-                    if (prompt === "trips") {
-                        navigate('/trips')
-                    }
-                    // setOutputMessage("Welcome " + user.displayName + "!")
-                } else {
-
-                    // const tempLoggedIn = false
-                    // alert("logged out")
-                    // console.log("logged out")
-                    setLoggedIn(false)
-                    setPasswordVerify("")
-                    setPasswordInput("")
-                    setEmail("")
-                    setOutputMessage("")
-                    setUserLocation({})
+                if (user && prompt === "trips") {
+                    navigate('/trips')
                 }
             })
         }
-        // console.log(auth.currentUser !== null ? auth.currentUser.email : "here: null")
-        monitorAuthState();
+        //         if (user) {
+        //             setLoggedIn(true)
+        //             props.setPasswordVerify("")
+        //             props.setPasswordInput("")
+        //             props.setEmail("")
+        //             props.setOutputMessage("")
+        //             locationSetter()
+        //             if (prompt === "trips") {
+        //                 navigate('/trips')
+        //             }
+        //             // props.setOutputMessage("Welcome " + user.displayName + "!")
+        //         } else {
+
+        //             // const tempLoggedIn = false
+        //             // alert("logged out")
+        //             // console.log("logged out")
+        //             setLoggedIn(false)
+        //             props.setPasswordVerify("")
+        //             props.setPasswordInput("")
+        //             props.setEmail("")
+        //             props.setOutputMessage("")
+        //             props.setUserLocation({})
+        //         }
+        //     })
+        // }
+        // console.log(auth.currentUser !== null ? auth.currentUser.props.email : "here: null")
+        // props.monitorAuthState();
+        // }, [navigate, prompt]);
+        temp()
     }, [navigate, prompt]);
 
 
@@ -168,10 +154,10 @@ export default function HomeScreen() {
         };
 
         navigator.geolocation.getCurrentPosition(function (position) {
-            // console.log(position)
+            console.log(position)
             // console.log(position.coords.latitude)
             // console.log(position.coords.longitude)
-            setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+            props.setUserLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude })
             // setUserLocation(position.coords.latitude, position.coords.longitude)
             // setUserLocation(position.coords.latitude, position.coords.longitude)
             // fetch('https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=' + position.coords.latitude + '%2C' + position.coords.longitude + '&key=FAF9D5D1F9A94A7FB6C92E3DE7A5CF3C&radius=50&radiusUnit=km&language=en', options)
@@ -192,11 +178,11 @@ export default function HomeScreen() {
             <div style={{ display: promptLoginTrue ? "none" : null }}>
                 {/* <h1>HomeScreen!</h1> */}
                 {/* <h1 style={{ backgroundColor: 'green' }}>{(auth.currentUser!==null).toString()}</h1> */}
-                {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()}</h1> */}
+                {/* <h1 style={{ backgroundColor: 'green' }}>{(props.loggedIn).toString()}</h1> */}
                 <h1 style={{ backgroundColor: 'green' }}>Title </h1>
-                <h2>{userLocation !== null ? "h1" + userLocation.latitude : null}</h2>
-                <h2>{userLocation !== null ? "h2" + userLocation.longitude : null}</h2>
-                {/* <h1 style={{ backgroundColor: 'green' }}>{(loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.email}</h1> */}
+                <h2>{props.userLocation !== null ? "h1" + props.userLocation.latitude : null}</h2>
+                <h2>{props.userLocation !== null ? "h2" + props.userLocation.longitude : null}</h2>
+                {/* <h1 style={{ backgroundColor: 'green' }}>{(props.loggedIn).toString()} {auth.currentUser == null ? "null" : auth.currentUser.props.email}</h1> */}
                 <div>
                     <button
                         onClick={
@@ -211,12 +197,12 @@ export default function HomeScreen() {
                 </div>
                 <div>
                     <button
-                        onClick={() => loggedIn ? navigate('/trips') : promptLogin()}
+                        onClick={() => props.loggedIn ? navigate('/trips') : promptLogin()}
                     >My trips</button>
                 </div>
             </div>
             <div style={{ display: !promptLoginTrue ? "none" : null }}>
-                {!loggedIn ?
+                {!props.loggedIn ?
                     <>
                         <div>
                             <p>{promptMessage}</p>
@@ -224,53 +210,53 @@ export default function HomeScreen() {
                         <div style={{ display: 'flex' }}>
                             <input
                                 name="usernameInput"
-                                type="email"
+                                type="props.email"
                                 placeholder="Email"
                                 autoComplete="false"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                value={props.email}
+                                onChange={e => props.setEmail(e.target.value)}
                             />
                             <input
-                                name="passwordInput"
-                                style={{ backgroundColor: passwordVerifyColour }}
+                                name="props.passwordInput"
+                                style={{ backgroundColor: props.passwordVerifyColour }}
                                 type="password"
                                 placeholder="Password"
                                 autoComplete="false"
-                                value={passwordInput}
+                                value={props.passwordInput}
                                 onChange={e => {
-                                    setPasswordInput(e.target.value)
-                                    if (!loggingIn) {
-                                        setPasswordVerifyColour("white")
+                                    props.setPasswordInput(e.target.value)
+                                    if (!props.loggingIn) {
+                                        props.setPasswordVerifyColour("white")
                                     } else {
-                                        if (!(e.target.value.length > 0 && passwordVerify.length > 0)) {
-                                            setPasswordVerifyColour("white")
-                                        } else if (e.target.value != passwordVerify) {
-                                            setPasswordVerifyColour("red")
+                                        if (!(e.target.value.length > 0 && props.passwordVerify.length > 0)) {
+                                            props.setPasswordVerifyColour("white")
+                                        } else if (e.target.value != props.passwordVerify) {
+                                            props.setPasswordVerifyColour("red")
                                         } else {
-                                            setPasswordVerifyColour("green")
+                                            props.setPasswordVerifyColour("green")
                                         }
                                     }
                                 }
                                 }
                             />
-                            {loggingIn ?
+                            {props.loggingIn ?
                                 <input
                                     style={{
-                                        backgroundColor: passwordVerifyColour
+                                        backgroundColor: props.passwordVerifyColour
                                     }}
-                                    name="passwordVerify"
+                                    name="props.passwordVerify"
                                     type="password"
                                     placeholder="Verify Password"
                                     autoComplete="false"
-                                    value={passwordVerify}
+                                    value={props.passwordVerify}
                                     onChange={(e) => {
-                                        setPasswordVerify(e.target.value)
-                                        if (!(e.target.value.length > 0 && passwordInput.length > 0)) {
-                                            setPasswordVerifyColour("white")
-                                        } else if (e.target.value != passwordInput) {
-                                            setPasswordVerifyColour("red")
+                                        props.setPasswordVerify(e.target.value)
+                                        if (!(e.target.value.length > 0 && props.passwordInput.length > 0)) {
+                                            props.setPasswordVerifyColour("white")
+                                        } else if (e.target.value != props.passwordInput) {
+                                            props.setPasswordVerifyColour("red")
                                         } else {
-                                            setPasswordVerifyColour("green")
+                                            props.setPasswordVerifyColour("green")
                                         }
                                     }
                                     }
@@ -279,21 +265,21 @@ export default function HomeScreen() {
                             }
                             <button
                                 style={{
-                                    display: (loggingIn && passwordVerifyColour === "green" && userLocation !== null && email !== null && passwordInput !== null && "block")
-                                        || (loggingIn && "none") || (!loggingIn && "block")
+                                    display: (props.loggingIn && props.passwordVerifyColour === "green" && props.userLocation !== null && props.email !== null && props.passwordInput !== null && "block")
+                                        || (props.loggingIn && "none") || (!props.loggingIn && "block")
                                 }}
-                                onClick={!loggingIn ? loginEmailPassword : createUserEmailPassword}>
-                                {!loggingIn ? "Log In" : "Sign Up"}
+                                onClick={!props.loggingIn ? loginEmailPassword : createUserEmailPassword}>
+                                {!props.loggingIn ? "Log In" : "Sign Up"}
                             </button>
-                            <div>{outputMessage}</div>
+                            <div>{props.outputMessage}</div>
                         </div>
                         <div
                             style={{
-                                display: loggingIn ? "flex" : "none"
+                                display: props.loggingIn ? "flex" : "none"
                             }}>
                             <p>
                                 Enter your location:
-                                {userLocation ? " " + userLocation.latitude + ", " + userLocation.longitude : null}
+                                {props.userLocation ? " " + props.userLocation.latitude + ", " + props.userLocation.longitude : null}
                             </p>
                             <input
                                 name="locationInput"
@@ -313,11 +299,11 @@ export default function HomeScreen() {
                         </div>
                         <button onClick={() => {
                             setPromptLoginTrue(!promptLoginTrue)
-                            setPasswordVerify("")
-                            setPasswordInput("")
-                            setEmail("")
-                            setPasswordVerifyColour("white")
-                            setLoggingIn(false)
+                            props.setPasswordVerify("")
+                            props.setPasswordInput("")
+                            props.setEmail("")
+                            props.setPasswordVerifyColour("white")
+                            props.setLoggingIn(false)
                         }
                         }>Back</button>
                     </> : null
@@ -328,7 +314,7 @@ export default function HomeScreen() {
                 {latitude}
                 {longitude}
             </p> */}
-            <div style={{ display: !loggedIn ? "none" : null }}>
+            <div style={{ display: !props.loggedIn ? "none" : null }}>
                 <button onClick={logout}>Log Out</button>
             </div>
             {/* <Outlet /> */}
