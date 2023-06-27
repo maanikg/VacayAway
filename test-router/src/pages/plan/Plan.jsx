@@ -318,6 +318,8 @@ export default function Plan(props) {
                 monitorAuthState={props.monitorAuthState}
                 lufthansaAccessToken={props.lufthansaAccessToken}
                 setLufthansaAccessToken={props.setLufthansaAccessToken}
+                amadeusAccessToken={props.amadeusAccessToken}
+                setAmadeusAccessToken={props.setAmadeusAccessToken}
             />
             <button
                 style={{

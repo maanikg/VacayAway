@@ -23,10 +23,10 @@ export default function DestinationSelectedScreen(props) {
             .then(data => {
                 const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
                 setDestAirports(filteredAirports);
-                console.log(filteredAirports)
+                // console.log(filteredAirports)
             })
             .catch(error => {
-                console.error(error);
+                // console.error(error);
                 alert(error)
             });
     }
@@ -40,32 +40,59 @@ export default function DestinationSelectedScreen(props) {
             .then(data => {
                 const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
                 setDepartureAirports(filteredAirports);
-                console.log(filteredAirports)
+                // console.log(filteredAirports)
             })
             .catch(error => {
-                console.error(error);
+                // console.error(error);
                 alert(error)
             });
     }
 
     function getFlight() {
         departureAirports.forEach(departureAirport => {
-            destAirports.forEach(destAirport => {
-                const url = 'https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${departureAirport.AirportCode}&destinationLocationCode=${destAirport.AirportCode}&departureDate=2023-07-01&adults=1&max=1';
-                // console.log(departureAirport.AirportCode + departureAirport.Names.Name.$)
-                // console.log(destAirport.AirportCode + destAirport.Names.Name.$)
-            })
+            setTimeout(() => {
+                destAirports.forEach(destAirport => {
+                    // console.log(departureAirport.AirportCode + " " + destAirport.AirportCode)
+                    // console.log(departureAirport.AirportCode + departureAirport.Names.Name.$)
+                    // console.log(destAirport.AirportCode + destAirport.Names.Name.$)
+                    fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${departureAirport.AirportCode}&destinationLocationCode=${destAirport.AirportCode}&departureDate=2023-07-01&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
+                        headers: {
+                            'Authorization': `Bearer ${props.amadeusAccessToken}`
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.meta.count != 0) {
+                                console.log(data)
+                                setDepartureFlights([...departureFlights, data.data[0]])
+                            }
+                        })
+                        .catch(error => {
+                            if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
+                                console.error(error.message);
+                                alert(error)
+                            }
+                        });
+                })
+            }, 150)
         })
+        const cheapestFlight = departureFlights.reduce((prevFlight, currFlight) => {
+            if (prevFlight === null || currFlight.price.total < prevFlight.price.total) {
+                return currFlight;
+            } else {
+                return prevFlight;
+            }
+        }, null);
     }
 
     useEffect(() => {
         props.monitorAuthState()
         if (props.destArray.length !== 0) {
-            getDestAirports()
-            getDepartureAirports()
+            // getDestAirports()
+            // getDepartureAirports()
             // getFlight()
         }
-    }, [navigate, props.destArray])
+    }, [props.currentScreen])
 
     return (
         <div

@@ -82,6 +82,7 @@ export default function App() {
 			.then(response => response.json())
 			.then(data => {
 				setAmadeusAccessToken(data.access_token)
+				console.log(data.access_token)
 			})
 			.catch(error => {
 				alert(error);
@@ -160,6 +161,8 @@ export default function App() {
 							monitorAuthState={monitorAuthState}
 							lufthansaAccessToken={lufthansaAccessToken}
 							setLufthansaAccessToken={setLufthansaAccessToken}
+							amadeusAccessToken={amadeusAccessToken}
+							setAmadeusAccessToken={setAmadeusAccessToken}
 						/>} />
 						<Route path="trips" caseSensitive={true} element={<Trips />} />
 						<Route path="*" element={<NoPage />} />
