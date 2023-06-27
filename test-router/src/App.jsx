@@ -12,6 +12,8 @@ import './css/App.css'
 import Trips from './pages/Trips';
 import Plan from './pages/plan/Plan';
 import { useState } from 'react';
+import { lufthansaConfig } from "./pages/lufthansaAPI";
+
 import {
 	AuthErrorCodes,
 	signInWithEmailAndPassword,
@@ -34,7 +36,7 @@ export default function App() {
 	const [outputMessage, setOutputMessage] = useState("");
 	const [loggingIn, setLoggingIn] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
-
+	const [lufthansaAccessToken, setLufthansaAccessToken] = useState('')
 	// const navigate = useNavigate();
 
 	function locationSetter() {
@@ -53,6 +55,23 @@ export default function App() {
 			}))
 		})
 	}
+	function setupLufthansaAPI() {
+		fetch(lufthansaConfig.url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: new URLSearchParams(lufthansaConfig.data)
+		})
+			.then(response => response.json())
+			.then(data => {
+				setLufthansaAccessToken(data.access_token)
+			})
+			.catch(error => {
+				alert(error)
+			});
+	}
+
 	const monitorAuthState = async () => {
 		onAuthStateChanged(auth, user => {
 			if (user) {
@@ -62,6 +81,8 @@ export default function App() {
 				setEmail("")
 				setOutputMessage("")
 				locationSetter()
+				setupLufthansaAPI()
+
 				// if (prompt === "trips") {
 				// navigate('/trips')
 				// }
@@ -116,6 +137,8 @@ export default function App() {
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
 							monitorAuthState={monitorAuthState}
+							lufthansaAccessToken={lufthansaAccessToken}
+							setLufthansaAccessToken={setLufthansaAccessToken}
 						/>} />
 						<Route path="trips" caseSensitive={true} element={<Trips />} />
 						<Route path="*" element={<NoPage />} />

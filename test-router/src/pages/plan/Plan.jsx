@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import InitialSelectCriteriaTabs from "./InitialSelectCriteraTabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './tabs.css';
 import DestinationSelectedScreen from "./DestinationSelectedScreen";
 import PlanGenerationScreen from "./PlanGenerationScreen";
@@ -244,6 +244,7 @@ export default function Plan(props) {
     const [returnDate, setReturnDate] = useState(new Date());
     const [datesValid, setDatesValid] = useState(false);
     const [currentScreen, setCurrentScreen] = useState(0)
+    
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
@@ -263,7 +264,6 @@ export default function Plan(props) {
         })
         setSampleCities(updatedCities);
     }
-
 
     const proceed = () => {
         // setDestinationSelected(!destinationSelected)
@@ -316,6 +316,8 @@ export default function Plan(props) {
                 returnDate={returnDate}
                 userLocation={props.userLocation}
                 monitorAuthState={props.monitorAuthState}
+                lufthansaAccessToken={props.lufthansaAccessToken}
+                setLufthansaAccessToken={props.setLufthansaAccessToken}
             />
             <button
                 style={{
