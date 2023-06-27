@@ -285,9 +285,7 @@ export default function Plan(props) {
     return (
         <div >
             <h1 style={{ background: "lightblue" }}>Plan</h1>
-            <p>{props.userLocation.latitude}</p>
             <InitialSelectCriteriaTabs
-                // display={destinationSelected ? "none" : "block"}
                 display={currentScreen === 0 ? "block" : "none"}
                 currentScreen={currentScreen}
                 setCurrentScreen={setCurrentScreen}
@@ -298,7 +296,6 @@ export default function Plan(props) {
                 currentTab={currentTab}
             />
             <DestinationSelectedScreen
-                // display={!destinationSelected ? "none" : "block"}
                 display={currentScreen === 1 ? "block" : "none"}
                 currentScreen={currentScreen}
                 setCurrentScreen={setCurrentScreen}

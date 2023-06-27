@@ -3,7 +3,7 @@ import requests
 import json
 
 v1API = "https://api.lufthansa.com/v1/oauth/token"
-partnersAPI = "https://api.lufthansa.com/v1/partners/oauth/token"
+# partnersAPI = "https://api.lufthansa.com/v1/partners/oauth/token"
 
 datas = {
     "client_id":"a5j4jgafxbdcqp4qnwjdzghdb",
@@ -29,7 +29,8 @@ response_v1 = requests.request("POST", v1API, data=datas)
 print(response_v1.status_code)
 
 
-newUrl = "https://api.lufthansa.com/v1/references/airports/nearest/43.842,-79.276"
+# newUrl = "https://api.lufthansa.com/v1/references/airports/nearest/43.842,-79.276"
+newUrl = "https://api.lufthansa.com/v1/references/airports/nearest/51.51924,-0.096654?lang=en"
 header = {
     "Authorization": "Bearer " + response_v1.json()["access_token"]
 }
@@ -37,7 +38,12 @@ response = requests.request("GET", newUrl, headers=header)
 # print(response.json())
 for i in response.json()['NearestAirportResource']['Airports']['Airport']:
     if (i['Distance']['Value']<50):
+        print(i['AirportCode'])
+        print(i['Names']['Name']['$'])
+        print()
+        # print(i)
+        # print()
     # print(i['Distance']['Value'])
-        print(i)
+        # print(i)
 # print(response.status_code)
 # print(response.json().keys())
