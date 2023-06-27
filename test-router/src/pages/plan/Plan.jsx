@@ -4,7 +4,7 @@ import { useState } from "react";
 import './tabs.css';
 import DestinationSelectedScreen from "./DestinationSelectedScreen";
 import PlanGenerationScreen from "./PlanGenerationScreen";
-
+import "../lufthansaAPI.js"
 const initialSampleCities = [
     {
         id: 1,
