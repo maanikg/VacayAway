@@ -12,6 +12,7 @@ import './css/App.css'
 import Trips from './pages/Trips';
 import Plan from './pages/plan/Plan';
 import { useState } from 'react';
+import { amadeusConfig } from "./pages/amadeusAPI";
 import { lufthansaConfig } from "./pages/lufthansaAPI";
 
 import {
@@ -25,7 +26,6 @@ import {
 } from "firebase/auth";
 import { auth, db } from "./pages/firebase.js"
 import { ref, set, onValue } from "firebase/database";
-import { amadeusConfig } from "./pages/amadeusAPI";
 
 export default function App() {
 	const [userLocation, setUserLocation] = useState({});

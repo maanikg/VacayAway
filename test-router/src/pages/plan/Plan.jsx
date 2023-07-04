@@ -244,7 +244,7 @@ export default function Plan(props) {
     const [returnDate, setReturnDate] = useState(new Date());
     const [datesValid, setDatesValid] = useState(false);
     const [currentScreen, setCurrentScreen] = useState(0)
-    
+
     const handleTabClick = (e) => {
         setCurrentTab(e.target.id);
     }
