@@ -1,0 +1,79 @@
+[Log] Object (main.3e3095e771f6194f2d8d.hot-update.js, line 166)
+
+id: "1"
+
+instantTicketingRequired: false
+
+itineraries: Array (1)
+0 Object
+
+duration: "PT7H"
+
+segments: Array (1)
+0 Object
+
+aircraft: {code: "333"}
+
+arrival: {iataCode: "LGW", terminal: "N", at: "2023-07-08T10:45:00"}
+
+blacklistedInEU: false
+
+carrierCode: "TS"
+
+departure: {iataCode: "YYZ", terminal: "3", at: "2023-07-07T22:45:00"}
+
+duration: "PT7H"
+
+id: "1"
+
+number: "122"
+
+numberOfStops: 0
+
+operating: {carrierCode: "TS"}
+
+Object Prototype
+
+Array Prototype
+
+Object Prototype
+
+Array Prototype
+
+lastTicketingDate: "2023-07-05"
+
+lastTicketingDateTime: "2023-07-05"
+
+nonHomogeneous: false
+
+numberOfBookableSeats: 9
+
+oneWay: false
+
+price: Object
+
+additionalServices: [{amount: "86.70", type: "CHECKED_BAGS"}] (1)
+
+base: "279.00"
+
+currency: "CAD"
+
+fees: [{amount: "0.00", type: "SUPPLIER"}, {amount: "0.00", type: "TICKETING"}] (2)
+
+grandTotal: "631.51"
+
+total: "631.51"
+
+Object Prototype
+
+pricingOptions: {fareType: ["PUBLISHED"], includedCheckedBagsOnly: false}
+
+source: "GDS"
+
+travelerPricings: [Object] (1)
+
+type: "flight-offer"
+
+validatingAirlineCodes: ["TS"] (1)
+
+Object Prototype

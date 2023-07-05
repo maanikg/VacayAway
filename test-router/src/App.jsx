@@ -14,6 +14,8 @@ import Plan from './pages/plan/Plan';
 import { useState } from 'react';
 import { amadeusConfig } from "./pages/amadeusAPI";
 import { lufthansaConfig } from "./pages/lufthansaAPI";
+import { useEffect } from 'react';
+// import { ref } from './pages/firebase.js'
 
 import {
 	AuthErrorCodes,
@@ -66,6 +68,7 @@ export default function App() {
 			.then(response => response.json())
 			.then(data => {
 				setLufthansaAccessToken(data.access_token)
+				console.log("luft" + data.access_token)
 			})
 			.catch(error => {
 				alert(error)
@@ -82,7 +85,7 @@ export default function App() {
 			.then(response => response.json())
 			.then(data => {
 				setAmadeusAccessToken(data.access_token)
-				console.log(data.access_token)
+				console.log("amadeus" + data.access_token)
 			})
 			.catch(error => {
 				alert(error);
