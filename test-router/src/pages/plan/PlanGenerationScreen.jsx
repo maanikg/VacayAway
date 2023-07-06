@@ -9,6 +9,8 @@ export default function DestinationSelectedScreen(props) {
     const [departureFlights, setDepartureFlights] = useState([])
     const [cheapestFlight, setCheapestFlight] = useState({})
     const [returnFlight, setReturnFlight] = useState({})
+    const [depFlightLatLon, setDepFlightLatLon] = useState({})
+    const [destFlightLatLon, setDestFlightLatLon] = useState({})
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -39,11 +41,18 @@ export default function DestinationSelectedScreen(props) {
                             duration: flights.data[0].itineraries[0].duration,
                             currencyShortForm: flights.data[0].price.currency,
                             currencyLongForm: flights.dictionaries.currencies[flights.data[0].price.currency],
+                            // totalDepartureLatLon: cheapestFlightLatLon,
+                            // totalArrivalLatLon: arrivalFlightLatLon
                         }
                     });
                 }
             });
         }
+        console.log(destFlightLatLon)
+        update(newPath, {
+            totalDepartureLatLon: depFlightLatLon,
+            totalArrivalLatLon: destFlightLatLon
+        })
         saveTripDataSub('departure', cheapestFlight)
         saveTripDataSub('arrival', returnFlight)
     }
@@ -85,30 +94,6 @@ export default function DestinationSelectedScreen(props) {
                 alert(error)
             });
     }
-    function getFlightTest() {
-        const departureDate = new Date(props.departureDate);
-        const year = departureDate.getFullYear();
-        const month = departureDate.getMonth() + 1; // add 1 to get month in range 1-12
-        const day = departureDate.getDate();
-        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-        fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=LHR&destinationLocationCode=YYZ&departureDate=${formattedDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
-            headers: {
-                'Authorization': `Bearer ${props.amadeusAccessToken}`
-            }
-        })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response)
-                console.log(response.meta)
-                console.log(response.meta.count)
-            })
-            .catch(error => {
-                if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
-                    console.error(error.message);
-                    alert(error)
-                }
-            });
-    }
     function getFlight() {
         const departureDate = new Date(props.departureDate);
         const depYear = departureDate.getFullYear();
@@ -140,11 +125,7 @@ export default function DestinationSelectedScreen(props) {
                             }
                         })
                         .catch(error => {
-                            if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
-                                console.error(error.message);
-                            } else {
-                                console.log(error.message)
-                            }
+                            console.log(error.message)
                         });
                 }, 1000 * index)
             })
@@ -163,6 +144,18 @@ export default function DestinationSelectedScreen(props) {
             const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
             const segments = cheapestFlightTemp.data[0].itineraries[0].segments;
             const destAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
+            for (let i = 0; i < departureAirports.length; i++) {
+                if (departureAirports[i].AirportCode === depAirportCheapest) {
+                    setDepFlightLatLon(departureAirports[i].Position.Coordinate)
+                    break
+                }
+            }
+            for (let i = 0; i < destAirports.length; i++) {
+                if (destAirports[i].AirportCode === destAirportCheapest) {
+                    setDestFlightLatLon(destAirports[i].Position.Coordinate)
+                    break
+                }
+            }
             fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
                 headers: {
                     'Authorization': `Bearer ${props.amadeusAccessToken}`
@@ -173,6 +166,7 @@ export default function DestinationSelectedScreen(props) {
                     console.log(depAirportCheapest + " " + destAirportCheapest + " ")
                     if (response.meta.count != 0) {
                         setReturnFlight(response)
+                        console.log(response)
                     }
                 })
                 .catch(error => {
