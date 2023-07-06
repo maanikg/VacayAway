@@ -20,8 +20,6 @@ export default function DestinationSelectedScreen(props) {
     const [departureFlights, setDepartureFlights] = useState([])
     const [cheapestFlight, setCheapestFlight] = useState({})
     const [returnFlight, setReturnFlight] = useState({})
-    // global const newPath
-
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -65,12 +63,9 @@ export default function DestinationSelectedScreen(props) {
         getDestAirports()
         getDepartureAirports()
         getFlight()
-        // getFlightTest()
-        // console.log(cheapestFlight)
     }
 
     function getDestAirports() {
-        // console.log('destAirports')
         const firstDest = props.destArray[0]
         fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
             headers: {
@@ -81,15 +76,12 @@ export default function DestinationSelectedScreen(props) {
             .then(data => {
                 const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
                 setDestAirports(filteredAirports);
-                // console.log(filteredAirports)
             })
             .catch(error => {
-                // console.error(error);
                 alert(error)
             });
     }
     function getDepartureAirports() {
-        // console.log('departureAirports')
         fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${props.userLocation.latitude},${props.userLocation.longitude}?lang=en`, {
             headers: {
                 'Authorization': `Bearer ${props.lufthansaAccessToken}`
@@ -99,10 +91,8 @@ export default function DestinationSelectedScreen(props) {
             .then(data => {
                 const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
                 setDepartureAirports(filteredAirports);
-                // console.log(filteredAirports)
             })
             .catch(error => {
-                // console.error(error);
                 alert(error)
             });
     }
@@ -133,18 +123,16 @@ export default function DestinationSelectedScreen(props) {
     function getFlight() {
         const departureDate = new Date(props.departureDate);
         const depYear = departureDate.getFullYear();
-        const depMonth = departureDate.getMonth() + 1; // add 1 to get month in range 1-12
+        const depMonth = departureDate.getMonth() + 1;
         const depDay = departureDate.getDate();
         const formattedDepDate = `${depYear}-${depMonth.toString().padStart(2, '0')}-${depDay.toString().padStart(2, '0')}`;
 
         const returnDate = new Date(props.returnDate);
         const returnYear = returnDate.getFullYear();
-        const returnMonth = returnDate.getMonth() + 1; // add 1 to get month in range 1-12
+        const returnMonth = returnDate.getMonth() + 1;
         const returnDay = returnDate.getDate();
         const formattedReturnDate = `${returnYear}-${returnMonth.toString().padStart(2, '0')}-${returnDay.toString().padStart(2, '0')}`;
-        // const returnYear = returnDate.getFullYear();
 
-        // console.log('getFlight')
         departureAirports.forEach(departureAirport => {
             destAirports.forEach((destAirport, index) => {
                 setTimeout(() => {
@@ -156,19 +144,15 @@ export default function DestinationSelectedScreen(props) {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            // console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + " ")
-                            // console.log(response)
                             if (response.meta.count != 0) {
-                                // console.log("here")
+                                console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + " ")
                                 console.log(response)
-                                // setDepartureFlights([...departureFlights, response.data[0]])
                                 setDepartureFlights([...departureFlights, response])
                             }
                         })
                         .catch(error => {
                             if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
                                 console.error(error.message);
-                                // alert(error)
                             } else {
                                 console.log(error.message)
                             }
@@ -177,8 +161,6 @@ export default function DestinationSelectedScreen(props) {
             })
         })
         //need to await maybe?
-        // console.log("!!")
-        // console.log(departureFlights)
         const cheapestFlightTemp = departureFlights.reduce((prevFlight, currFlight) => {
             if (prevFlight === null || currFlight.data[0].price.total < prevFlight.data[0].price.total) {
                 return currFlight;
@@ -200,11 +182,8 @@ export default function DestinationSelectedScreen(props) {
                 .then(response => response.json())
                 .then(response => {
                     console.log(depAirportCheapest + " " + destAirportCheapest + " ")
-                    // console.log(response)
                     if (response.meta.count != 0) {
-                        console.log("HERE")
                         setReturnFlight(response)
-                        console.log(response)
                     }
                 })
                 .catch(error => {
@@ -220,14 +199,8 @@ export default function DestinationSelectedScreen(props) {
     useEffect(() => {
         if (cheapestFlight !== null && cheapestFlight !== {} && cheapestFlight !== undefined && cheapestFlight !== "") {
             console.log(cheapestFlight)
-            // setCheapestFlight(cheapestFlight)
         }
         props.monitorAuthState()
-        if (props.destArray.length !== 0) {
-            // getDestAirports()
-            // getDepartureAirports()
-            // getFlight()
-        }
     }, [props.currentScreen])
 
     return (
