@@ -13,6 +13,18 @@ Firebase
 - https://firebase.google.com/docs/database/security/core-syntax?authuser=0&hl=en
 - https://firebase.google.com/docs/rules/rules-language#basic_structure
 - https://firebase.google.com/docs/emulator-suite/connect_auth
+- https://firebase.google.com/docs/database/web/read-and-write?hl=en&authuser=0#web-modular-api_2
+- https://www.youtube.com/watch?v=pP7quzFmWBY&list=PLl-K7zZEsYLnfwBe4WgEw9ao0J0N1LYDR&index=19
+- https://firebase.google.com/docs/hosting/test-preview-deploy?authuser=0
+- https://firebase.google.com/docs/cli?authuser=0#macos
+- https://stackoverflow.com/questions/62578273/how-do-i-temporarily-shut-down-or-turn-off-a-firebase-web-app
+- https://firebase.google.com/docs/database/rtdb-vs-firestore?hl=en&authuser=0&_gl=1*1rzrs66*_ga*MTc1MDc4MjYzNS4xNjg2NTgxOTkx*_ga_CW55HF8NVT*MTY4NzIyNDQ0MC4xNy4xLjE2ODcyMjU5NzUuMC4wLjA.
+- https://www.youtube.com/watch?v=Lb-Pnytoi-8
+- https://cloud.google.com/storage
+- https://cloud.google.com/storage#machine-learning-and-ai
+- https://cloud.google.com/billing/docs/how-to/notify#functions_cap_billing_dependencies-python
+- https://cloud.google.com/apis/docs/capping-api-usage
+- https://cloud.google.com/billing/docs/how-to/budgets?hl=en&_ga=2.150301874.-566697965.1667680219
 
 - https://www.youtube.com/watch?v=rQvOAnNvcNQ
 - https://www.youtube.com/watch?v=ZAsKOqv_SWU
