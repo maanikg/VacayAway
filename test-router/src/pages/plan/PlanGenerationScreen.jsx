@@ -3,7 +3,7 @@ import React from "react"
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react"
-import { ref, get, set, push } from "firebase/database";
+import { ref, get, set, push, update } from "firebase/database";
 import { render } from "react-dom";
 import { amadeusConfig } from "../amadeusAPI"
 import { lufthansaConfig } from "../lufthansaAPI";
@@ -20,75 +20,45 @@ export default function DestinationSelectedScreen(props) {
     const [departureFlights, setDepartureFlights] = useState([])
     const [cheapestFlight, setCheapestFlight] = useState({})
     const [returnFlight, setReturnFlight] = useState({})
+    // global const newPath
 
 
     function saveTripData() {
-        saveArrivalTripData()
-        // saveReturnTripData()
-    }
-    function saveArrivalTripData() {
-        const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/departure')
-        const newPath = push(pathRef)
-        const departurePath = newPath + '/departure'
-        const segments = cheapestFlight.data[0].itineraries[0].segments;
-        const lastIndex = segments.length - 1;
-        const segmentData = [];
-        // console.log(segments)
-        segments.forEach((segment, index) => {
-            segmentData.push({
-                departure: segment.departure.iataCode,
-                departureTerminal: segment.departure.terminal ? segment.departure.terminal : null,
-                departureDateTime: segment.departure.at,
-                destination: segment.arrival.iataCode,
-                destinationTerminal: segment.arrival.terminal ? segment.arrival.terminal : null,
-                destinationDateTime: segment.arrival.at,
-                duration: segment.duration,
-                flightNumber: segment.carrierCode + segment.number,
-                airline: cheapestFlight.dictionaries.carriers[segment.carrierCode],
-                aircraft: cheapestFlight.dictionaries.aircraft[segment.aircraft.code],
-            });
-            if (index === lastIndex) {
-                set(departurePath, {
-                    segments: segmentData,
-                    price: cheapestFlight.data[0].price.grandTotal,
-                    duration: cheapestFlight.data[0].itineraries[0].duration,
-                    currencyShortForm: cheapestFlight.data[0].price.currency,
-                    currencyLongForm: cheapestFlight.dictionaries.currencies[cheapestFlight.data[0].price.currency],
-                });
-            }
-        });
-    }
-    function saveReturnTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
         const newPath = push(pathRef)
-        const arrivalPath = newPath + '/arrival'
-        const segments = cheapestFlight.data[0].itineraries[0].segments;
-        const lastIndex = segments.length - 1;
-        const segmentData = [];
-        // console.log(segments)
-        segments.forEach((segment, index) => {
-            segmentData.push({
-                departure: segment.departure.iataCode,
-                departureTerminal: segment.departure.terminal ? segment.departure.terminal : null,
-                departureDateTime: segment.departure.at,
-                destination: segment.arrival.iataCode,
-                destinationTerminal: segment.arrival.terminal ? segment.arrival.terminal : null,
-                destinationDateTime: segment.arrival.at,
-                duration: segment.duration,
-                flightNumber: segment.carrierCode + segment.number,
-                airline: cheapestFlight.dictionaries.carriers[segment.carrierCode],
-                aircraft: cheapestFlight.dictionaries.aircraft[segment.aircraft.code],
-            });
-            if (index === lastIndex) {
-                set(arrivalPath, {
-                    segments: segmentData,
-                    price: cheapestFlight.data[0].price.grandTotal,
-                    duration: cheapestFlight.data[0].itineraries[0].duration,
-                    currencyShortForm: cheapestFlight.data[0].price.currency,
-                    currencyLongForm: cheapestFlight.dictionaries.currencies[cheapestFlight.data[0].price.currency],
+        function saveTripDataSub(tripSegment, flights) {
+            const segments = flights.data[0].itineraries[0].segments;
+            const lastIndex = segments.length - 1;
+            const segmentData = [];
+            console.log(segments)
+            segments.forEach((segment, index) => {
+                segmentData.push({
+                    departure: segment.departure.iataCode,
+                    departureTerminal: segment.departure.terminal ? segment.departure.terminal : null,
+                    departureDateTime: segment.departure.at,
+                    destination: segment.arrival.iataCode,
+                    destinationTerminal: segment.arrival.terminal ? segment.arrival.terminal : null,
+                    destinationDateTime: segment.arrival.at,
+                    duration: segment.duration,
+                    flightNumber: segment.carrierCode + segment.number,
+                    airline: flights.dictionaries.carriers[segment.carrierCode],
+                    aircraft: flights.dictionaries.aircraft[segment.aircraft.code],
                 });
-            }
-        });
+                if (index === lastIndex) {
+                    update(newPath, {
+                        [tripSegment]: {
+                            segments: segmentData,
+                            price: flights.data[0].price.grandTotal,
+                            duration: flights.data[0].itineraries[0].duration,
+                            currencyShortForm: flights.data[0].price.currency,
+                            currencyLongForm: flights.dictionaries.currencies[flights.data[0].price.currency],
+                        }
+                    });
+                }
+            });
+        }
+        saveTripDataSub('departure', cheapestFlight)
+        saveTripDataSub('arrival', returnFlight)
     }
 
     const generateTrip = () => {
@@ -220,7 +190,7 @@ export default function DestinationSelectedScreen(props) {
         setCheapestFlight(cheapestFlightTemp)
         if (cheapestFlightTemp !== null) {
             const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
-            const segments = cheapestFlight.data[0].itineraries[0].segments;
+            const segments = cheapestFlightTemp.data[0].itineraries[0].segments;
             const destAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
             fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
                 headers: {
