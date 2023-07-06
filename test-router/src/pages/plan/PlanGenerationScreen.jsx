@@ -1,20 +1,9 @@
-import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
 import React from "react"
 import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import { useState } from "react"
-import { ref, get, set, push, update } from "firebase/database";
-import { render } from "react-dom";
-import { amadeusConfig } from "../amadeusAPI"
-import { lufthansaConfig } from "../lufthansaAPI";
-// import { ref, db, auth } from "../firebase.js"
+import { ref, push, update } from "firebase/database";
 import { auth, db } from "../firebase.js"
-// import {ref} from
-// import { ref, set, onValue } from "../../firebase/database";
-// import { db } from "../firebase.js"
-// import { auth } from "../firebase.js"
 export default function DestinationSelectedScreen(props) {
-    const navigate = useNavigate();
     const [destAirports, setDestAirports] = useState([])
     const [departureAirports, setDepartureAirports] = useState([])
     const [departureFlights, setDepartureFlights] = useState([])
