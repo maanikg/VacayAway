@@ -42,6 +42,7 @@ export default function App() {
 	const [amadeusAccessToken, setAmadeusAccessToken] = useState('')
 
 	function locationSetter() {
+		console.log("loc")
 		const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
 		const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
 		onValue(latitutdeRef, (snapshot) => {
@@ -58,6 +59,7 @@ export default function App() {
 		})
 	}
 	function setupLufthansaAPI() {
+		console.log("luft")
 		fetch(lufthansaConfig.url, {
 			method: 'POST',
 			headers: {
@@ -75,6 +77,7 @@ export default function App() {
 			});
 	}
 	function setupAmadeusAPI() {
+		console.log("amadeus")
 		fetch(amadeusConfig.url, {
 			method: 'POST',
 			headers: {
@@ -97,6 +100,7 @@ export default function App() {
 	</script>
 
 	const monitorAuthState = async () => {
+		console.log("here")
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				setLoggedIn(true)
