@@ -51,10 +51,12 @@ export default function DestinationSelectedScreen(props) {
         console.log(destFlightLatLon)
         update(newPath, {
             totalDepartureLatLon: depFlightLatLon,
-            totalArrivalLatLon: destFlightLatLon
+            totalArrivalLatLon: destFlightLatLon,
+            departureAirport: cheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
+            arrivalAirport: returnFlight.data[0].itineraries[0].segments[0].departure.iataCode
         })
         saveTripDataSub('departure', cheapestFlight)
-        saveTripDataSub('arrival', returnFlight)
+        saveTripDataSub('return', returnFlight)
     }
 
     const generateTrip = () => {
