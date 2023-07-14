@@ -41,8 +41,6 @@ export default function DestinationSelectedScreen(props) {
                             duration: flights.data[0].itineraries[0].duration,
                             currencyShortForm: flights.data[0].price.currency,
                             currencyLongForm: flights.dictionaries.currencies[flights.data[0].price.currency],
-                            // totalDepartureLatLon: cheapestFlightLatLon,
-                            // totalArrivalLatLon: arrivalFlightLatLon
                         }
                     });
                 }

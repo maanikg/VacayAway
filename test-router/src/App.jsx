@@ -3,6 +3,7 @@
 // import Map from './pages/map/MapView';
 import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
 import MapWithRouter from './pages/map/MapView';
+import MainMap from './pages/map/Map';
 import HomeScreen from './pages/HomeScreen';
 import NoPage from './pages/NoPage';
 import NavigationBar from './pages/NavigationBar';
@@ -163,6 +164,7 @@ export default function App() {
 						/>} />
 						{/* <Route path="auth" element={<AuthPage />} /> */}
 						<Route path="map" caseSensitive={true} element={<MapWithRouter />} />
+						<Route path="map2" caseSensitive={true} element={<MainMap />} />
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
 							monitorAuthState={monitorAuthState}

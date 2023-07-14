@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { useNavigate } from 'react-router';
 import { Navigate, useHistory } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import MainMap from './Map';
 import mapStyle from './mapStyle';
 
 // const mapStyles = {
@@ -63,7 +64,7 @@ export class MapContainer extends Component {
                 {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
                 <div style={{ display: 'flex' }}>
                     <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
-                        <Map
+                        {/* <Map
                             // style={this.mapStyle}
                             style={mapStyle}
                             disableDefaultUI={true}
@@ -75,7 +76,8 @@ export class MapContainer extends Component {
 
                         >
                             <Marker position={coords} />
-                        </Map>
+                        </Map> */}
+                        <MainMap />
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
