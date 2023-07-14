@@ -1,6 +1,5 @@
 import React from 'react'
 import { GoogleMap, LoadScript, useJsApiLoader } from '@react-google-maps/api';
-// import useplacesautocomplete from 'use-places-autocomplete';
 
 const containerStyle = {
     width: '100%',

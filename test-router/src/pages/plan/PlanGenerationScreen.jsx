@@ -57,6 +57,25 @@ export default function DestinationSelectedScreen(props) {
         saveTripDataSub('return', returnFlight)
     }
 
+    function searchGoogle() {
+        let service = new window.google.maps.places.PlacesService(document.createElement('div'));
+        // console.log(depFlightLatLon.Latitude)
+        service.nearbySearch({
+            location: { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude },
+            radius: 50000,
+            // type: ['lodging'],
+            pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
+            // Aaw_FcL3oDO1j5O4OFiEHOZRzTvEpOjXh9lFjE73Zg_cEgO8aHkBOhCnRSIow_6sOaGtQmuVleoDfBe_T0TQH69cxiQs1JM91ot4AY6kQlCf0oCfpedVkVrp83GaAMlaizFnsAgB1ImR
+        }, (results, status, pagination) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                console.log(results)
+            }
+            console.log(status)
+            console.log(pagination)
+        }
+        )
+    }
+
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
@@ -230,6 +249,10 @@ export default function DestinationSelectedScreen(props) {
                     <button
                         onClick={saveTripData}>
                         Confirm
+                    </button>
+                    <button
+                        onClick={searchGoogle}>
+                        Search Google
                     </button>
                 </div>
             </div>
