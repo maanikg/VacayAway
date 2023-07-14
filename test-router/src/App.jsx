@@ -163,8 +163,8 @@ export default function App() {
 							setLoggingIn={setLoggingIn}
 						/>} />
 						{/* <Route path="auth" element={<AuthPage />} /> */}
-						<Route path="map" caseSensitive={true} element={<MapWithRouter />} />
-						<Route path="map2" caseSensitive={true} element={<MainMap />} />
+						{/* <Route path="map" caseSensitive={true} element={<MapWithRouter />} /> */}
+						<Route path="map" caseSensitive={true} element={<MainMap />} />
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
 							monitorAuthState={monitorAuthState}
