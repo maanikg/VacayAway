@@ -1,27 +1,30 @@
-// import { useMemo } from "react";
-import { GoogleMap, useLoadScript,/* Marker*/ } from "@react-google-maps/api";
+import React from 'react'
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
-export default function MainMap() {
-    const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: "AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc",
-    });
+const containerStyle = {
+    width: '100%',
+    height: '100%'
+};
 
-    if (!isLoaded) return console.log("loading");
-    if (loadError) return console.log("error loading");
-    // console.log("loaded")
+const center = {
+    lat: 43.6532, lng: -79.3832
+};
+
+function MainMap() {
     return (
-        <Map />
+        <LoadScript
+            googleMapsApiKey="AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc"
+        >
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={15}
+            >
+                { /* Child components, such as markers, info windows, etc. */}
+                <></>
+            </GoogleMap>
+        </LoadScript>
     )
 }
 
-function Map() {
-
-    // const center = useMemo(() => ({ lat: 43.6532, lng: -79.3832 }), []);
-    return (
-        <GoogleMap
-            zoom={15}
-            center={{ lat: 43.6532, lng: -79.3832 }}
-            mapContainerStyle={{ width: "100%", height: "100%" }}
-        />
-    );
-}
+export default MainMap
