@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { useNavigate } from 'react-router';
 import { Navigate, useHistory } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import MainMap from './Map';
 import mapStyle from './mapStyle';
 
 // const mapStyles = {
@@ -43,27 +44,19 @@ import mapStyle from './mapStyle';
 // const zoom = 10;
 // const navigate = useNavigate()
 // let history = useHistory()
-export class MapContainer extends Component {
-    _mapLoaded(mapProps, map) {
-        map.setOptions({
-            styles: mapStyle//,
-            // containerStyle: containerStyle
-        });
-    }
 
-    render() {
-        // navigate = useNavigate();
-        // const navigate = useNavigate();
-        const coords = { lat: 43.6532, lng: -79.3832 };
-        return (
-            <div >
-                <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
-                    <h1  >Hi! </h1>
-                </div>
-                {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
-                <div style={{ display: 'flex' }}>
-                    <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
-                        <Map
+// MapContainer.defaultProps = GoogleMapStyles;
+export default function MapContainer() {
+    const navigate = useNavigate();
+    return (
+        <div >
+            <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: '#6c423e' }}>
+                <h1  >Hi! </h1>
+            </div>
+            {/* <div style={{ position: 'relative', width: '100vw', height: '40vh' }} /> */}
+            <div style={{ display: 'flex' }}>
+                <div style={{ position: 'relative', width: '100vw', height: '80vh' }}>
+                    {/* <Map
                             // style={this.mapStyle}
                             style={mapStyle}
                             disableDefaultUI={true}
@@ -75,39 +68,24 @@ export class MapContainer extends Component {
 
                         >
                             <Marker position={coords} />
-                        </Map>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
-                        <h1>Sidebar</h1>
-                    </div>
-
+                        </Map> */}
+                    <MainMap />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0d57cd' }}>
-                    <h1>Footer</h1>
-                </div>
-                <button onClick={
-                    () => this.props.navigate('/')
-                }>Go Home</button>
-                <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0dcd9d' }}>
-                    <h1>Footer2</h1>
-                </div>
-            </div >
-        );
 
-    }
-}
+                <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
+                    <h1>Sidebar</h1>
+                </div>
 
-// MapContainer.defaultProps = GoogleMapStyles;
-export function MapWithRouter(props) {
-    const navigate = useNavigate();
-    return (
-        <>
-            <MapContainer google={props.google} navigate={navigate}></MapContainer>
-        </>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0d57cd' }}>
+                <h1>Footer</h1>
+            </div>
+            <button onClick={
+                () => navigate('/')
+            }>Go Home</button>
+            <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: '#0dcd9d' }}>
+                <h1>Footer2</h1>
+            </div>
+        </div >
     )
 }
-
-export default GoogleApiWrapper({
-    apiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc'
-})(MapWithRouter);
