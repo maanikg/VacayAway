@@ -11,6 +11,7 @@ export default function DestinationSelectedScreen(props) {
     const [returnFlight, setReturnFlight] = useState({})
     const [depFlightLatLon, setDepFlightLatLon] = useState({})
     const [destFlightLatLon, setDestFlightLatLon] = useState({})
+    const [lodging, setLodging] = useState([])
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -60,22 +61,38 @@ export default function DestinationSelectedScreen(props) {
     function searchGoogle() {
         let service = new window.google.maps.places.PlacesService(document.createElement('div'));
         // console.log(depFlightLatLon.Latitude)
-        service.nearbySearch({
+        const request = {
             location: { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude },
             radius: 50000,
-            // type: ['lodging'],
-            pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
+            type: ['lodging'],
+            language: 'en',
+            // pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
             // Aaw_FcL3oDO1j5O4OFiEHOZRzTvEpOjXh9lFjE73Zg_cEgO8aHkBOhCnRSIow_6sOaGtQmuVleoDfBe_T0TQH69cxiQs1JM91ot4AY6kQlCf0oCfpedVkVrp83GaAMlaizFnsAgB1ImR
-        }, (results, status, pagination) => {
+        }
+        service.nearbySearch(request, (results, status, pagination) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results)
+                setLodging(...lodging, results)
+                // console.log(results[1].place_id)
+                // if (pagination.hasNextPage) {
+                //     // console.log(pagination)
+                //     pagination.nextPage();
+                // }
             }
-            console.log(status)
-            console.log(pagination)
         }
         )
+        // service.getDetails({
+        //     placeId: "ChIJY-ndrTzAQUcR2BkUyAT8F-s",
+        //     fields: ["opening_hours"]
+        // }, (results, status) => {
+        //     console.log(results)
+        // }
+        // )
     }
 
+    useEffect(() => {
+        console.log(lodging)
+    }, [lodging])
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
