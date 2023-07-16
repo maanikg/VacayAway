@@ -12,6 +12,9 @@ export default function DestinationSelectedScreen(props) {
     const [depFlightLatLon, setDepFlightLatLon] = useState({})
     const [destFlightLatLon, setDestFlightLatLon] = useState({})
     const [lodging, setLodging] = useState([])
+    var localDepAirports = [];
+    var localDestAirports = [];
+    var localDepFlights = []
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -96,9 +99,14 @@ export default function DestinationSelectedScreen(props) {
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
-        getFlight()
+        // getFlight()
     }
 
+    // useEffect(() => {
+    //     if (destAirports.length > 0 && departureAirports.length > 0) {
+    //         getFlight()
+    //     }
+    // }, [destAirports, departureAirports])
     function getDestAirports() {
         const firstDest = props.destArray[0]
         fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
@@ -106,11 +114,19 @@ export default function DestinationSelectedScreen(props) {
                 'Authorization': `Bearer ${props.lufthansaAccessToken}`
             }
         })
-            .then(response => response.json())
+            .then(
+                response => response.json()
+                // console.log("request complete")
+            )
             .then(data => {
-                const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
-                setDestAirports(filteredAirports);
+                localDestAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
+                setDestAirports(localDestAirports);
+                console.log(localDestAirports)
+                // console.log("dest airport request complete")
+                // getFlight()
             })
+            // .then(
+            // )
             .catch(error => {
                 alert(error)
             });
@@ -123,9 +139,14 @@ export default function DestinationSelectedScreen(props) {
         })
             .then(response => response.json())
             .then(data => {
-                const filteredAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
-                setDepartureAirports(filteredAirports);
+                localDepAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
+                setDepartureAirports(localDepAirports);
+                console.log(localDepAirports)
+                // getFlight()
+                console.log("dep airport request complete")
             })
+            // .then(
+            // )
             .catch(error => {
                 alert(error)
             });
@@ -143,10 +164,14 @@ export default function DestinationSelectedScreen(props) {
         const returnDay = returnDate.getDate();
         const formattedReturnDate = `${returnYear}-${returnMonth.toString().padStart(2, '0')}-${returnDay.toString().padStart(2, '0')}`;
 
-        departureAirports.forEach(departureAirport => {
-            destAirports.forEach((destAirport, index) => {
+        // const flightPromises = []
+        var numPromises = localDepAirports.length * localDestAirports.length
+        console.log(numPromises)
+        localDepAirports.forEach(departureAirport => {
+            localDestAirports.forEach((destAirport, index) => {
                 setTimeout(() => {
                     console.log(destAirport.AirportCode + " " + departureAirport.AirportCode)
+                    // const promise = fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${departureAirport.AirportCode}&destinationLocationCode=${destAirport.AirportCode}&departureDate=${formattedDepDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
                     fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${departureAirport.AirportCode}&destinationLocationCode=${destAirport.AirportCode}&departureDate=${formattedDepDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
                         headers: {
                             'Authorization': `Bearer ${props.amadeusAccessToken}`
@@ -157,17 +182,34 @@ export default function DestinationSelectedScreen(props) {
                             if (response.meta.count != 0) {
                                 console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + " ")
                                 console.log(response)
+                                localDepFlights = [...localDepFlights, response]
+                                console.log(localDepFlights)
                                 setDepartureFlights([...departureFlights, response])
                             }
                         })
+                        .then(
+                            console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + "flight request complete")
+                        )
                         .catch(error => {
                             console.log(error.message)
-                        });
+                        })
+                        .finally(() => {
+                            numPromises--
+                            console.log(numPromises)
+                            if (numPromises === 0) {
+                                console.log("all promises complete")
+                                console.log(localDepFlights)
+                            }
+                            // console.log("finally")
+                        })
+                    // flightPromises.push(promise)
                 }, 1000 * index)
             })
         })
         //need to await maybe?
-        const cheapestFlightTemp = departureFlights.reduce((prevFlight, currFlight) => {
+        // const cheapestFlightTemp = departureFlights.reduce((prevFlight, currFlight) => {
+        // Promise.all(flightPromises).then(() => {
+        const cheapestFlightTemp = localDepFlights.reduce((prevFlight, currFlight) => {
             if (prevFlight === null || currFlight.data[0].price.total < prevFlight.data[0].price.total) {
                 return currFlight;
             } else {
@@ -213,6 +255,7 @@ export default function DestinationSelectedScreen(props) {
                     }
                 })
         }
+        // })
     }
 
     useEffect(() => {

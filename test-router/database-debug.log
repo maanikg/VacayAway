@@ -1,4 +1,8 @@
-11:30:58.802 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-11:30:58.898 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-10] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 105ms, init: 0ms
-11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-11] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 106ms, init: 0ms
+14:00:39.347 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+14:00:39.605 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+14:02:27.312 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 124ms, init: 0ms
+14:02:36.445 [FirebaseWorkerPool-1-2] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested 
+namespace vacayaway, but the emulator is configured for vacayaway-default-rtdb. To 
+opt-out of single project mode add/set the singleProjectMode: false property in 
+the firebase.json emulators config. 
+14:02:36.467 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 10ms, init: 0ms

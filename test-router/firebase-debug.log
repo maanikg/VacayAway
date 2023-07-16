@@ -1,52 +1,54 @@
-[debug] [2023-07-14T15:30:56.543Z] ----------------------------------------------------------------------
-[debug] [2023-07-14T15:30:56.545Z] Command:       /usr/local/bin/firebase /Users/maanikgogna/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start
-[debug] [2023-07-14T15:30:56.546Z] CLI Version:   12.2.1
-[debug] [2023-07-14T15:30:56.546Z] Platform:      darwin
-[debug] [2023-07-14T15:30:56.546Z] Node Version:  v16.16.0
-[debug] [2023-07-14T15:30:56.552Z] Time:          Fri Jul 14 2023 11:30:56 GMT-0400 (Eastern Daylight Time)
-[debug] [2023-07-14T15:30:56.552Z] ----------------------------------------------------------------------
+[debug] [2023-07-16T18:00:34.887Z] ----------------------------------------------------------------------
+[debug] [2023-07-16T18:00:34.890Z] Command:       /usr/local/bin/firebase /Users/maanikgogna/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start
+[debug] [2023-07-16T18:00:34.891Z] CLI Version:   12.2.1
+[debug] [2023-07-16T18:00:34.892Z] Platform:      darwin
+[debug] [2023-07-16T18:00:34.892Z] Node Version:  v16.16.0
+[debug] [2023-07-16T18:00:34.901Z] Time:          Sun Jul 16 2023 14:00:34 GMT-0400 (Eastern Daylight Time)
+[debug] [2023-07-16T18:00:34.902Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2023-07-14T15:30:56.673Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-07-14T15:30:56.676Z] > authorizing via signed-in user (gognamaanik@gmail.com)
-[debug] [2023-07-14T15:30:56.936Z] java version "20.0.1" 2023-04-18
+[debug] [2023-07-16T18:00:34.911Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2023-07-16T18:00:35.102Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-07-16T18:00:35.103Z] > authorizing via signed-in user (gognamaanik@gmail.com)
+[debug] [2023-07-16T18:00:35.392Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2023-07-16T18:00:35.396Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2023-07-16T18:00:35.686Z] java version "20.0.1" 2023-04-18
 
-[debug] [2023-07-14T15:30:56.939Z] Java(TM) SE Runtime Environment (build 20.0.1+9-29)
+[debug] [2023-07-16T18:00:35.688Z] Java(TM) SE Runtime Environment (build 20.0.1+9-29)
 Java HotSpot(TM) 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
 
-[debug] [2023-07-14T15:30:56.941Z] Parsed Java major version: 20
+[debug] [2023-07-16T18:00:35.692Z] Parsed Java major version: 20
 [info] i  emulators: Starting emulators: auth, database {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, database"}}
-[debug] [2023-07-14T15:30:57.440Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2023-07-14T15:30:57.441Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2023-07-14T15:30:57.442Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2023-07-14T15:30:57.443Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}]},"metadata":{"message":"assigned listening specs for emulators"}}
-[warn] ⚠  emulators: It seems that you are running multiple instances of the emulator suite for project vacayaway. This may result in unexpected behavior. 
-[debug] [2023-07-14T15:30:57.467Z] [hub] writing locator at /var/folders/k4/ndhbjn8x6937y2q_d1jlblch0000gn/T/hub-vacayaway.json
-[debug] [2023-07-14T15:30:57.477Z] > refreshing access token with scopes: []
-[debug] [2023-07-14T15:30:57.478Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2023-07-14T15:30:57.478Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-07-14T15:30:57.751Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
-[debug] [2023-07-14T15:30:57.756Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-07-14T15:30:57.776Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway [none]
-[debug] [2023-07-14T15:30:58.112Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway 200
-[debug] [2023-07-14T15:30:58.112Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway {"projectId":"vacayaway","projectNumber":"983293492743","displayName":"vacayAway","name":"projects/vacayaway","resources":{"hostingSite":"vacayaway","realtimeDatabaseInstance":"vacayaway-default-rtdb"},"state":"ACTIVE","etag":"1_273fa0a5-2b7d-4454-934f-d8c22c4cf6e5"}
-[debug] [2023-07-14T15:30:58.113Z] database rules config:  []
+[debug] [2023-07-16T18:00:36.649Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-16T18:00:36.651Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-16T18:00:36.653Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-16T18:00:36.653Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-07-16T18:00:36.685Z] [hub] writing locator at /var/folders/k4/ndhbjn8x6937y2q_d1jlblch0000gn/T/hub-vacayaway.json
+[debug] [2023-07-16T18:00:36.699Z] > refreshing access token with scopes: []
+[debug] [2023-07-16T18:00:36.700Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-07-16T18:00:36.700Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-07-16T18:00:37.089Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-07-16T18:00:37.089Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-07-16T18:00:37.107Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway [none]
+[debug] [2023-07-16T18:00:37.672Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway 200
+[debug] [2023-07-16T18:00:37.672Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/vacayaway {"projectId":"vacayaway","projectNumber":"983293492743","displayName":"vacayAway","name":"projects/vacayaway","resources":{"hostingSite":"vacayaway","realtimeDatabaseInstance":"vacayaway-default-rtdb"},"state":"ACTIVE","etag":"1_273fa0a5-2b7d-4454-934f-d8c22c4cf6e5"}
+[debug] [2023-07-16T18:00:37.673Z] database rules config:  []
 [warn] ⚠  database: Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"database"},"message":"Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
-[debug] [2023-07-14T15:30:58.119Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
-[debug] [2023-07-14T15:30:58.120Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2023-07-14T15:30:58.120Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
-[debug] [2023-07-14T15:30:58.120Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","/Users/maanikgogna/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar","--host","127.0.0.1","--port",9000,"--single_project_mode","Warning"],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"/Users/maanikgogna/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",9000,\"--single_project_mode\",\"Warning\"],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[debug] [2023-07-16T18:00:37.684Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2023-07-16T18:00:37.684Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-07-16T18:00:37.685Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2023-07-16T18:00:37.685Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","/Users/maanikgogna/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar","--host","127.0.0.1","--port",9000,"--single_project_mode","Warning"],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"/Users/maanikgogna/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",9000,\"--single_project_mode\",\"Warning\"],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false}"}}
 [info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
-[debug] [2023-07-14T15:30:58.803Z] 11:30:58.802 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
- {"metadata":{"emulator":{"name":"database"},"message":"11:30:58.802 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started\n"}}
-[debug] [2023-07-14T15:30:58.898Z] 11:30:58.898 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
- {"metadata":{"emulator":{"name":"database"},"message":"11:30:58.898 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000\n"}}
-[debug] [2023-07-14T15:31:04.596Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2023-07-14T15:31:04.599Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
-[debug] [2023-07-14T15:31:04.599Z] Starting Emulator UI with command {"binary":"node","args":["/Users/maanikgogna/.cache/firebase/emulators/ui-v1.11.6/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/maanikgogna/.cache/firebase/emulators/ui-v1.11.6/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[debug] [2023-07-16T18:00:39.351Z] 14:00:39.347 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+ {"metadata":{"emulator":{"name":"database"},"message":"14:00:39.347 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started\n"}}
+[debug] [2023-07-16T18:00:39.606Z] 14:00:39.605 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+ {"metadata":{"emulator":{"name":"database"},"message":"14:00:39.605 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000\n"}}
+[debug] [2023-07-16T18:00:49.122Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-07-16T18:00:49.126Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-07-16T18:00:49.126Z] Starting Emulator UI with command {"binary":"node","args":["/Users/maanikgogna/.cache/firebase/emulators/ui-v1.11.6/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/maanikgogna/.cache/firebase/emulators/ui-v1.11.6/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
 [info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
-[debug] [2023-07-14T15:31:04.836Z] Web / API server started at 127.0.0.1:4000
+[debug] [2023-07-16T18:00:49.436Z] Web / API server started at 127.0.0.1:4000
  {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
-[debug] [2023-07-14T15:31:04.837Z] Web / API server started at ::1:4000
+[debug] [2023-07-16T18:00:49.441Z] Web / API server started at ::1:4000
  {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
 [info] 
 ┌─────────────────────────────────────────────────────────────┐
@@ -66,6 +68,12 @@ Java HotSpot(TM) 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
-[debug] [2023-07-14T15:37:16.929Z] 11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-10] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 105ms, init: 0ms
-11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-11] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 106ms, init: 0ms
- {"metadata":{"emulator":{"name":"database"},"message":"11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-10] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 105ms, init: 0ms\n11:37:16.928 [NamespaceSystem-akka.actor.default-dispatcher-11] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 106ms, init: 0ms\n"}}
+[debug] [2023-07-16T18:02:27.313Z] 14:02:27.312 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 124ms, init: 0ms
+ {"metadata":{"emulator":{"name":"database"},"message":"14:02:27.312 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 124ms, init: 0ms\n"}}
+[debug] [2023-07-16T18:02:36.446Z] 14:02:36.445 [FirebaseWorkerPool-1-2] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested 
+namespace vacayaway, but the emulator is configured for vacayaway-default-rtdb. To 
+opt-out of single project mode add/set the singleProjectMode: false property in 
+the firebase.json emulators config. 
+ {"metadata":{"emulator":{"name":"database"},"message":"14:02:36.445 [FirebaseWorkerPool-1-2] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested \nnamespace vacayaway, but the emulator is configured for vacayaway-default-rtdb. To \nopt-out of single project mode add/set the singleProjectMode: false property in \nthe firebase.json emulators config. \n"}}
+[debug] [2023-07-16T18:02:36.468Z] 14:02:36.467 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 10ms, init: 0ms
+ {"metadata":{"emulator":{"name":"database"},"message":"14:02:36.467 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 10ms, init: 0ms\n"}}
