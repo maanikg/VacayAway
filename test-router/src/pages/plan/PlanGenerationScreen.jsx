@@ -15,6 +15,8 @@ export default function DestinationSelectedScreen(props) {
     var localDepAirports = [];
     var localDestAirports = [];
     var localDepFlights = []
+    var depAirportPromise
+    var destAirportPromise
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -99,6 +101,15 @@ export default function DestinationSelectedScreen(props) {
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
+
+        Promise.all([depAirportPromise, destAirportPromise])
+            .then(() => {
+                console.log("here now")
+                console.log(localDepAirports)
+                console.log(localDestAirports)
+                getFlight(localDepAirports, localDestAirports)
+            })
+            .catch(err => console.log(err))
         // getFlight()
     }
 
@@ -109,7 +120,7 @@ export default function DestinationSelectedScreen(props) {
     // }, [destAirports, departureAirports])
     function getDestAirports() {
         const firstDest = props.destArray[0]
-        fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
+        destAirportPromise = fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
             headers: {
                 'Authorization': `Bearer ${props.lufthansaAccessToken}`
             }
@@ -132,7 +143,7 @@ export default function DestinationSelectedScreen(props) {
             });
     }
     function getDepartureAirports() {
-        fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${props.userLocation.latitude},${props.userLocation.longitude}?lang=en`, {
+        depAirportPromise = fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${props.userLocation.latitude},${props.userLocation.longitude}?lang=en`, {
             headers: {
                 'Authorization': `Bearer ${props.lufthansaAccessToken}`
             }
