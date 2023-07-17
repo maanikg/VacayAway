@@ -229,55 +229,48 @@ export default function DestinationSelectedScreen(props) {
                 }
             }, null);
             console.log(cheapestFlightTemp)
+            setCheapestFlight(cheapestFlightTemp)
             console.log("cheapest")
-        }
-        // Promise.all(flightPromises).then(() => {
-        //     console.log("all promises complete")
-        //     // console.log(localDepFlights)
-        // })
-        //need to await maybe?
-        // const cheapestFlightTemp = departureFlights.reduce((prevFlight, currFlight) => {
-        // Promise.all(flightPromises).then(() => {
-
-
-        setCheapestFlight(cheapestFlightTemp)
-        if (cheapestFlightTemp !== null) {
-            const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
-            const segments = cheapestFlightTemp.data[0].itineraries[0].segments;
-            const destAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
-            for (let i = 0; i < departureAirports.length; i++) {
-                if (departureAirports[i].AirportCode === depAirportCheapest) {
-                    setDepFlightLatLon(departureAirports[i].Position.Coordinate)
-                    break
+            if (cheapestFlightTemp !== null) {
+                const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
+                const segments = cheapestFlightTemp.data[0].itineraries[0].segments;
+                const destAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
+                for (let i = 0; i < localDepAirports.length; i++) {
+                    if (localDepAirports[i].AirportCode === depAirportCheapest) {
+                        setDepFlightLatLon(localDepAirports[i].Position.Coordinate)
+                        break
+                    }
                 }
-            }
-            for (let i = 0; i < destAirports.length; i++) {
-                if (destAirports[i].AirportCode === destAirportCheapest) {
-                    setDestFlightLatLon(destAirports[i].Position.Coordinate)
-                    break
+                for (let i = 0; i < localDestAirports.length; i++) {
+                    if (localDestAirports[i].AirportCode === destAirportCheapest) {
+                        setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
+                        break
+                    }
                 }
-            }
-            fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
-                headers: {
-                    'Authorization': `Bearer ${props.amadeusAccessToken}`
-                }
-            })
-                .then(response => response.json())
-                .then(response => {
-                    console.log(depAirportCheapest + " " + destAirportCheapest + " ")
-                    if (response.meta.count != 0) {
-                        setReturnFlight(response)
-                        console.log(response)
+                fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
+                    headers: {
+                        'Authorization': `Bearer ${props.amadeusAccessToken}`
                     }
                 })
-                .catch(error => {
-                    if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
-                        console.error(error.message);
-                    } else {
-                        console.log(error.message)
-                    }
-                })
+                    .then(response => response.json())
+                    .then(response => {
+                        console.log(depAirportCheapest + " " + destAirportCheapest + " ")
+                        if (response.meta.count != 0) {
+                            setReturnFlight(response)
+                            console.log(response)
+                        }
+                    })
+                    .catch(error => {
+                        if (error.message !== "TypeError: undefined is not an object (evaluating 'data.meta.count')") {
+                            console.error(error.message);
+                        } else {
+                            console.log(error.message)
+                        }
+                    })
+            }
         }
+
+
         // })
     }
 
@@ -327,11 +320,11 @@ export default function DestinationSelectedScreen(props) {
                     <p>When do you want to come back?</p>
                     <button
                         onClick={generateTrip}>
-                        Hi
+                        Generate Trip
                     </button>
                     <button
                         onClick={saveTripData}>
-                        Confirm
+                        Save Info
                     </button>
                     <button
                         onClick={searchGoogle}>
