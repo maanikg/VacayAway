@@ -13,12 +13,12 @@ const center = {
 const libraryImports = ["places"]
 
 function MainMap() {
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc',
-        libraries: libraryImports
-    });
-    if (!isLoaded) return <div>Loading...</div>;
+    // const { isLoaded } = useJsApiLoader({
+    //     id: 'google-map-script',
+    //     googleMapsApiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc',
+    //     libraries: libraryImports
+    // });
+    // if (!isLoaded) return <div>Loading...</div>;
     return (
 
         <GoogleMap

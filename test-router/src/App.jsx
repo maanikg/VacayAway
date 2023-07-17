@@ -16,6 +16,8 @@ import { useState } from 'react';
 import { amadeusConfig } from "./pages/amadeusAPI";
 import { lufthansaConfig } from "./pages/lufthansaAPI";
 import { useEffect } from 'react';
+// import { LoadMap } from './pages/map/LoadMap'
+import LoadMap from "./pages/map/LoadMap";
 // import { ref } from './pages/firebase.js'
 
 import {
@@ -135,6 +137,7 @@ export default function App() {
 		// <div style={{ backgroundColor: "blue" }}>
 		<div>
 			<NavigationBar />
+			<LoadMap />
 			<BrowserRouter>
 				<Routes>
 					{/* <Route index */}
