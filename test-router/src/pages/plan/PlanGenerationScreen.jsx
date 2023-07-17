@@ -104,13 +104,12 @@ export default function DestinationSelectedScreen(props) {
 
         Promise.all([depAirportPromise, destAirportPromise])
             .then(() => {
-                console.log("here now")
+                console.log("calling getFlight")
                 console.log(localDepAirports)
                 console.log(localDestAirports)
                 getFlight(localDepAirports, localDestAirports)
             })
             .catch(err => console.log(err))
-        // getFlight()
     }
 
     // useEffect(() => {
@@ -152,9 +151,9 @@ export default function DestinationSelectedScreen(props) {
             .then(data => {
                 localDepAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
                 setDepartureAirports(localDepAirports);
-                console.log(localDepAirports)
+                // console.log(localDepAirports)
                 // getFlight()
-                console.log("dep airport request complete")
+                // console.log("dep airport request complete")
             })
             // .then(
             // )
@@ -176,8 +175,8 @@ export default function DestinationSelectedScreen(props) {
         const formattedReturnDate = `${returnYear}-${returnMonth.toString().padStart(2, '0')}-${returnDay.toString().padStart(2, '0')}`;
 
         // const flightPromises = []
+        // console.log(numPromises)
         var numPromises = localDepAirports.length * localDestAirports.length
-        console.log(numPromises)
         localDepAirports.forEach(departureAirport => {
             localDestAirports.forEach((destAirport, index) => {
                 setTimeout(() => {
@@ -210,24 +209,37 @@ export default function DestinationSelectedScreen(props) {
                             if (numPromises === 0) {
                                 console.log("all promises complete")
                                 console.log(localDepFlights)
+                                getCheapestFlight()
                             }
-                            // console.log("finally")
                         })
                     // flightPromises.push(promise)
                 }, 1000 * index)
             })
         })
+
+
+        // getCheapestFlight()
+        var cheapestFlightTemp
+        function getCheapestFlight() {
+            cheapestFlightTemp = localDepFlights.reduce((prevFlight, currFlight) => {
+                if (prevFlight === null || currFlight.data[0].price.total < prevFlight.data[0].price.total) {
+                    return currFlight;
+                } else {
+                    return prevFlight;
+                }
+            }, null);
+            console.log(cheapestFlightTemp)
+            console.log("cheapest")
+        }
+        // Promise.all(flightPromises).then(() => {
+        //     console.log("all promises complete")
+        //     // console.log(localDepFlights)
+        // })
         //need to await maybe?
         // const cheapestFlightTemp = departureFlights.reduce((prevFlight, currFlight) => {
         // Promise.all(flightPromises).then(() => {
-        const cheapestFlightTemp = localDepFlights.reduce((prevFlight, currFlight) => {
-            if (prevFlight === null || currFlight.data[0].price.total < prevFlight.data[0].price.total) {
-                return currFlight;
-            } else {
-                return prevFlight;
-            }
-        }, null);
-        console.log(cheapestFlightTemp)
+
+
         setCheapestFlight(cheapestFlightTemp)
         if (cheapestFlightTemp !== null) {
             const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
