@@ -73,7 +73,8 @@ export default function DestinationSelectedScreen(props) {
             // type: ['lodging'],
             // type: ['tourist_attraction'],
             // type: ['landmark'],
-            keyword: ['landmark'],
+            // keyword: ['tourist attraction'],
+            keyword: ['hotel'],
             // type: ['point_of_interest', '-lodging'],
             language: 'en',
             // pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
@@ -85,19 +86,19 @@ export default function DestinationSelectedScreen(props) {
                 console.log(results)
                 results.forEach((result) => {
                     if (result.business_status === "OPERATIONAL") {
-                        // console.log(result.name)
+                        console.log(result.name)
                         // console.log(result.types)
-                        if (result.opening_hours !== undefined) {
-                            service.getDetails({
-                                placeId: result.place_id,
-                                fields: ["opening_hours", "url", "website", "geometry", "formatted_address", "address_components", "name"]
-                            }, (results, status) => {
-                                console.log(results)
-                                console.log(results.geometry.location.lat())
-                                console.log(results.geometry.location.lng())
-                            })
-                            // console.log(result.opening_hours.isOpen())
-                        }
+                        // if (result.opening_hours !== undefined) {
+                        //     service.getDetails({
+                        //         placeId: result.place_id,
+                        //         fields: ["opening_hours", "url", "website", "geometry", "formatted_address", "address_components", "name"]
+                        //     }, (results, status) => {
+                        //         console.log(results)
+                        //         console.log(results.geometry.location.lat())
+                        //         console.log(results.geometry.location.lng())
+                        //     })
+                        //     // console.log(result.opening_hours.isOpen())
+                        // }
                     }
                 })
                 // setLodging(...lodging, results)
@@ -255,6 +256,7 @@ export default function DestinationSelectedScreen(props) {
                         if (response.meta.count != 0) {
                             setReturnFlight(response)
                             alert("complete")
+                            saveTripData()
                         }
                     })
                     .catch(error => {
@@ -312,10 +314,10 @@ export default function DestinationSelectedScreen(props) {
                         onClick={generateTrip}>
                         Generate Trip
                     </button>
-                    <button
+                    {/* <button
                         onClick={saveTripData}>
                         Save Info
-                    </button>
+                    </button> */}
                     <button
                         onClick={searchGoogle}>
                         Search Google
