@@ -1,18 +1,15 @@
-import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     AuthErrorCodes,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     onAuthStateChanged,
-    signOut,
-    sendEmailVerification
-    /*getAuth*/
+    signOut
 } from "firebase/auth";
-import { auth, db } from "./firebase.js"
-import { ref, set, onValue } from "firebase/database";
-// import { GeolocationPosition } from "react-geolocation";
+import { auth, db } from "./firebase.js";
+import { ref, set } from "firebase/database";
 
-import { useState,/* useRef,*/ useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function HomeScreen(props) {
     // const props.loggedIn = useRef(auth.currentUser !== null);

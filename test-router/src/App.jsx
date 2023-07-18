@@ -1,36 +1,22 @@
-// import React from 'react';
-// import MapView from './pages/map/MapView';
-// import Map from './pages/map/MapView';
-import { /*Outlet, Link, NavLink,*/ useNavigate } from "react-router-dom";
 import MapContainer from './pages/map/MapView';
-import MainMap from './pages/map/Map';
 import HomeScreen from './pages/HomeScreen';
 import NoPage from './pages/NoPage';
 import NavigationBar from './pages/NavigationBar';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/Layout';
-import './css/App.css'
+import './css/App.css';
 import Trips from './pages/Trips';
 import Plan from './pages/plan/Plan';
 import { useState } from 'react';
 import { amadeusConfig } from "./pages/amadeusAPI";
 import { lufthansaConfig } from "./pages/lufthansaAPI";
-import { useEffect } from 'react';
-// import { LoadMap } from './pages/map/LoadMap'
 import LoadMap from "./pages/map/LoadMap";
-// import { ref } from './pages/firebase.js'
 
 import {
-	AuthErrorCodes,
-	signInWithEmailAndPassword,
-	createUserWithEmailAndPassword,
-	onAuthStateChanged,
-	signOut,
-	sendEmailVerification
-	/*getAuth*/
+	onAuthStateChanged
 } from "firebase/auth";
-import { auth, db } from "./pages/firebase.js"
-import { ref, set, onValue } from "firebase/database";
+import { auth, db } from "./pages/firebase.js";
+import { ref, onValue } from "firebase/database";
 
 export default function App() {
 	const [userLocation, setUserLocation] = useState({});
@@ -166,7 +152,9 @@ export default function App() {
 							setLoggingIn={setLoggingIn}
 						/>} />
 						{/* <Route path="auth" element={<AuthPage />} /> */}
-						<Route path="map" caseSensitive={true} element={<MapContainer />} />
+						<Route path="map" caseSensitive={true} element={<MapContainer
+							userLocation={userLocation}
+						/>} />
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
 							monitorAuthState={monitorAuthState}

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-// import React from 'react';
 import { useNavigate } from 'react-router';
-import { Navigate, useHistory } from 'react-router-dom';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import MainMap from './Map';
 import mapStyle from './mapStyle';
@@ -46,7 +44,7 @@ import mapStyle from './mapStyle';
 // let history = useHistory()
 
 // MapContainer.defaultProps = GoogleMapStyles;
-export default function MapContainer() {
+export default function MapContainer(props) {
     const navigate = useNavigate();
     return (
         <div >
@@ -69,7 +67,9 @@ export default function MapContainer() {
                         >
                             <Marker position={coords} />
                         </Map> */}
-                    <MainMap />
+                    <MainMap
+                        userLocation = {props.userLocation}
+                    />
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center', width: '30vw', backgroundColor: '#cd0d0d' }}>
