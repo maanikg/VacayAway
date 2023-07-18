@@ -178,10 +178,26 @@ export default function DestinationSelectedScreen(props) {
     function outputResults() {
         const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/attractions');
         // const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/');
-        update(attractionsRef, {
-            temp: savedAttractions[1].name
-            // savedAttractions)
+        // update(attractionsRef, {
+        //     temp: savedAttractions[1].name
+        //     // savedAttractions)
+        // })
+        savedAttractions.forEach((attraction, index) => {
+            // console.log(attraction)
+            update(attractionsRef, {
+                [index]: {
+                    name: attraction.name,
+                    latitude: attraction.latitude,
+                    longitude: attraction.longitude,
+                    numRatings: attraction.numRatings,
+                    rating: attraction.rating,
+                    reference: attraction.reference,
+                    // opening_hours: attraction.opening_hours
+                }
+            })
         })
+        console.log(savedAttractions)
+        // update(attractionsRef, { "savedAttractions": savedAttractions })
     }
     // useEffect(() => {
     //     console.log(lodging)
