@@ -18,8 +18,14 @@ export default function DestinationSelectedScreen(props) {
     var localDepFlights = []
     var depAirportPromise
     var destAirportPromise
-    var localLodging
-    var localAttractions
+    var localDestFlightLatLon
+    var localDepFlightLatLon
+    let localLodging = []
+    var localCheapestFlight
+    var localReturnFlight
+    let localAttractions = []
+    const [savedAttractions, setSavedAttractions] = useState([])
+    let service = new window.google.maps.places.PlacesService(document.createElement('div'));
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -55,33 +61,38 @@ export default function DestinationSelectedScreen(props) {
             });
         }
         update(newPath, {
-            totalDepartureLatLon: depFlightLatLon,
-            totalArrivalLatLon: destFlightLatLon,
-            departureAirport: cheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
-            arrivalAirport: returnFlight.data[0].itineraries[0].segments[0].departure.iataCode
+            // totalDepartureLatLon: depFlightLatLon,
+            totalDepartureLatLon: localDepFlightLatLon,
+            // totalArrivalLatLon: destFlightLatLon,
+            totalArrivalLatLon: localDestFlightLatLon,
+            departureAirport: localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
+            arrivalAirport: localReturnFlight.data[0].itineraries[0].segments[0].departure.iataCode
         })
-        saveTripDataSub('departure', cheapestFlight)
-        saveTripDataSub('return', returnFlight)
+        saveTripDataSub('departure', localCheapestFlight)
+        saveTripDataSub('return', localReturnFlight)
     }
 
     function searchGoogle() {
-        let service = new window.google.maps.places.PlacesService(document.createElement('div'));
         // alert("hi")
         const request = {
-            location: { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude },
+            location: {
+                lat: destFlightLatLon.Latitude,
+                lng: destFlightLatLon.Longitude
+            },
             radius: 50000,
             // type: ['lodging'],
             // type: ['tourist_attraction'],
             // type: ['landmark'],
-            // keyword: ['tourist attraction'],
-            keyword: ['hotel'],
+            keyword: ['tourist attraction'],
+            // keyword: ['hotel'],
             // type: ['point_of_interest', '-lodging'],
             language: 'en',
             // pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
             // Aaw_FcL3oDO1j5O4OFiEHOZRzTvEpOjXh9lFjE73Zg_cEgO8aHkBOhCnRSIow_6sOaGtQmuVleoDfBe_T0TQH69cxiQs1JM91ot4AY6kQlCf0oCfpedVkVrp83GaAMlaizFnsAgB1ImR
         }
-        // service.nearbySearch(request, (results, status, pagination) => {
-        service.nearbySearch(request, (results, status) => {
+        service.nearbySearch(request, (results, status, pagination) => {
+            // service.nearbySearch(request, (results, status) => {
+            console.log(status)
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results)
                 results.forEach((result) => {
@@ -102,24 +113,63 @@ export default function DestinationSelectedScreen(props) {
                     }
                 })
                 // setLodging(...lodging, results)
-                // localLodging = [...localLodging, results]
-                // console.log(results[1].place_id)
-                // if (pagination.hasNextPage) {
-                //     // console.log(pagination)
-                //     pagination.nextPage();
-                // }
+                // localLodging = [...localLodging, ...results]
+                localAttractions = [...localAttractions, ...results]
+                console.log(pagination)
+                if (pagination.hasNextPage) {
+                    pagination.nextPage();
+                }
             }
         }
         )
         // service.getDetails({
-        //     placeId: "ChIJY-ndrTzAQUcR2BkUyAT8F-s",
-        //     fields: ["opening_hours"]
+        //     // placeId: "ChIJY-ndrTzAQUcR2BkUyAT8F-s",
+        //     // placeId: "ChIJTz4qiCM_dkgRJWQuA2Dr-gA",
+        //     placeId: "ChIJ_dGXYaUOdkgRjQQ6Whq-jBM",
+        //     // fields: ["opening_hours"]
         // }, (results, status) => {
         //     console.log(results)
         // }
         // )
     }
 
+    function searchResults() {
+        localAttractions.sort((a, b) => b.rating - a.rating)
+        console.log(localAttractions)
+        const curatedAttractions = localAttractions.map((attraction) => ({
+            name: attraction.name,
+            latitude: attraction.geometry.location.lat(),
+            longitude: attraction.geometry.location.lng(),
+            numRatings: attraction.user_ratings_total,
+            rating: attraction.rating,
+            reference: attraction.reference,
+            // opening_hours: attraction.opening_hours,
+        }));
+        console.log(curatedAttractions);
+
+        for (let i = 0; i < 10; i++) {
+            const place = curatedAttractions[i];
+            service.getDetails(
+                {
+                    placeId: place.reference,
+                    fields: ["opening_hours"],
+                },
+                (result, status) => {
+                    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                        if (result.opening_hours) {
+                            place.opening_hours = result.opening_hours;
+                        }
+                    }
+                }
+            );
+        }
+        setSavedAttractions(curatedAttractions.slice(0, 10))
+        console.log(savedAttractions)
+    }
+
+    function outputResults() {
+        console.log(savedAttractions)
+    }
     // useEffect(() => {
     //     console.log(lodging)
     // }, [lodging])
@@ -134,12 +184,6 @@ export default function DestinationSelectedScreen(props) {
             })
             .catch(err => console.log(err))
     }
-
-    // useEffect(() => {
-    //     if (destAirports.length > 0 && departureAirports.length > 0) {
-    //         getFlight()
-    //     }
-    // }, [destAirports, departureAirports])
     function getDestAirports() {
         const firstDest = props.destArray[0]
         destAirportPromise = fetch(`https://api.lufthansa.com/v1/references/airports/nearest/${firstDest.latitude},${firstDest.longitude}?lang=en`, {
@@ -219,30 +263,31 @@ export default function DestinationSelectedScreen(props) {
             })
         })
 
-        var cheapestFlightTemp
         function getCheapestFlight() {
-            cheapestFlightTemp = localDepFlights.reduce((prevFlight, currFlight) => {
+            localCheapestFlight = localDepFlights.reduce((prevFlight, currFlight) => {
                 if (prevFlight === null || currFlight.data[0].price.total < prevFlight.data[0].price.total) {
                     return currFlight;
                 } else {
                     return prevFlight;
                 }
             }, null);
-            setCheapestFlight(cheapestFlightTemp)
+            setCheapestFlight(localCheapestFlight)
             console.log("cheapest selected")
-            if (cheapestFlightTemp !== null) {
-                const depAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[0].departure.iataCode
-                const segments = cheapestFlightTemp.data[0].itineraries[0].segments;
-                const destAirportCheapest = cheapestFlightTemp.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
+            if (localCheapestFlight !== null) {
+                const depAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode
+                const segments = localCheapestFlight.data[0].itineraries[0].segments;
+                const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
                 for (let i = 0; i < localDepAirports.length; i++) {
                     if (localDepAirports[i].AirportCode === depAirportCheapest) {
                         setDepFlightLatLon(localDepAirports[i].Position.Coordinate)
+                        localDepFlightLatLon = localDepAirports[i].Position.Coordinate
                         break
                     }
                 }
                 for (let i = 0; i < localDestAirports.length; i++) {
                     if (localDestAirports[i].AirportCode === destAirportCheapest) {
                         setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
+                        localDestFlightLatLon = localDestAirports[i].Position.Coordinate
                         break
                     }
                 }
@@ -254,6 +299,7 @@ export default function DestinationSelectedScreen(props) {
                     .then(response => response.json())
                     .then(response => {
                         if (response.meta.count != 0) {
+                            localReturnFlight = response
                             setReturnFlight(response)
                             alert("complete")
                             saveTripData()
@@ -267,9 +313,6 @@ export default function DestinationSelectedScreen(props) {
     }
 
     useEffect(() => {
-        if (cheapestFlight !== null && cheapestFlight !== {} && cheapestFlight !== undefined && cheapestFlight !== "") {
-            console.log(cheapestFlight)
-        }
         props.monitorAuthState()
     }, [props.currentScreen])
     //hello - shruti is here
@@ -321,6 +364,16 @@ export default function DestinationSelectedScreen(props) {
                     <button
                         onClick={searchGoogle}>
                         Search Google
+                    </button>
+                    <button
+                        onClick={searchResults}
+                    >
+                        Search Results
+                    </button>
+                    <button
+                        onClick={outputResults}
+                    >
+                        Output Results
                     </button>
                 </div>
             </div>
