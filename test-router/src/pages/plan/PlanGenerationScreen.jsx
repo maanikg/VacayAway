@@ -55,8 +55,8 @@ export default function DestinationSelectedScreen(props) {
             });
         }
         update(newPath, {
-            totalDepartureLatLon: depFlightLatLon.Latitude + "|" + depFlightLatLon.Longitude,
-            totalArrivalLatLon: destFlightLatLon.Latitude + "|" + destFlightLatLon.Longitude,
+            totalDepartureLatLon: depFlightLatLon,
+            totalArrivalLatLon: destFlightLatLon,
             departureAirport: cheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
             arrivalAirport: returnFlight.data[0].itineraries[0].segments[0].departure.iataCode
         })
