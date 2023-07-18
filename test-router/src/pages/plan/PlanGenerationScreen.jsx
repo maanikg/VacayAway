@@ -1,7 +1,7 @@
 import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
-import { ref, push, update } from "firebase/database";
+import { ref, push, update, set } from "firebase/database";
 import { auth, db } from "../firebase.js"
 export default function DestinationSelectedScreen(props) {
     const [destAirports, setDestAirports] = useState([])
@@ -13,6 +13,7 @@ export default function DestinationSelectedScreen(props) {
     const [destFlightLatLon, setDestFlightLatLon] = useState({})
     const [lodging, setLodging] = useState([])
     const [attractions, setAttractions] = useState([])
+    const [newPathglobal, setNewPathGlobal] = useState()
     var localDepAirports = [];
     var localDestAirports = [];
     var localDepFlights = []
@@ -24,12 +25,18 @@ export default function DestinationSelectedScreen(props) {
     var localCheapestFlight
     var localReturnFlight
     let localAttractions = []
+    let newPath
+    var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
     let service = new window.google.maps.places.PlacesService(document.createElement('div'));
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
-        const newPath = push(pathRef)
+        newPath = push(pathRef)
+        setNewPathGlobal(newPath.key)
+        newTrip = newPath.key
+        // newTrip = newPath.key
+        const flightRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPath.key + '/flight')
         function saveTripDataSub(tripSegment, flights) {
             const segments = flights.data[0].itineraries[0].segments;
             const lastIndex = segments.length - 1;
@@ -48,7 +55,7 @@ export default function DestinationSelectedScreen(props) {
                     aircraft: flights.dictionaries.aircraft[segment.aircraft.code],
                 });
                 if (index === lastIndex) {
-                    update(newPath, {
+                    update(flightRef, {
                         [tripSegment]: {
                             segments: segmentData,
                             price: flights.data[0].price.grandTotal,
@@ -60,7 +67,7 @@ export default function DestinationSelectedScreen(props) {
                 }
             });
         }
-        update(newPath, {
+        update(flightRef, {
             // totalDepartureLatLon: depFlightLatLon,
             totalDepartureLatLon: localDepFlightLatLon,
             // totalArrivalLatLon: destFlightLatLon,
@@ -165,10 +172,16 @@ export default function DestinationSelectedScreen(props) {
         }
         setSavedAttractions(curatedAttractions.slice(0, 10))
         console.log(savedAttractions)
+
     }
 
     function outputResults() {
-        console.log(savedAttractions)
+        const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/attractions');
+        // const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/');
+        update(attractionsRef, {
+            temp: savedAttractions[1].name
+            // savedAttractions)
+        })
     }
     // useEffect(() => {
     //     console.log(lodging)
