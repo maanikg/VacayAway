@@ -35,7 +35,6 @@ export default function DestinationSelectedScreen(props) {
         newPath = push(pathRef)
         setNewPathGlobal(newPath.key)
         newTrip = newPath.key
-        // newTrip = newPath.key
         const flightRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPath.key + '/flight')
         function saveTripDataSub(tripSegment, flights) {
             const segments = flights.data[0].itineraries[0].segments;
@@ -68,9 +67,7 @@ export default function DestinationSelectedScreen(props) {
             });
         }
         update(flightRef, {
-            // totalDepartureLatLon: depFlightLatLon,
             totalDepartureLatLon: localDepFlightLatLon,
-            // totalArrivalLatLon: destFlightLatLon,
             totalArrivalLatLon: localDestFlightLatLon,
             departureAirport: localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
             arrivalAirport: localReturnFlight.data[0].itineraries[0].segments[0].departure.iataCode
@@ -177,7 +174,6 @@ export default function DestinationSelectedScreen(props) {
 
     function outputResults() {
         const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/attractions');
-        // const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/');
         // update(attractionsRef, {
         //     temp: savedAttractions[1].name
         //     // savedAttractions)
@@ -197,11 +193,7 @@ export default function DestinationSelectedScreen(props) {
             })
         })
         console.log(savedAttractions)
-        // update(attractionsRef, { "savedAttractions": savedAttractions })
     }
-    // useEffect(() => {
-    //     console.log(lodging)
-    // }, [lodging])
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
