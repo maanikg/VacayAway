@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
 import { ref, push, update, set } from "firebase/database";
-import { auth, db } from "../firebase.js"
+import { auth, db } from "../api/firebase.js"
 export default function DestinationSelectedScreen(props) {
     const [destAirports, setDestAirports] = useState([])
     const [departureAirports, setDepartureAirports] = useState([])

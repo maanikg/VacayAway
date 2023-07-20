@@ -8,14 +8,14 @@ import './css/App.css';
 import Trips from './pages/Trips';
 import Plan from './pages/plan/Plan';
 import { useState } from 'react';
-import { amadeusConfig } from "./pages/amadeusAPI";
-import { lufthansaConfig } from "./pages/lufthansaAPI";
+import { amadeusConfig } from "./pages/api/amadeusAPI";
+import { lufthansaConfig } from "./pages/api/lufthansaAPI";
 import LoadMap from "./pages/map/LoadMap";
 
 import {
 	onAuthStateChanged
 } from "firebase/auth";
-import { auth, db } from "./pages/firebase.js";
+import { auth, db } from "./pages/api/firebase.js";
 import { ref, onValue } from "firebase/database";
 
 export default function App() {

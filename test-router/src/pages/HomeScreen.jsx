@@ -6,7 +6,7 @@ import {
     onAuthStateChanged,
     signOut
 } from "firebase/auth";
-import { auth, db } from "./firebase.js";
+import { auth, db } from "./api/firebase.js";
 import { ref, set } from "firebase/database";
 
 import { useState, useEffect } from "react";

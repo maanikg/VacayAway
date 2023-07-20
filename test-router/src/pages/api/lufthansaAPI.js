@@ -3,7 +3,7 @@
 // import {} from axios
 // import axios from 'axios';
 import { useState } from "react";
-import { setLufthansaAccessToken } from '../pages/plan/Plan'
+import { setLufthansaAccessToken } from '../plan/Plan'
 // const axiosConfig = require('axios');
 
 export const lufthansaConfig = {
