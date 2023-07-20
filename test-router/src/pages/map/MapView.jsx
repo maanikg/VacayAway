@@ -68,7 +68,9 @@ export default function MapContainer(props) {
                             <Marker position={coords} />
                         </Map> */}
                     <MainMap
-                        userLocation = {props.userLocation}
+                        userLocation={props.userLocation}
+                        loaded={props.loaded}
+                        setLoaded={props.setLoaded}
                     />
                 </div>
 

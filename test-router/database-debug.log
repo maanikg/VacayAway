@@ -1,4 +1,2 @@
-11:09:23.555 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-11:09:23.646 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-11:17:16.742 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 106ms, init: 0ms
-11:17:16.742 [NamespaceSystem-akka.actor.default-dispatcher-11] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 106ms, init: 0ms
+12:01:01.351 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+12:01:01.445 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000

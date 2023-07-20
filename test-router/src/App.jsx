@@ -29,6 +29,7 @@ export default function App() {
 	const [loggedIn, setLoggedIn] = useState(auth.currentUser !== null);
 	const [lufthansaAccessToken, setLufthansaAccessToken] = useState('')
 	const [amadeusAccessToken, setAmadeusAccessToken] = useState('')
+	const [loaded, setLoaded] = useState(false)
 
 	function locationSetter() {
 		console.log("loc")
@@ -123,7 +124,10 @@ export default function App() {
 		// <div style={{ backgroundColor: "blue" }}>
 		<div>
 			<NavigationBar />
-			<LoadMap />
+			<LoadMap
+				loaded={loaded}
+				setLoaded={setLoaded}
+			/>
 			<BrowserRouter>
 				<Routes>
 					{/* <Route index */}
@@ -154,6 +158,8 @@ export default function App() {
 						{/* <Route path="auth" element={<AuthPage />} /> */}
 						<Route path="map" caseSensitive={true} element={<MapContainer
 							userLocation={userLocation}
+							loaded={loaded}
+							setLoaded={setLoaded}
 						/>} />
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
