@@ -9,7 +9,8 @@ import { getDatabase, ref, set, onValue, connectDatabaseEmulator } from "firebas
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     // apiKey: "AIzaSyBtd-Depovo-wEhTlI-j398qZeqxJ1FXcA",
-    apiKey: "AIzaSyBtd-Depovo-wEhTlI-j398qZeqxJ1FXcA",
+    // apiKey: "AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc",
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     authDomain: "vacayaway.firebaseapp.com",
     projectId: "vacayaway",
     storageBucket: "vacayaway.appspot.com",

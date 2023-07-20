@@ -85,9 +85,10 @@ export default function App() {
 			});
 	}
 
-	<script async
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc&libraries=places">
-	</script>
+	// <script async
+	// 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc&libraries=places">
+	// </script>
+	// console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 
 	const monitorAuthState = async () => {
 		console.log("here")

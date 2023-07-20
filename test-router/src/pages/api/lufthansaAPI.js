@@ -9,8 +9,8 @@ import { setLufthansaAccessToken } from '../plan/Plan'
 export const lufthansaConfig = {
     "url": "https://api.lufthansa.com/v1/oauth/token",
     "data": {
-        "client_id": "8tfe56qaa5689crffx5s3b79q",
-        "client_secret": "SqnP5Byn2R",
-        "grant_type": "client_credentials"
+        "client_id": process.env.REACT_APP_LUFTHANSA_CLIENT_ID,
+        "client_secret": process.env.REACT_APP_LUFTHANSA_CLIENT_SECRET,
+        "grant_type": process.env.REACT_APP_LUFTHANSA_GRANT_TYPE
     }
 };

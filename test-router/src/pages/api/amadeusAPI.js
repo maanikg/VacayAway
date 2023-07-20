@@ -1,8 +1,8 @@
 export const amadeusConfig = {
 	"url": "https://test.api.amadeus.com/v1/security/oauth2/token",
 	"data": {
-		"client_id": "dQiOy75pIQXpFgIOVfItGx6L52y13ZRZ",
-		"client_secret": "wZAPAA1vjjeFPMsV",
-		"grant_type": "client_credentials"
+		"client_id": process.env.REACT_APP_AMADEUS_CLIENT_ID,
+		"client_secret": process.env.REACT_APP_AMADEUS_CLIENT_SECRET,
+		"grant_type": process.env.REACT_APP_AMADEUS_GRANT_TYPE
 	}
 };

@@ -14,12 +14,12 @@ const containerStyle = {
 
 function MainMap(props) {
     // const loaded = true
-    console.log(props.userLocation)
-    console.log(props.userLocation.latitude)
-    console.log(props.userLocation.longitude)
+    // console.log(props.userLocation)
+    // console.log(props.userLocation.latitude)
+    // console.log(props.userLocation.longitude)
     const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
-    console.log(center)
-    
+    // console.log(center)
+
     return (
         <>
             <LoadMap
@@ -36,7 +36,6 @@ function MainMap(props) {
             }
         </>
     )
-    // }
 }
 
 export default MainMap

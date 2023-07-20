@@ -5,7 +5,7 @@ const libraryImports = ["places"]
 export default function LoadMap(props) {
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: 'AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc',
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
         libraries: libraryImports
     });
     props.setLoaded(false)
