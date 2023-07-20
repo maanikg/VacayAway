@@ -68,3 +68,6 @@ Java HotSpot(TM) 64-Bit Server VM (build 20.0.1+9-29, mixed mode, sharing)
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2023-07-20T16:29:12.456Z] 12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms
+12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms
+ {"metadata":{"emulator":{"name":"database"},"message":"12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms\n12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms\n"}}

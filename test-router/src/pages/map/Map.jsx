@@ -15,14 +15,11 @@ const containerStyle = {
 function MainMap(props) {
     // const loaded = true
     console.log(props.userLocation)
-    // const [apiLoaded, setApiLoaded] = useState(false);
-    // Object.keys(props.userLocation).length === 0 ? console.log(props.userLocation.latitude, props.userLocation.longitude) : console.log("no user location")
-    const center = props.userLocation === {} ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
-    // window.onload = function () {
-    // window.onload = function () {
-    //     setApiLoaded(true); // set the flag to true when the API has finished loading
-    // }
-    // console.log("apiLoaded", apiLoaded)
+    console.log(props.userLocation.latitude)
+    console.log(props.userLocation.longitude)
+    const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
+    console.log(center)
+    
     return (
         <>
             <LoadMap
