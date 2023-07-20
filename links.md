@@ -58,3 +58,6 @@ Google API
 - https://developers.google.com/maps/billing-and-pricing/pricing
 - https://stackoverflow.com/questions/62173188/align-divs-to-the-right-side-of-the-window-in-react
 - https://developers.google.com/community/gdsc
+
+Tripadvisor API
+- https://developer-tripadvisor.com/content-api/
