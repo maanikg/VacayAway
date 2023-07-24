@@ -15,7 +15,8 @@ headers = {
 }
 
 response = requests.request("GET", url,params=payload, headers=headers, data=data)
-
+print(response)
+print(response.text)
 for i in response.json()['results']:
     print(f"{i['name']}, {i['rating']}")
 
