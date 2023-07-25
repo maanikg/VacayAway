@@ -115,9 +115,17 @@ export default function DestinationSelectedScreen(props) {
         const innerStart = new Date(startDateTime)
         innerStart.setDate(innerStart.getDate() + 1)
         innerStart.setHours(0, 0, 0, 0)
+
+        const innerEnd = new Date(endDateTime)
+        innerEnd.setDate(innerEnd.getDate())
+        innerEnd.setHours(0, 0, 0, 0)
         console.log(innerStart)
+        console.log(innerEnd)
+
         const duration = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24)
+        const duration2 = (innerEnd.getTime() - innerStart.getTime()) / (1000 * 60 * 60 * 24)
         console.log(duration)
+        console.log(duration2)
     }
 
     function searchGoogle() {
