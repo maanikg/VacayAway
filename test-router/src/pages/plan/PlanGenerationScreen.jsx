@@ -1,7 +1,7 @@
 import React from "react"
 import { useEffect } from "react";
 import { useState } from "react"
-import { ref, push, update, set } from "firebase/database";
+import { ref, push, update, /*set*/ } from "firebase/database";
 import { auth, db } from "../api/firebase.js"
 export default function DestinationSelectedScreen(props) {
     const [destAirports, setDestAirports] = useState([])
@@ -14,6 +14,9 @@ export default function DestinationSelectedScreen(props) {
     const [lodging, setLodging] = useState([])
     const [attractions, setAttractions] = useState([])
     const [newPathglobal, setNewPathGlobal] = useState()
+    const [startDateTime, setStartDateTime] = useState()
+    const [endDateTime, setEndDateTime] = useState()
+    const [destTimezone, setDestTimezone] = useState()
     var localDepAirports = [];
     var localDestAirports = [];
     var localDepFlights = []
@@ -26,9 +29,25 @@ export default function DestinationSelectedScreen(props) {
     var localReturnFlight
     let localAttractions = []
     let newPath
+    var localDestTimezone
+    var startTripDateTime, endTripDateTime
     var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
     let service = new window.google.maps.places.PlacesService(document.createElement('div'));
+
+
+    function convertDateString(dateString) {
+        const dateComponents = dateString.split('T');
+        const date = dateComponents[0];
+        const time = dateComponents[1];
+        const year = date.substring(0, 4);
+        const month = date.substring(5, 7) - 1; // Subtract 1 because months are zero-indexed in JavaScript
+        const day = date.substring(8, 10);
+        const hour = time.substring(0, 2);
+        const minute = time.substring(3, 5);
+        const second = time.substring(6, 8);
+        return new Date(year, month, day, hour, minute, second);
+    }
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
@@ -39,6 +58,19 @@ export default function DestinationSelectedScreen(props) {
         function saveTripDataSub(tripSegment, flights) {
             const segments = flights.data[0].itineraries[0].segments;
             const lastIndex = segments.length - 1;
+            if (tripSegment === 'departure') {
+                console.log("dep")
+                startTripDateTime = segments[lastIndex].arrival.at
+                const startTripDateTimeFormatted = convertDateString(startTripDateTime)
+                setStartDateTime(startTripDateTimeFormatted)
+                console.log(startTripDateTimeFormatted)
+            } else if (tripSegment === 'return') {
+                console.log("ret")
+                endTripDateTime = segments[0].departure.at
+                const endTripDateTimeFormatted = convertDateString(endTripDateTime)
+                setEndDateTime(endTripDateTimeFormatted)
+                console.log(endTripDateTimeFormatted)
+            }
             const segmentData = [];
             segments.forEach((segment, index) => {
                 segmentData.push({
@@ -70,10 +102,22 @@ export default function DestinationSelectedScreen(props) {
             totalDepartureLatLon: localDepFlightLatLon,
             totalArrivalLatLon: localDestFlightLatLon,
             departureAirport: localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode,
-            arrivalAirport: localReturnFlight.data[0].itineraries[0].segments[0].departure.iataCode
+            arrivalAirport: localReturnFlight.data[0].itineraries[0].segments[0].departure.iataCode,
+            destTimezone: localDestTimezone,
         })
         saveTripDataSub('departure', localCheapestFlight)
         saveTripDataSub('return', localReturnFlight)
+    }
+
+    function temp() {
+        console.log(startDateTime)
+        console.log(endDateTime)
+        const innerStart = new Date(startDateTime)
+        innerStart.setDate(innerStart.getDate() + 1)
+        innerStart.setHours(0, 0, 0, 0)
+        console.log(innerStart)
+        const duration = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24)
+        console.log(duration)
     }
 
     function searchGoogle() {
@@ -217,7 +261,7 @@ export default function DestinationSelectedScreen(props) {
             )
             .then(data => {
                 localDestAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
-                setDestAirports(localDestAirports);
+                setDestTimezone(localDestAirports);
             })
             .catch(error => {
                 alert(error)
@@ -263,7 +307,7 @@ export default function DestinationSelectedScreen(props) {
                     })
                         .then(response => response.json())
                         .then(response => {
-                            if (response.meta.count != 0) {
+                            if (response.meta.count !== 0) {
                                 // console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + " ")
                                 localDepFlights = [...localDepFlights, response]
                                 setDepartureFlights([...departureFlights, response])
@@ -293,11 +337,31 @@ export default function DestinationSelectedScreen(props) {
                 }
             }, null);
             setCheapestFlight(localCheapestFlight)
+            console.log(localCheapestFlight)
             console.log("cheapest selected")
+
             if (localCheapestFlight !== null) {
                 const depAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode
                 const segments = localCheapestFlight.data[0].itineraries[0].segments;
                 const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
+
+                destAirportPromise = fetch(`https://api.lufthansa.com/v1/mds-references/airports/${destAirportCheapest}?lang=EN`, {
+                    headers: {
+                        'Authorization': `Bearer ${props.lufthansaAccessToken}`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        localDestTimezone = data.AirportResource.Airports.Airport.UtcOffset
+                        console.log(localDestTimezone)
+                        setDestTimezone(localDestTimezone);
+                    })
+                    .catch(error => {
+                        alert(error)
+                    });
+
+
+
                 for (let i = 0; i < localDepAirports.length; i++) {
                     if (localDepAirports[i].AirportCode === depAirportCheapest) {
                         setDepFlightLatLon(localDepAirports[i].Position.Coordinate)
@@ -319,7 +383,7 @@ export default function DestinationSelectedScreen(props) {
                 })
                     .then(response => response.json())
                     .then(response => {
-                        if (response.meta.count != 0) {
+                        if (response.meta.count !== 0) {
                             localReturnFlight = response
                             setReturnFlight(response)
                             alert("complete")
@@ -382,6 +446,10 @@ export default function DestinationSelectedScreen(props) {
                         onClick={saveTripData}>
                         Save Info
                     </button> */}
+                    <button
+                        onClick={temp}>
+                        Temps
+                    </button>
                     <button
                         onClick={searchGoogle}>
                         Search Google

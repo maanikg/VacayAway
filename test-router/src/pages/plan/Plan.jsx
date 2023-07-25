@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import InitialSelectCriteriaTabs from "./InitialSelectCriteraTabs";
 import { useEffect, useState } from "react";
-import './tabs.css';
+import './Tabs.css';
 import DestinationSelectedScreen from "./DestinationSelectedScreen";
 import PlanGenerationScreen from "./PlanGenerationScreen";
 import "../api/lufthansaAPI.js"
