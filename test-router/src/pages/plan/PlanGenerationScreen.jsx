@@ -17,6 +17,7 @@ export default function DestinationSelectedScreen(props) {
     const [startDateTime, setStartDateTime] = useState()
     const [endDateTime, setEndDateTime] = useState()
     const [destTimezone, setDestTimezone] = useState()
+    const [fullDays, setFullDays] = useState()
     var localDepAirports = [];
     var localDestAirports = [];
     var localDepFlights = []
@@ -32,7 +33,9 @@ export default function DestinationSelectedScreen(props) {
     var localReturnFlight
     let localAttractions = []
     let newPath
+    var curatedAttractions
     var localDestTimezone
+    var numFullDays
     var startTripDateTime, endTripDateTime
     var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
@@ -125,10 +128,11 @@ export default function DestinationSelectedScreen(props) {
         console.log(innerStart)
         console.log(innerEnd)
 
-        const duration = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24)
-        const duration2 = (innerEnd.getTime() - innerStart.getTime()) / (1000 * 60 * 60 * 24)
-        console.log(duration)
-        console.log(duration2)
+        // const duration = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24)
+        numFullDays = (innerEnd.getTime() - innerStart.getTime()) / (1000 * 60 * 60 * 24)
+        setFullDays(numFullDays)
+        // console.log(duration)
+        console.log(numFullDays)
     }
 
     function searchGoogle() {
@@ -174,8 +178,11 @@ export default function DestinationSelectedScreen(props) {
                 // setLodging(...lodging, results)
                 // localLodging = [...localLodging, ...results]
                 localAttractions = [...localAttractions, ...results]
+                setAttractions(localAttractions)
                 console.log(pagination)
-                if (pagination.hasNextPage) {
+                // console.log(numFullDays)
+                // console.log(fullDays)
+                if (localAttractions.length < 7 * fullDays && pagination.hasNextPage) {
                     pagination.nextPage();
                 }
             }
@@ -193,9 +200,9 @@ export default function DestinationSelectedScreen(props) {
     }
 
     function searchResults() {
-        localAttractions.sort((a, b) => b.rating - a.rating)
-        console.log(localAttractions)
-        const curatedAttractions = localAttractions.map((attraction) => ({
+        attractions.sort((a, b) => b.rating - a.rating)
+        console.log(attractions)
+        curatedAttractions = attractions.map((attraction) => ({
             name: attraction.name,
             latitude: attraction.geometry.location.lat(),
             longitude: attraction.geometry.location.lng(),
@@ -204,27 +211,39 @@ export default function DestinationSelectedScreen(props) {
             reference: attraction.reference,
             // opening_hours: attraction.opening_hours,
         }));
-        console.log(curatedAttractions);
+        const promises = [];
 
-        for (let i = 0; i < 10; i++) {
-            const place = curatedAttractions[i];
-            service.getDetails(
-                {
-                    placeId: place.reference,
-                    fields: ["opening_hours"],
-                },
-                (result, status) => {
-                    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                        if (result.opening_hours) {
-                            place.opening_hours = result.opening_hours;
+        for (let i = 0; i < 7 * fullDays; i++) {
+            const promise = new Promise((resolve, reject) => {
+                service.getDetails(
+                    {
+                        placeId: curatedAttractions[i].reference,
+                        fields: ["opening_hours"],
+                    },
+                    (result, status) => {
+                        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                            if (result.opening_hours) {
+                                curatedAttractions[i].opening_hours = result.opening_hours;
+                            }
+                            resolve();
+                        } else {
+                            reject(`Error fetching details for place ${curatedAttractions[i].reference}: ${status}`);
                         }
                     }
-                }
-            );
+                );
+            });
+            promises.push(promise);
         }
-        setSavedAttractions(curatedAttractions.slice(0, 10))
-        console.log(savedAttractions)
 
+        Promise.all(promises)
+            .then(() => {
+                curatedAttractions = curatedAttractions.slice(0, 7 * fullDays)
+                console.log(curatedAttractions);
+                setSavedAttractions(curatedAttractions.slice(0, 7 * fullDays))
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     function outputResults() {
@@ -233,8 +252,9 @@ export default function DestinationSelectedScreen(props) {
         //     temp: savedAttractions[1].name
         //     // savedAttractions)
         // })
+        console.log(savedAttractions)
+        console.log(savedAttractions.length)
         savedAttractions.forEach((attraction, index) => {
-            // console.log(attraction)
             update(attractionsRef, {
                 [index]: {
                     name: attraction.name,
@@ -243,7 +263,7 @@ export default function DestinationSelectedScreen(props) {
                     numRatings: attraction.numRatings,
                     rating: attraction.rating,
                     reference: attraction.reference,
-                    // opening_hours: attraction.opening_hours
+                    opening_hours: attraction.opening_hours ? attraction.opening_hours.periods : null,
                 }
             })
         })
