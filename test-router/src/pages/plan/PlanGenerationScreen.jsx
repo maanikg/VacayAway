@@ -2,6 +2,7 @@
 import React from "react"
 import MainMap from "../map/Map.jsx";
 import LoadMap from "../map/LoadMap.jsx";
+import { Marker } from '@react-google-maps/api';
 import { GoogleMap } from '@react-google-maps/api';
 import { useEffect } from "react";
 import { useState } from "react"
@@ -23,6 +24,7 @@ export default function DestinationSelectedScreen(props) {
     const [endDateTime, setEndDateTime] = useState()
     const [destTimezone, setDestTimezone] = useState()
     const [fullDays, setFullDays] = useState()
+    const [attractionsMarkers, setAttractionsMarkers] = useState([]);
     var localDepAirports = [];
     const [map, setMap] = useState(null);
     const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
@@ -46,8 +48,14 @@ export default function DestinationSelectedScreen(props) {
     var startTripDateTime, endTripDateTime
     var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
-    let service = new window.google.maps.places.PlacesService(document.createElement('div'));
+    let service
 
+    useEffect(() => {
+        console.log(props.loaded)
+        if (props.loaded) {
+            service = new window.google.maps.places.PlacesService(document.createElement('div'));
+        }
+    }, [props.loaded])
 
     function convertDateString(dateString) {
         const dateComponents = dateString.split('T');
@@ -506,7 +514,14 @@ export default function DestinationSelectedScreen(props) {
             map.panTo(center);
             setLocalCenter(center);
         }
-    }, [map, destFlightLatLon]);
+        if (map !== null && savedAttractions.length !== 0) {
+            const markers = savedAttractions.map((attraction) => {
+                const position = { lat: attraction.Latitude, lng: attraction.Longitude };
+                return <Marker key={attraction.Id} position={position} />;
+            });
+            setAttractionsMarkers(markers);
+        }
+    }, [map, destFlightLatLon, savedAttractions]);
 
     // useEffect(() => {
     //     console.log(localDestFlightLatLon)
@@ -520,6 +535,9 @@ export default function DestinationSelectedScreen(props) {
     // console.log(localCenter)
     // console.log(destFlightLatLon.Latitude)
     // console.log(destFlightLatLon.Longitude)
+    if (!props.loaded) {
+        return null;
+    }
     return (
         <div
             style={{
@@ -586,7 +604,7 @@ export default function DestinationSelectedScreen(props) {
                     <button
                         onClick={outputResults}
                     >
-                        Output Resultss
+                        Output Results
                     </button>
                 </div>
                 <div
@@ -598,6 +616,7 @@ export default function DestinationSelectedScreen(props) {
                         zoom={13}
                         onLoad={handleMapLoad}
                     >
+                        {attractionsMarkers}
                     </GoogleMap>
                 </div>
             </div>
