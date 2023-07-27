@@ -1,10 +1,15 @@
+
 import React from "react"
+import MainMap from "../map/Map.jsx";
+import LoadMap from "../map/LoadMap.jsx";
+import { GoogleMap } from '@react-google-maps/api';
 import { useEffect } from "react";
 import { useState } from "react"
 import { ref, push, update, /*set*/ } from "firebase/database";
 import { auth, db } from "../api/firebase.js"
 export default function DestinationSelectedScreen(props) {
     const [destAirports, setDestAirports] = useState([])
+
     const [departureAirports, setDepartureAirports] = useState([])
     const [departureFlights, setDepartureFlights] = useState([])
     const [cheapestFlight, setCheapestFlight] = useState({})
@@ -19,6 +24,8 @@ export default function DestinationSelectedScreen(props) {
     const [destTimezone, setDestTimezone] = useState()
     const [fullDays, setFullDays] = useState()
     var localDepAirports = [];
+    const [map, setMap] = useState(null);
+    const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     var localDestAirports = [];
     var localDepFlights = []
     var depAirportPromise
@@ -415,6 +422,8 @@ export default function DestinationSelectedScreen(props) {
                     if (localDestAirports[i].AirportCode === destAirportCheapest) {
                         setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
                         localDestFlightLatLon = localDestAirports[i].Position.Coordinate
+                        // localCenter = localDestFlightLatLon
+                        // console.log(localDestFlightLatLon)
                         break
                     }
                 }
@@ -479,6 +488,38 @@ export default function DestinationSelectedScreen(props) {
         props.monitorAuthState()
     }, [props.currentScreen])
     //hello - shruti is here
+
+    // console.log(localCheapestFlight)
+    // const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
+    // const center = (localCheapestFlight !== undefined) ? { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude } : { lat: 43.6532, lng: -79.3832 };
+
+
+
+    const handleMapLoad = (map) => {
+        setMap(map);
+    };
+
+    useEffect(() => {
+        console.log(destFlightLatLon)
+        if (map !== null && destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
+            const center = { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude };
+            map.panTo(center);
+            setLocalCenter(center);
+        }
+    }, [map, destFlightLatLon]);
+
+    // useEffect(() => {
+    //     console.log(localDestFlightLatLon)
+    //     if (localDestFlightLatLon !== undefined) {
+    //         const center = { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude };
+    //         // setCenter(center);
+    //     }
+    // }, []);
+
+    // const [center, setCenter] = useState({ lat: 43.6532, lng: -79.3832 });
+    // console.log(localCenter)
+    // console.log(destFlightLatLon.Latitude)
+    // console.log(destFlightLatLon.Longitude)
     return (
         <div
             style={{
@@ -512,6 +553,11 @@ export default function DestinationSelectedScreen(props) {
                     {/* <p>{ props.departureDate.toString()}</p> */}
                     <p>{props.returnDate.toString()}</p>
                 </div>
+                {/* <MainMap
+                    userLocation={props.userLocation}
+                    loaded={props.loaded}
+                    setLoaded={props.setLoaded}
+                /> */}
                 <div
                     style={{ display: "flex" }}
                 >
@@ -540,8 +586,19 @@ export default function DestinationSelectedScreen(props) {
                     <button
                         onClick={outputResults}
                     >
-                        Output Results
+                        Output Resultss
                     </button>
+                </div>
+                <div
+                    style={{ width: "100%", height: "100vh" }}
+                >
+                    <GoogleMap
+                        mapContainerStyle={{ width: "100%", height: "100%" }}
+                        center={localCenter}
+                        zoom={13}
+                        onLoad={handleMapLoad}
+                    >
+                    </GoogleMap>
                 </div>
             </div>
         </div >

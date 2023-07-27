@@ -315,6 +315,8 @@ export default function Plan(props) {
                 departureDate={departureDate}
                 returnDate={returnDate}
                 userLocation={props.userLocation}
+                setLoaded={props.setLoaded}
+                loaded={props.loaded}
                 monitorAuthState={props.monitorAuthState}
                 lufthansaAccessToken={props.lufthansaAccessToken}
                 setLufthansaAccessToken={props.setLufthansaAccessToken}

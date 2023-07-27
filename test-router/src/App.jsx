@@ -164,6 +164,8 @@ export default function App() {
 						/>} />
 						<Route path="plan" caseSensitive={true} element={<Plan
 							userLocation={userLocation}
+							loaded={loaded}
+							setLoaded={setLoaded}
 							monitorAuthState={monitorAuthState}
 							lufthansaAccessToken={lufthansaAccessToken}
 							setLufthansaAccessToken={setLufthansaAccessToken}
