@@ -48,13 +48,16 @@ export default function DestinationSelectedScreen(props) {
     var startTripDateTime, endTripDateTime
     var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
-    let service
+    let localService
+    const [service, setService] = useState()
 
     useEffect(() => {
         console.log(props.loaded)
         if (props.loaded) {
-            service = new window.google.maps.places.PlacesService(document.createElement('div'));
+            localService = new window.google.maps.places.PlacesService(document.createElement('div'));
+            setService(localService)
         }
+        console.log(localService)
     }, [props.loaded])
 
     function convertDateString(dateString) {
@@ -80,13 +83,11 @@ export default function DestinationSelectedScreen(props) {
             const segments = flights.data[0].itineraries[0].segments;
             const lastIndex = segments.length - 1;
             if (tripSegment === 'departure') {
-                console.log("dep")
                 startTripDateTime = segments[lastIndex].arrival.at
                 const startTripDateTimeFormatted = convertDateString(startTripDateTime)
                 setStartDateTime(startTripDateTimeFormatted)
                 console.log(startTripDateTimeFormatted)
             } else if (tripSegment === 'return') {
-                console.log("ret")
                 endTripDateTime = segments[0].departure.at
                 const endTripDateTimeFormatted = convertDateString(endTripDateTime)
                 setEndDateTime(endTripDateTimeFormatted)
@@ -170,12 +171,10 @@ export default function DestinationSelectedScreen(props) {
         }
         service.nearbySearch(request, (results, status, pagination) => {
             // service.nearbySearch(request, (results, status) => {
-            console.log(status)
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
                 console.log(results)
                 results.forEach((result) => {
                     if (result.business_status === "OPERATIONAL") {
-                        console.log(result.name)
                         // console.log(result.types)
                         // if (result.opening_hours !== undefined) {
                         //     service.getDetails({
@@ -268,7 +267,6 @@ export default function DestinationSelectedScreen(props) {
         //     // savedAttractions)
         // })
         console.log(savedAttractions)
-        console.log(savedAttractions.length)
         savedAttractions.forEach((attraction, index) => {
             update(attractionsRef, {
                 [index]: {
@@ -282,7 +280,6 @@ export default function DestinationSelectedScreen(props) {
                 }
             })
         })
-        console.log(savedAttractions)
     }
     const generateTrip = () => {
         getDestAirports()
@@ -290,7 +287,6 @@ export default function DestinationSelectedScreen(props) {
 
         Promise.all([depAirportPromise, destAirportPromise])
             .then(() => {
-                console.log("calling getFlight")
                 getFlight(localDepAirports, localDestAirports)
             })
             .catch(err => console.log(err))
@@ -354,7 +350,6 @@ export default function DestinationSelectedScreen(props) {
                         .then(response => response.json())
                         .then(response => {
                             if (response.meta.count !== 0) {
-                                // console.log(departureAirport.AirportCode + " " + destAirport.AirportCode + " ")
                                 localDepFlights = [...localDepFlights, response]
                                 setDepartureFlights([...departureFlights, response])
                             }
@@ -383,7 +378,6 @@ export default function DestinationSelectedScreen(props) {
                 }
             }, null);
             setCheapestFlight(localCheapestFlight)
-            console.log(localCheapestFlight)
             console.log("cheapest selected")
 
             if (localCheapestFlight !== null) {
@@ -430,8 +424,6 @@ export default function DestinationSelectedScreen(props) {
                     if (localDestAirports[i].AirportCode === destAirportCheapest) {
                         setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
                         localDestFlightLatLon = localDestAirports[i].Position.Coordinate
-                        // localCenter = localDestFlightLatLon
-                        // console.log(localDestFlightLatLon)
                         break
                     }
                 }
@@ -497,7 +489,6 @@ export default function DestinationSelectedScreen(props) {
     }, [props.currentScreen])
     //hello - shruti is here
 
-    // console.log(localCheapestFlight)
     // const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
     // const center = (localCheapestFlight !== undefined) ? { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude } : { lat: 43.6532, lng: -79.3832 };
 
@@ -507,8 +498,8 @@ export default function DestinationSelectedScreen(props) {
         setMap(map);
     };
 
+    //latitude and longitude are different capitalizations in db for flight and attractions
     useEffect(() => {
-        console.log(destFlightLatLon)
         if (map !== null && destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
             const center = { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude };
             map.panTo(center);
@@ -516,20 +507,12 @@ export default function DestinationSelectedScreen(props) {
         }
         if (map !== null && savedAttractions.length !== 0) {
             const markers = savedAttractions.map((attraction) => {
-                const position = { lat: attraction.Latitude, lng: attraction.Longitude };
+                const position = { lat: attraction.latitude, lng: attraction.longitude };
                 return <Marker key={attraction.Id} position={position} />;
             });
             setAttractionsMarkers(markers);
         }
     }, [map, destFlightLatLon, savedAttractions]);
-
-    // useEffect(() => {
-    //     console.log(localDestFlightLatLon)
-    //     if (localDestFlightLatLon !== undefined) {
-    //         const center = { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude };
-    //         // setCenter(center);
-    //     }
-    // }, []);
 
     // const [center, setCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     // console.log(localCenter)
