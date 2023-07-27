@@ -26,6 +26,7 @@ export default function DestinationSelectedScreen(props) {
     const [fullDays, setFullDays] = useState()
     const [attractionsMarkers, setAttractionsMarkers] = useState([]);
     var localDepAirports = [];
+    const [averageLatLon, setAverageLatLon] = useState({})
     const [map, setMap] = useState(null);
     const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     var localDestAirports = [];
@@ -281,6 +282,25 @@ export default function DestinationSelectedScreen(props) {
             })
         })
     }
+
+    function searchHotels() {
+        const localAverageLatLon = savedAttractions.reduce(
+            (accumulator, attraction) => {
+                accumulator.lat += attraction.latitude;
+                accumulator.lng += attraction.longitude;
+                return accumulator;
+            },
+            { lat: 0, lng: 0 }
+        );
+
+        localAverageLatLon.lat /= savedAttractions.length;
+        localAverageLatLon.lng /= savedAttractions.length;
+
+        console.log(localAverageLatLon);
+        setAverageLatLon(localAverageLatLon)
+        console.log(averageLatLon)
+    }
+
     const generateTrip = () => {
         getDestAirports()
         getDepartureAirports()
@@ -500,7 +520,18 @@ export default function DestinationSelectedScreen(props) {
 
     //latitude and longitude are different capitalizations in db for flight and attractions
     useEffect(() => {
-        if (map !== null && destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
+        console.log(averageLatLon)
+        if (map !== null && averageLatLon !== undefined && averageLatLon.lat !== undefined && averageLatLon.lng !== undefined) {
+            const center = { lat: averageLatLon.lat, lng: averageLatLon.lng };
+            map.panTo(center);
+            setLocalCenter(center);
+            const bounds = new window.google.maps.LatLngBounds();
+            savedAttractions.forEach((attraction) => {
+                const tempLatLon = { lat: attraction.latitude, lng: attraction.longitude }
+                bounds.extend(tempLatLon);
+            });
+            map.fitBounds(bounds);
+        } else if (map !== null && destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
             const center = { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude };
             map.panTo(center);
             setLocalCenter(center);
@@ -508,11 +539,16 @@ export default function DestinationSelectedScreen(props) {
         if (map !== null && savedAttractions.length !== 0) {
             const markers = savedAttractions.map((attraction) => {
                 const position = { lat: attraction.latitude, lng: attraction.longitude };
-                return <Marker key={attraction.Id} position={position} />;
+                return <Marker
+                    key={attraction.Id}
+                    position={position}
+                    opacity={.6}
+                // animation={window.google.maps.Animation.DROP}
+                />;
             });
             setAttractionsMarkers(markers);
         }
-    }, [map, destFlightLatLon, savedAttractions]);
+    }, [map, destFlightLatLon, savedAttractions, averageLatLon]);
 
     // const [center, setCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     // console.log(localCenter)
@@ -589,9 +625,17 @@ export default function DestinationSelectedScreen(props) {
                     >
                         Output Results
                     </button>
+                    <button
+                        onClick={searchHotels}
+                    >
+                        Search Hotels
+                    </button>
                 </div>
                 <div
-                    style={{ width: "100%", height: "100vh" }}
+                    style={{
+                        width: "100%",
+                        height: "100vh",
+                    }}
                 >
                     <GoogleMap
                         mapContainerStyle={{ width: "100%", height: "100%" }}
