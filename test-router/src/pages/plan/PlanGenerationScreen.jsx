@@ -1,4 +1,3 @@
-
 import React from "react"
 import MainMap from "../map/Map.jsx";
 import LoadMap from "../map/LoadMap.jsx";
@@ -17,14 +16,15 @@ export default function DestinationSelectedScreen(props) {
     const [returnFlight, setReturnFlight] = useState({})
     const [depFlightLatLon, setDepFlightLatLon] = useState({})
     const [destFlightLatLon, setDestFlightLatLon] = useState({})
-    const [lodging, setLodging] = useState([])
+    const [lodging, setLodging] = useState()
     const [attractions, setAttractions] = useState([])
     const [newPathglobal, setNewPathGlobal] = useState()
     const [startDateTime, setStartDateTime] = useState()
     const [endDateTime, setEndDateTime] = useState()
     const [destTimezone, setDestTimezone] = useState()
     const [fullDays, setFullDays] = useState()
-    const [attractionsMarkers, setAttractionsMarkers] = useState([]);
+    const [attractionMarkers, setAttractionMarkers] = useState([]);
+    const [hotelMarkers, setHotelMarkers] = useState();
     var localDepAirports = [];
     const [averageLatLon, setAverageLatLon] = useState({})
     const [map, setMap] = useState(null);
@@ -38,7 +38,6 @@ export default function DestinationSelectedScreen(props) {
     var localDestFlightLatLon
     var localDepFlightLatLon
     var localTimeZoneDict = {}
-    let localLodging = []
     var localCheapestFlight
     var localReturnFlight
     let localAttractions = []
@@ -227,6 +226,7 @@ export default function DestinationSelectedScreen(props) {
             // opening_hours: attraction.opening_hours,
         }));
         const promises = [];
+        console.log(curatedAttractions)
 
         for (let i = 0; i < 7 * fullDays; i++) {
             const promise = new Promise((resolve, reject) => {
@@ -298,7 +298,33 @@ export default function DestinationSelectedScreen(props) {
 
         console.log(localAverageLatLon);
         setAverageLatLon(localAverageLatLon)
-        console.log(averageLatLon)
+        // console.log(averageLatLon)
+
+        const request = {
+            location: localAverageLatLon,
+            radius: 5000,
+            type: "lodging",
+        };
+        service.nearbySearch(request, (results, status, pagination) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+                const localLodging = results;
+                localLodging.sort((a, b) => b.rating - a.rating)
+                const selectedLodging = results.find((result) => result.business_status === "OPERATIONAL");
+                const formattedSelectedLodging = {
+                    name: selectedLodging.name,
+                    latitude: selectedLodging.geometry.location.lat(),
+                    longitude: selectedLodging.geometry.location.lng(),
+                    numRatings: selectedLodging.user_ratings_total,
+                    rating: selectedLodging.rating,
+                    reference: selectedLodging.reference,
+                };
+                setLodging(formattedSelectedLodging)
+
+                const hotelRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/hotel');
+                update(hotelRef, formattedSelectedLodging)
+            }
+        })
+
     }
 
     const generateTrip = () => {
@@ -509,6 +535,7 @@ export default function DestinationSelectedScreen(props) {
     }, [props.currentScreen])
     //hello - shruti is here
 
+
     // const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
     // const center = (localCheapestFlight !== undefined) ? { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude } : { lat: 43.6532, lng: -79.3832 };
 
@@ -520,7 +547,7 @@ export default function DestinationSelectedScreen(props) {
 
     //latitude and longitude are different capitalizations in db for flight and attractions
     useEffect(() => {
-        console.log(averageLatLon)
+        // console.log(averageLatLon)
         if (map !== null && averageLatLon !== undefined && averageLatLon.lat !== undefined && averageLatLon.lng !== undefined) {
             const center = { lat: averageLatLon.lat, lng: averageLatLon.lng };
             map.panTo(center);
@@ -546,9 +573,31 @@ export default function DestinationSelectedScreen(props) {
                 // animation={window.google.maps.Animation.DROP}
                 />;
             });
-            setAttractionsMarkers(markers);
+            setAttractionMarkers(markers);
         }
-    }, [map, destFlightLatLon, savedAttractions, averageLatLon]);
+        if (map !== null && lodging !== undefined) {
+            console.log(lodging)
+            // attractionMarkers.forEach((marker) => {
+            //     marker.setVisible(false);
+            // });
+            const hotelMarker = <Marker
+                position={{ lat: lodging.latitude, lng: lodging.longitude }}
+                opacity={.6}
+                animation={window.google.maps.Animation.DROP}
+            />
+            map.panTo({ lat: lodging.latitude, lng: lodging.longitude })
+            // const marker = lodging.map((hotel) => {
+            //     const position = { lat: hotel.latitude, lng: hotel.longitude };
+            //     return <Marker
+            //         // key={hotel.Id}
+            //         position={position}
+            //         opacity={.6}
+            //         animation={window.google.maps.Animation.DROP}
+            //     />;
+            // });
+            setHotelMarkers(hotelMarker);
+        }
+    }, [map, destFlightLatLon, savedAttractions, averageLatLon, lodging]);
 
     // const [center, setCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     // console.log(localCenter)
@@ -643,7 +692,8 @@ export default function DestinationSelectedScreen(props) {
                         zoom={13}
                         onLoad={handleMapLoad}
                     >
-                        {attractionsMarkers}
+                        {attractionMarkers}
+                        {hotelMarkers}
                     </GoogleMap>
                 </div>
             </div>
