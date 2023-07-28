@@ -25,9 +25,9 @@ Firebase
 - https://cloud.google.com/billing/docs/how-to/notify#functions_cap_billing_dependencies-python
 - https://cloud.google.com/apis/docs/capping-api-usage
 - https://cloud.google.com/billing/docs/how-to/budgets?hl=en&_ga=2.150301874.-566697965.1667680219
-
 - https://www.youtube.com/watch?v=rQvOAnNvcNQ
 - https://www.youtube.com/watch?v=ZAsKOqv_SWU
+- https://firebase.google.com/docs/database/web/read-and-write
 
 ReactJS
 - https://blog.webdevsimplified.com/2022-07/react-router/
@@ -58,6 +58,22 @@ Google API
 - https://developers.google.com/maps/billing-and-pricing/pricing
 - https://stackoverflow.com/questions/62173188/align-divs-to-the-right-side-of-the-window-in-react
 - https://developers.google.com/community/gdsc
+- https://developers.google.com/maps/documentation/places/web-service/usage-and-billing#places-details
+- https://developers.google.com/maps/documentation/places/web-service/search-text#text-search-examples
+- https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+- https://github.com/leighhalliday/google-maps-intro/blob/main/pages/places.js#L47
+- https://www.youtube.com/watch?v=BL2XVTqz9Ek&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN&index=4
+- https://developers.google.com/maps/documentation/places/web-service/details#PlacesDetailsResponse
+- https://tomchentw.github.io/react-google-maps/#introduction
+- https://developers.google.com/maps/documentation/javascript/reference
+- https://github.com/wellyshen/use-places-autocomplete
+- https://github.com/trulymittal/google-maps-directions-tutorial/blob/master/src/App.js
+- https://www.youtube.com/watch?v=iP3DnhCUIsE
+- https://github.com/leighhalliday/google-maps-intro/blob/main/styles/globals.css
+- https://developers.google.com/maps/documentation/javascript/places#place_search_requests
+- https://developers.google.com/maps/billing-and-pricing/pricing#nearby-search
+- https://developers.google.com/maps/documentation/javascript/usage-and-billing#pricing-for-product
+- https://developers.google.com/maps/documentation/api-picker
 
 Tripadvisor API
 - https://developer-tripadvisor.com/content-api/
