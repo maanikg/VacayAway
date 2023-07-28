@@ -1,39 +1,37 @@
 import React from "react"
-import MainMap from "../map/Map.jsx";
-import LoadMap from "../map/LoadMap.jsx";
 import { Marker } from '@react-google-maps/api';
 import { GoogleMap } from '@react-google-maps/api';
 import { useEffect } from "react";
 import { useState } from "react"
-import { ref, push, update, /*set*/ } from "firebase/database";
+import { ref, push, update } from "firebase/database";
 import { auth, db } from "../api/firebase.js"
 export default function DestinationSelectedScreen(props) {
-    const [destAirports, setDestAirports] = useState([])
-
-    const [departureAirports, setDepartureAirports] = useState([])
+    //flights
     const [departureFlights, setDepartureFlights] = useState([])
-    const [cheapestFlight, setCheapestFlight] = useState({})
-    const [returnFlight, setReturnFlight] = useState({})
-    const [depFlightLatLon, setDepFlightLatLon] = useState({})
     const [destFlightLatLon, setDestFlightLatLon] = useState({})
-    const [lodging, setLodging] = useState()
-    const [attractions, setAttractions] = useState([])
-    const [newPathglobal, setNewPathGlobal] = useState()
+    const [newPathKey, setNewPathKey] = useState()
+
+    //time
     const [startDateTime, setStartDateTime] = useState()
     const [endDateTime, setEndDateTime] = useState()
-    const [destTimezone, setDestTimezone] = useState()
     const [fullDays, setFullDays] = useState()
+
+    //attractions and lodging
+    const [attractions, setAttractions] = useState([])
+    const [averageLatLon, setAverageLatLon] = useState({})
+    const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
+    const [lodging, setLodging] = useState()
+
+    //mapping
+    const [map, setMap] = useState(null);
     const [attractionMarkers, setAttractionMarkers] = useState([]);
     const [hotelMarkers, setHotelMarkers] = useState();
+
+    //flights and airports
     var localDepAirports = [];
-    const [averageLatLon, setAverageLatLon] = useState({})
-    const [map, setMap] = useState(null);
-    const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     var localDestAirports = [];
     var localDepFlights = []
     var depAirportPromise
-    var airportPromise
-    var airportPromise2
     var destAirportPromise
     var localDestFlightLatLon
     var localDepFlightLatLon
@@ -41,12 +39,9 @@ export default function DestinationSelectedScreen(props) {
     var localCheapestFlight
     var localReturnFlight
     let localAttractions = []
-    let newPath
     var curatedAttractions
-    var localDestTimezone
     var numFullDays
     var startTripDateTime, endTripDateTime
-    var newTrip
     const [savedAttractions, setSavedAttractions] = useState([])
     let localService
     const [service, setService] = useState()
@@ -75,9 +70,8 @@ export default function DestinationSelectedScreen(props) {
 
     function saveTripData() {
         const pathRef = ref(db, 'users/' + auth.currentUser.uid + '/trips')
-        newPath = push(pathRef)
-        setNewPathGlobal(newPath.key)
-        newTrip = newPath.key
+        const newPath = push(pathRef)
+        setNewPathKey(newPath.key)
         const flightRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPath.key + '/flight')
         function saveTripDataSub(tripSegment, flights) {
             const segments = flights.data[0].itineraries[0].segments;
@@ -152,7 +146,6 @@ export default function DestinationSelectedScreen(props) {
     }
 
     function searchGoogle() {
-        // alert("hi")
         const request = {
             location: {
                 lat: destFlightLatLon.Latitude,
@@ -166,51 +159,27 @@ export default function DestinationSelectedScreen(props) {
             // keyword: ['hotel'],
             // type: ['point_of_interest', '-lodging'],
             language: 'en',
-            // pagetoken: "Aaw_FcI7OIADLDSc0BkwavxNQ9jIikYOm7IrtE7oEIEnW3Hs65vWHQlsuvv2ohoqOUvMTZRZQ6j6RLXhpcWOOS1rdaDszP3s3Q4pyHK_Acl8eDUbruE7oTsuvNItH5rQ79INXA9u0P0d"
-            // Aaw_FcL3oDO1j5O4OFiEHOZRzTvEpOjXh9lFjE73Zg_cEgO8aHkBOhCnRSIow_6sOaGtQmuVleoDfBe_T0TQH69cxiQs1JM91ot4AY6kQlCf0oCfpedVkVrp83GaAMlaizFnsAgB1ImR
         }
         service.nearbySearch(request, (results, status, pagination) => {
-            // service.nearbySearch(request, (results, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                console.log(results)
-                results.forEach((result) => {
-                    if (result.business_status === "OPERATIONAL") {
-                        // console.log(result.types)
-                        // if (result.opening_hours !== undefined) {
-                        //     service.getDetails({
-                        //         placeId: result.place_id,
-                        //         fields: ["opening_hours", "url", "website", "geometry", "formatted_address", "address_components", "name"]
-                        //     }, (results, status) => {
-                        //         console.log(results)
-                        //         console.log(results.geometry.location.lat())
-                        //         console.log(results.geometry.location.lng())
-                        //     })
-                        //     // console.log(result.opening_hours.isOpen())
-                        // }
-                    }
-                })
-                // setLodging(...lodging, results)
-                // localLodging = [...localLodging, ...results]
-                localAttractions = [...localAttractions, ...results]
-                setAttractions(localAttractions)
-                console.log(pagination)
-                // console.log(numFullDays)
-                // console.log(fullDays)
-                if (localAttractions.length < 7 * fullDays && pagination.hasNextPage) {
-                    pagination.nextPage();
-                }
+            if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
+                alert(status)
+                return
             }
+
+            console.log(results)
+            //need to only take operational businesses
+            // results.forEach((result) => {
+            //     if (result.business_status === "OPERATIONAL") {
+            //     }
+            // })
+            localAttractions = [...localAttractions, ...results]
+            setAttractions(localAttractions)
+            if (localAttractions.length < 7 * fullDays && pagination.hasNextPage) {
+                pagination.nextPage();
+            }
+
         }
         )
-        // service.getDetails({
-        //     // placeId: "ChIJY-ndrTzAQUcR2BkUyAT8F-s",
-        //     // placeId: "ChIJTz4qiCM_dkgRJWQuA2Dr-gA",
-        //     placeId: "ChIJ_dGXYaUOdkgRjQQ6Whq-jBM",
-        //     // fields: ["opening_hours"]
-        // }, (results, status) => {
-        //     console.log(results)
-        // }
-        // )
     }
 
     function searchResults() {
@@ -223,10 +192,8 @@ export default function DestinationSelectedScreen(props) {
             numRatings: attraction.user_ratings_total,
             rating: attraction.rating,
             reference: attraction.reference,
-            // opening_hours: attraction.opening_hours,
         }));
         const promises = [];
-        console.log(curatedAttractions)
 
         for (let i = 0; i < 7 * fullDays; i++) {
             const promise = new Promise((resolve, reject) => {
@@ -262,11 +229,7 @@ export default function DestinationSelectedScreen(props) {
     }
 
     function outputResults() {
-        const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/attractions');
-        // update(attractionsRef, {
-        //     temp: savedAttractions[1].name
-        //     // savedAttractions)
-        // })
+        const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/attractions');
         console.log(savedAttractions)
         savedAttractions.forEach((attraction, index) => {
             update(attractionsRef, {
@@ -298,7 +261,6 @@ export default function DestinationSelectedScreen(props) {
 
         console.log(localAverageLatLon);
         setAverageLatLon(localAverageLatLon)
-        // console.log(averageLatLon)
 
         const request = {
             location: localAverageLatLon,
@@ -306,23 +268,25 @@ export default function DestinationSelectedScreen(props) {
             type: "lodging",
         };
         service.nearbySearch(request, (results, status, pagination) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                const localLodging = results;
-                localLodging.sort((a, b) => b.rating - a.rating)
-                const selectedLodging = results.find((result) => result.business_status === "OPERATIONAL");
-                const formattedSelectedLodging = {
-                    name: selectedLodging.name,
-                    latitude: selectedLodging.geometry.location.lat(),
-                    longitude: selectedLodging.geometry.location.lng(),
-                    numRatings: selectedLodging.user_ratings_total,
-                    rating: selectedLodging.rating,
-                    reference: selectedLodging.reference,
-                };
-                setLodging(formattedSelectedLodging)
-
-                const hotelRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathglobal + '/hotel');
-                update(hotelRef, formattedSelectedLodging)
+            if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
+                alert(status)
+                return
             }
+            const localLodging = results;
+            localLodging.sort((a, b) => b.rating - a.rating)
+            const selectedLodging = results.find((result) => result.business_status === "OPERATIONAL");
+            const formattedSelectedLodging = {
+                name: selectedLodging.name,
+                latitude: selectedLodging.geometry.location.lat(),
+                longitude: selectedLodging.geometry.location.lng(),
+                numRatings: selectedLodging.user_ratings_total,
+                rating: selectedLodging.rating,
+                reference: selectedLodging.reference,
+            };
+            setLodging(formattedSelectedLodging)
+
+            const hotelRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/hotel');
+            update(hotelRef, formattedSelectedLodging)
         })
 
     }
@@ -349,7 +313,6 @@ export default function DestinationSelectedScreen(props) {
             )
             .then(data => {
                 localDestAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
-                setDestTimezone(localDestAirports);
             })
             .catch(error => {
                 alert(error)
@@ -364,7 +327,6 @@ export default function DestinationSelectedScreen(props) {
             .then(response => response.json())
             .then(data => {
                 localDepAirports = data.NearestAirportResource.Airports.Airport.filter(airport => airport.Distance.Value < 50);
-                setDepartureAirports(localDepAirports);
             })
             .catch(error => {
                 alert(error)
@@ -423,110 +385,112 @@ export default function DestinationSelectedScreen(props) {
                     return prevFlight;
                 }
             }, null);
-            setCheapestFlight(localCheapestFlight)
             console.log("cheapest selected")
 
-            if (localCheapestFlight !== null) {
-                const depAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode
-                const segments = localCheapestFlight.data[0].itineraries[0].segments;
-                const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
+            if (localCheapestFlight === null) {
+                return
+            }
 
-                const airports = Object.keys(localCheapestFlight.dictionaries.locations)
-                const timezoneDict = {};
-                console.log(airports)
+            const depAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[0].departure.iataCode
+            const segments = localCheapestFlight.data[0].itineraries[0].segments;
+            const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
 
-                airports.forEach((airport) => {
-                    airportPromise = fetch(`https://api.lufthansa.com/v1/mds-references/airports/${airport}?lang=EN`, {
-                        headers: {
-                            'Authorization': `Bearer ${props.lufthansaAccessToken}`
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            const timezone = data.AirportResource.Airports.Airport.UtcOffset;
-                            timezoneDict[airport] = timezone
-                            localTimeZoneDict[airport] = timezone
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching timezone for airport ${airport}: ${error}`);
-                        });
-                });
-                Promise.all([airportPromise])
-                    .then(() => {
-                        console.log("timezoneDict")
-                        console.log(timezoneDict);
-                        console.log(localTimeZoneDict);
-                    })
+            const airports = Object.keys(localCheapestFlight.dictionaries.locations)
+            const timezoneDict = {};
+            console.log(airports)
 
-
-                for (let i = 0; i < localDepAirports.length; i++) {
-                    if (localDepAirports[i].AirportCode === depAirportCheapest) {
-                        setDepFlightLatLon(localDepAirports[i].Position.Coordinate)
-                        localDepFlightLatLon = localDepAirports[i].Position.Coordinate
-                        break
-                    }
-                }
-                for (let i = 0; i < localDestAirports.length; i++) {
-                    if (localDestAirports[i].AirportCode === destAirportCheapest) {
-                        setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
-                        localDestFlightLatLon = localDestAirports[i].Position.Coordinate
-                        break
-                    }
-                }
-                fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
+            var depAirportsPromise
+            airports.forEach((airport) => {
+                depAirportsPromise = fetch(`https://api.lufthansa.com/v1/mds-references/airports/${airport}?lang=EN`, {
                     headers: {
-                        'Authorization': `Bearer ${props.amadeusAccessToken}`
+                        'Authorization': `Bearer ${props.lufthansaAccessToken}`
                     }
                 })
                     .then(response => response.json())
-                    .then(response => {
-                        if (response.meta.count !== 0) {
-                            localReturnFlight = response
-                            setReturnFlight(response)
-
-                            const airports = Object.keys(localReturnFlight.dictionaries.locations)
-                            const timezoneDict = {};
-                            const timezonePromises = [];
-                            console.log(airports)
-
-                            airports.forEach((airport) => {
-                                const promise = new Promise((resolve, reject) => {
-                                    fetch(`https://api.lufthansa.com/v1/mds-references/airports/${airport}?lang=EN`, {
-                                        headers: {
-                                            'Authorization': `Bearer ${props.lufthansaAccessToken}`
-                                        }
-                                    })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            const timezone = data.AirportResource.Airports.Airport.UtcOffset;
-                                            resolve({ airport, timezone });
-                                        })
-                                        .catch(error => {
-                                            reject(`Error fetching timezone for airport ${airport}: ${error}`);
-                                        });
-                                });
-                                timezonePromises.push(promise);
-                            });
-
-                            Promise.all(timezonePromises)
-                                .then(results => {
-                                    // const timezoneDict = {};
-                                    results.forEach(result => {
-                                        localTimeZoneDict[result.airport] = result.timezone;
-                                    });
-                                    console.log(localTimeZoneDict);
-                                    alert("complete")
-                                    saveTripData()
-                                })
-                                .catch(error => {
-                                    console.error(error);
-                                });
-                        }
+                    .then(data => {
+                        const timezone = data.AirportResource.Airports.Airport.UtcOffset;
+                        timezoneDict[airport] = timezone
+                        localTimeZoneDict[airport] = timezone
                     })
                     .catch(error => {
-                        console.log(error.message)
-                    })
+                        console.error(`Error fetching timezone for airport ${airport}: ${error}`);
+                    });
+            });
+            Promise.all([depAirportsPromise])
+                .then(() => {
+                    console.log("timezoneDict")
+                    console.log(timezoneDict);
+                    console.log(localTimeZoneDict);
+                })
+
+
+            for (let i = 0; i < localDepAirports.length; i++) {
+                if (localDepAirports[i].AirportCode === depAirportCheapest) {
+                    localDepFlightLatLon = localDepAirports[i].Position.Coordinate
+                    break
+                }
             }
+            for (let i = 0; i < localDestAirports.length; i++) {
+                if (localDestAirports[i].AirportCode === destAirportCheapest) {
+                    setDestFlightLatLon(localDestAirports[i].Position.Coordinate)
+                    localDestFlightLatLon = localDestAirports[i].Position.Coordinate
+                    break
+                }
+            }
+            fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${destAirportCheapest}&destinationLocationCode=${depAirportCheapest}&departureDate=${formattedReturnDate}&adults=1&nonStop=false&currencyCode=CAD&max=1`, {
+                headers: {
+                    'Authorization': `Bearer ${props.amadeusAccessToken}`
+                }
+            })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.meta.count === 0) {
+                        return
+                    }
+                    localReturnFlight = response
+
+                    const airports = Object.keys(localReturnFlight.dictionaries.locations)
+                    const timezoneDict = {};
+                    const timezonePromises = [];
+                    console.log(airports)
+
+                    airports.forEach((airport) => {
+                        const promise = new Promise((resolve, reject) => {
+                            fetch(`https://api.lufthansa.com/v1/mds-references/airports/${airport}?lang=EN`, {
+                                headers: {
+                                    'Authorization': `Bearer ${props.lufthansaAccessToken}`
+                                }
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    const timezone = data.AirportResource.Airports.Airport.UtcOffset;
+                                    resolve({ airport, timezone });
+                                })
+                                .catch(error => {
+                                    reject(`Error fetching timezone for airport ${airport}: ${error}`);
+                                });
+                        });
+                        timezonePromises.push(promise);
+                    });
+
+                    Promise.all(timezonePromises)
+                        .then(results => {
+                            results.forEach(result => {
+                                localTimeZoneDict[result.airport] = result.timezone;
+                            });
+                            console.log(localTimeZoneDict);
+                            alert("complete")
+                            saveTripData()
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+
+                })
+                .catch(error => {
+                    console.log(error.message)
+                })
+
         }
     }
 
@@ -535,19 +499,12 @@ export default function DestinationSelectedScreen(props) {
     }, [props.currentScreen])
     //hello - shruti is here
 
-
-    // const center = (props.userLocation !== null && props.userLocation !== {} && props.userLocation.latitude !== undefined && props.userLocation.longitude !== undefined) ? { lat: props.userLocation.latitude, lng: props.userLocation.longitude } : { lat: 43.6532, lng: -79.3832 };
-    // const center = (localCheapestFlight !== undefined) ? { lat: localDestFlightLatLon.Latitude, lng: localDestFlightLatLon.Longitude } : { lat: 43.6532, lng: -79.3832 };
-
-
-
     const handleMapLoad = (map) => {
         setMap(map);
     };
 
     //latitude and longitude are different capitalizations in db for flight and attractions
     useEffect(() => {
-        // console.log(averageLatLon)
         if (map !== null && averageLatLon !== undefined && averageLatLon.lat !== undefined && averageLatLon.lng !== undefined) {
             const center = { lat: averageLatLon.lat, lng: averageLatLon.lng };
             map.panTo(center);
@@ -577,32 +534,16 @@ export default function DestinationSelectedScreen(props) {
         }
         if (map !== null && lodging !== undefined) {
             console.log(lodging)
-            // attractionMarkers.forEach((marker) => {
-            //     marker.setVisible(false);
-            // });
             const hotelMarker = <Marker
                 position={{ lat: lodging.latitude, lng: lodging.longitude }}
                 opacity={.6}
                 animation={window.google.maps.Animation.DROP}
             />
-            map.panTo({ lat: lodging.latitude, lng: lodging.longitude })
-            // const marker = lodging.map((hotel) => {
-            //     const position = { lat: hotel.latitude, lng: hotel.longitude };
-            //     return <Marker
-            //         // key={hotel.Id}
-            //         position={position}
-            //         opacity={.6}
-            //         animation={window.google.maps.Animation.DROP}
-            //     />;
-            // });
+            // map.panTo({ lat: lodging.latitude, lng: lodging.longitude })
             setHotelMarkers(hotelMarker);
         }
     }, [map, destFlightLatLon, savedAttractions, averageLatLon, lodging]);
 
-    // const [center, setCenter] = useState({ lat: 43.6532, lng: -79.3832 });
-    // console.log(localCenter)
-    // console.log(destFlightLatLon.Latitude)
-    // console.log(destFlightLatLon.Longitude)
     if (!props.loaded) {
         return null;
     }
@@ -636,14 +577,8 @@ export default function DestinationSelectedScreen(props) {
                 >
                     <p>Dates:</p>
                     <p>{props.departureDate.toString()}</p>
-                    {/* <p>{ props.departureDate.toString()}</p> */}
                     <p>{props.returnDate.toString()}</p>
                 </div>
-                {/* <MainMap
-                    userLocation={props.userLocation}
-                    loaded={props.loaded}
-                    setLoaded={props.setLoaded}
-                /> */}
                 <div
                     style={{ display: "flex" }}
                 >
@@ -652,10 +587,6 @@ export default function DestinationSelectedScreen(props) {
                         onClick={generateTrip}>
                         Generate Trip
                     </button>
-                    {/* <button
-                        onClick={saveTripData}>
-                        Save Info
-                    </button> */}
                     <button
                         onClick={temp}>
                         Temps
