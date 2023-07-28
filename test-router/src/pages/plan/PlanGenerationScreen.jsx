@@ -47,12 +47,10 @@ export default function DestinationSelectedScreen(props) {
     const [service, setService] = useState()
 
     useEffect(() => {
-        console.log(props.loaded)
         if (props.loaded) {
             localService = new window.google.maps.places.PlacesService(document.createElement('div'));
             setService(localService)
         }
-        console.log(localService)
     }, [props.loaded])
 
     function convertDateString(dateString) {
@@ -141,7 +139,6 @@ export default function DestinationSelectedScreen(props) {
         // const duration = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60 * 24)
         numFullDays = (innerEnd.getTime() - innerStart.getTime()) / (1000 * 60 * 60 * 24)
         setFullDays(numFullDays)
-        // console.log(duration)
         console.log(numFullDays)
     }
 
@@ -259,7 +256,6 @@ export default function DestinationSelectedScreen(props) {
         localAverageLatLon.lat /= savedAttractions.length;
         localAverageLatLon.lng /= savedAttractions.length;
 
-        console.log(localAverageLatLon);
         setAverageLatLon(localAverageLatLon)
 
         const request = {
@@ -396,9 +392,8 @@ export default function DestinationSelectedScreen(props) {
             const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
 
             const airports = Object.keys(localCheapestFlight.dictionaries.locations)
-            const timezoneDict = {};
+            
             console.log(airports)
-
             var depAirportsPromise
             airports.forEach((airport) => {
                 depAirportsPromise = fetch(`https://api.lufthansa.com/v1/mds-references/airports/${airport}?lang=EN`, {
@@ -409,20 +404,12 @@ export default function DestinationSelectedScreen(props) {
                     .then(response => response.json())
                     .then(data => {
                         const timezone = data.AirportResource.Airports.Airport.UtcOffset;
-                        timezoneDict[airport] = timezone
                         localTimeZoneDict[airport] = timezone
                     })
                     .catch(error => {
                         console.error(`Error fetching timezone for airport ${airport}: ${error}`);
                     });
             });
-            Promise.all([depAirportsPromise])
-                .then(() => {
-                    console.log("timezoneDict")
-                    console.log(timezoneDict);
-                    console.log(localTimeZoneDict);
-                })
-
 
             for (let i = 0; i < localDepAirports.length; i++) {
                 if (localDepAirports[i].AirportCode === depAirportCheapest) {
@@ -450,7 +437,6 @@ export default function DestinationSelectedScreen(props) {
                     localReturnFlight = response
 
                     const airports = Object.keys(localReturnFlight.dictionaries.locations)
-                    const timezoneDict = {};
                     const timezonePromises = [];
                     console.log(airports)
 
@@ -479,7 +465,7 @@ export default function DestinationSelectedScreen(props) {
                                 localTimeZoneDict[result.airport] = result.timezone;
                             });
                             console.log(localTimeZoneDict);
-                            alert("complete")
+                            console.log("complete")
                             saveTripData()
                         })
                         .catch(error => {
