@@ -1,5 +1,8 @@
 # ✈️ VacayAway
 
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/98338848/259257305-20c148b1-7e79-490e-94d9-1b9be9ed52e4.png" >
+
+
 About the project:
 - The app take in a user's destination preference and length of trip and generates a full itinerary
 - Identifies the cheapest flight path given the selected destination and dates by using `LufthansaAPI` and `AmadeusAPI`
