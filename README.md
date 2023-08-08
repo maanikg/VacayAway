@@ -14,7 +14,7 @@ The process:
 - Utilized Google Maps `PlacesAPI` to generate attractions for a trip
 - Grouping attractions by location using `TensorFlow` to generate a logical order of events **(CURRENTLY IN PROGRESS 🔜)**
 
-⚠️ Note: If you want to fork or duplicate this repo, you must make a Google Cloud Project account, AmadeusAPI account, and LufthansaAPI account and replace the api keys in a .env file as they are referenced in the code. The program will not work correctly otherwise as API calls won't be made.
+⚠️ Note: If you want to fork or duplicate this repo, you must make a Google Cloud Project account, AmadeusAPI account, and LufthansaAPI account and replace the api keys in a .env file as they are referenced in the code. The program will not work correctly otherwise as API calls won't be made unless the API keys are valid.
 
 ## 💻 Tech Stack
 <img src="https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=ffdd55" height="30" alt = "Python" /> <img src="https://img.shields.io/badge/-JavaScript-31322f?style=flat&logo=javascript&logoColor=F7DF1E" height="30" alt = "Javascript"/> 
