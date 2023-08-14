@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import { ref, push, update } from "firebase/database";
 import { auth, db } from "../api/firebase.js"
+// import * as torch from 'torch-js';
 export default function DestinationSelectedScreen(props) {
     //flights
     const [departureFlights, setDepartureFlights] = useState([])
@@ -18,6 +19,7 @@ export default function DestinationSelectedScreen(props) {
 
     //attractions and lodging
     const [attractions, setAttractions] = useState([])
+    const [savedAttractions, setSavedAttractions] = useState([])
     const [averageLatLon, setAverageLatLon] = useState({})
     const [localCenter, setLocalCenter] = useState({ lat: 43.6532, lng: -79.3832 });
     const [lodging, setLodging] = useState()
@@ -42,7 +44,6 @@ export default function DestinationSelectedScreen(props) {
     var curatedAttractions
     var numFullDays
     var startTripDateTime, endTripDateTime
-    const [savedAttractions, setSavedAttractions] = useState([])
     let localService
     const [service, setService] = useState()
 
@@ -227,7 +228,6 @@ export default function DestinationSelectedScreen(props) {
 
     function outputResults() {
         const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/attractions');
-        console.log(savedAttractions)
         savedAttractions.forEach((attraction, index) => {
             update(attractionsRef, {
                 [index]: {
@@ -241,6 +241,18 @@ export default function DestinationSelectedScreen(props) {
                 }
             })
         })
+        console.log(JSON.stringify(savedAttractions))
+        fetch('/api/data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(savedAttractions),
+        })
+            // .then(response => response.json())
+            .then(response => console.log(response))
+            .then(data => console.log(data))
+            .catch((error) => console.log(error))
     }
 
     function searchHotels() {
@@ -392,7 +404,7 @@ export default function DestinationSelectedScreen(props) {
             const destAirportCheapest = localCheapestFlight.data[0].itineraries[0].segments[segments.length - 1].arrival.iataCode
 
             const airports = Object.keys(localCheapestFlight.dictionaries.locations)
-            
+
             console.log(airports)
             var depAirportsPromise
             airports.forEach((airport) => {
@@ -491,7 +503,8 @@ export default function DestinationSelectedScreen(props) {
 
     //latitude and longitude are different capitalizations in db for flight and attractions
     useEffect(() => {
-        if (map !== null && averageLatLon !== undefined && averageLatLon.lat !== undefined && averageLatLon.lng !== undefined) {
+        if (map === null) return
+        if (averageLatLon !== undefined && averageLatLon.lat !== undefined && averageLatLon.lng !== undefined) {
             const center = { lat: averageLatLon.lat, lng: averageLatLon.lng };
             map.panTo(center);
             setLocalCenter(center);
@@ -501,12 +514,12 @@ export default function DestinationSelectedScreen(props) {
                 bounds.extend(tempLatLon);
             });
             map.fitBounds(bounds);
-        } else if (map !== null && destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
+        } else if (destFlightLatLon !== undefined && destFlightLatLon.Latitude !== undefined && destFlightLatLon.Longitude !== undefined) {
             const center = { lat: destFlightLatLon.Latitude, lng: destFlightLatLon.Longitude };
             map.panTo(center);
             setLocalCenter(center);
         }
-        if (map !== null && savedAttractions.length !== 0) {
+        if (savedAttractions.length !== 0) {
             const markers = savedAttractions.map((attraction) => {
                 const position = { lat: attraction.latitude, lng: attraction.longitude };
                 return <Marker
@@ -518,7 +531,7 @@ export default function DestinationSelectedScreen(props) {
             });
             setAttractionMarkers(markers);
         }
-        if (map !== null && lodging !== undefined) {
+        if (lodging !== undefined) {
             console.log(lodging)
             const hotelMarker = <Marker
                 position={{ lat: lodging.latitude, lng: lodging.longitude }}

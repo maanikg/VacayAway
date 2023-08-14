@@ -22,7 +22,7 @@ def input_fn():
 
 num_clusters = 2
 kmeans = tf.compat.v1.estimator.experimental.KMeans(
-    num_clusters=num_clusters, use_mini_batch=False
+    num_clusters=num_clusters, use_mini_batch=True
 )
 
 # train

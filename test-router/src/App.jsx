@@ -1,22 +1,21 @@
-import MapContainer from './pages/map/MapView';
-import HomeScreen from './pages/HomeScreen';
-import NoPage from './pages/NoPage';
-import NavigationBar from './pages/NavigationBar';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from './pages/Layout';
-import './css/App.css';
-import Trips from './pages/Trips';
-import Plan from './pages/plan/Plan';
 import { useState } from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import './css/App.css';
+import HomeScreen from './pages/HomeScreen';
+import Layout from './pages/Layout';
+import NavigationBar from './pages/NavigationBar';
+import NoPage from './pages/NoPage';
+import Trips from './pages/Trips';
+import LoadMap from "./pages/map/LoadMap";
+import MapContainer from './pages/map/MapView';
+import Plan from './pages/plan/Plan';
+
 import { amadeusConfig } from "./pages/api/amadeusAPI";
 import { lufthansaConfig } from "./pages/api/lufthansaAPI";
-import LoadMap from "./pages/map/LoadMap";
-
-import {
-	onAuthStateChanged
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { onValue, ref } from "firebase/database";
 import { auth, db } from "./pages/api/firebase.js";
-import { ref, onValue } from "firebase/database";
 
 export default function App() {
 	const [userLocation, setUserLocation] = useState({});
@@ -32,7 +31,6 @@ export default function App() {
 	const [loaded, setLoaded] = useState(false)
 
 	function locationSetter() {
-		console.log("loc")
 		const latitutdeRef = ref(db, 'users/' + auth.currentUser.uid + '/latitude')
 		const longitudeRef = ref(db, 'users/' + auth.currentUser.uid + '/longitude')
 		onValue(latitutdeRef, (snapshot) => {
@@ -49,7 +47,6 @@ export default function App() {
 		})
 	}
 	function setupLufthansaAPI() {
-		console.log("luft")
 		fetch(lufthansaConfig.url, {
 			method: 'POST',
 			headers: {
@@ -67,7 +64,6 @@ export default function App() {
 			});
 	}
 	function setupAmadeusAPI() {
-		console.log("amadeus")
 		fetch(amadeusConfig.url, {
 			method: 'POST',
 			headers: {
@@ -85,13 +81,7 @@ export default function App() {
 			});
 	}
 
-	// <script async
-	// 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK9X5wfxp6YyHIDCwEIeDzYWFhziw9MUc&libraries=places">
-	// </script>
-	// console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
-
 	const monitorAuthState = async () => {
-		console.log("here")
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				setLoggedIn(true)
