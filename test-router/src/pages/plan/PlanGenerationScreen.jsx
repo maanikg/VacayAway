@@ -30,6 +30,7 @@ export default function DestinationSelectedScreen(props) {
     const [hotelMarkers, setHotelMarkers] = useState();
 
     //flights and airports
+    // const [fullDays, numFullDays] = useState()
     var localDepAirports = [];
     var localDestAirports = [];
     var localDepFlights = []
@@ -227,21 +228,8 @@ export default function DestinationSelectedScreen(props) {
     }
 
     function outputResults() {
-        const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/attractions');
-        savedAttractions.forEach((attraction, index) => {
-            update(attractionsRef, {
-                [index]: {
-                    name: attraction.name,
-                    latitude: attraction.latitude,
-                    longitude: attraction.longitude,
-                    numRatings: attraction.numRatings,
-                    rating: attraction.rating,
-                    reference: attraction.reference,
-                    opening_hours: attraction.opening_hours ? attraction.opening_hours.periods : null,
-                }
-            })
-        })
-        console.log(JSON.stringify(savedAttractions))
+        // console.log(JSON.stringify(savedAttractions))
+        console.log(numFullDays)
         fetch('/api/data', {
             method: 'POST',
             headers: {
@@ -249,9 +237,46 @@ export default function DestinationSelectedScreen(props) {
             },
             body: JSON.stringify(savedAttractions),
         })
-            // .then(response => response.json())
-            .then(response => console.log(response))
-            .then(data => console.log(data))
+            .then(response =>
+                response.json()
+                // response.forEach((result) => {
+                //     console.log(result)
+                //     const savedAttraction = savedAttractions.find((a) => a.reference === result.attraction.reference);
+                //     if (savedAttraction) {
+                //         savedAttraction.cluster = result.cluster;
+                //     }
+                // })
+                // var returnVal = response.json()
+
+            )
+            // .then(response => console.log(response))
+            .then(
+                data => {
+                    console.log("hi")
+                    data.forEach((attraction) => {
+                        const savedAttraction = savedAttractions.find((a) => a.reference === attraction.attraction.reference);
+                        if (savedAttraction) {
+                            savedAttraction.cluster = attraction.cluster;
+                        }
+                    });
+                    console.log(savedAttractions);
+                    const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/attractions');
+                    savedAttractions.forEach((attraction, index) => {
+                        update(attractionsRef, {
+                            [index]: {
+                                name: attraction.name,
+                                latitude: attraction.latitude,
+                                longitude: attraction.longitude,
+                                numRatings: attraction.numRatings,
+                                rating: attraction.rating,
+                                reference: attraction.reference,
+                                opening_hours: attraction.opening_hours ? attraction.opening_hours.periods : null,
+                                cluster: attraction.cluster
+                            }
+                        })
+                    })
+                }
+            )
             .catch((error) => console.log(error))
     }
 
