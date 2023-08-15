@@ -516,6 +516,22 @@ export default function DestinationSelectedScreen(props) {
 
         }
     }
+    function getMarkerColor(cluster) {
+        var colorDict = {
+            0: "red",
+            1: "blue",
+            2: "green",
+            3: "yellow",
+            4: "orange",
+            5: "purple",
+            6: "pink",
+            7: "brown",
+            8: "white",
+            9: "black"
+        }
+        return colorDict[cluster]
+    }
+
 
     useEffect(() => {
         props.monitorAuthState()
@@ -551,7 +567,21 @@ export default function DestinationSelectedScreen(props) {
                     key={attraction.Id}
                     position={position}
                     opacity={.6}
+                // icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
                 // animation={window.google.maps.Animation.DROP}
+                />;
+            });
+            setAttractionMarkers(markers);
+        }
+        if (savedAttractions[0]['cluster'] !== undefined) {
+            const markers = savedAttractions.map((attraction) => {
+                const position = { lat: attraction.latitude, lng: attraction.longitude };
+                return <Marker
+                    key={attraction.Id}
+                    position={position}
+                    // opacity={.6}
+                    icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
+                    animation={window.google.maps.Animation.DROP}
                 />;
             });
             setAttractionMarkers(markers);

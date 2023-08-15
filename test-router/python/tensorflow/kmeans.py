@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 num_points = 100
 dimensions = 2
-points = np.random.uniform(0, 1000, [num_points, dimensions])
+points = np.random.uniform(0, 100, [num_points, dimensions])
 
 plt.figure()
 for i, cluster in enumerate(points):
