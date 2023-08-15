@@ -24,9 +24,9 @@ def get_data():
 
     # Return the cluster labels as part of the response
     response = [
-        {"data": locData[i], "label": int(labels[i])} for i in range(len(locData))
+        {"attraction": attraction, "cluster": int(labels[i])}
+        for i, attraction in enumerate(attractions)
     ]
-
 
     print(response)
     return jsonify(response)
