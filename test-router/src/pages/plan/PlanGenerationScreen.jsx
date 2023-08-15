@@ -518,16 +518,15 @@ export default function DestinationSelectedScreen(props) {
     }
     function getMarkerColor(cluster) {
         var colorDict = {
-            0: "red",
+            0: "orange",
             1: "blue",
             2: "green",
             3: "yellow",
-            4: "orange",
-            5: "purple",
-            6: "pink",
-            7: "brown",
-            8: "white",
-            9: "black"
+            4: "purple",
+            5: "pink",
+            6: "brown",
+            7: "white",
+            8: "black",
         }
         return colorDict[cluster]
     }
@@ -566,31 +565,33 @@ export default function DestinationSelectedScreen(props) {
                 return <Marker
                     key={attraction.Id}
                     position={position}
-                    opacity={.6}
-                // icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
+                    // opacity={.6}
+                    icon={{
+                        url: attraction.cluster !== undefined ? `https://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` : undefined//'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    }}
                 // animation={window.google.maps.Animation.DROP}
                 />;
             });
             setAttractionMarkers(markers);
         }
-        if (savedAttractions[0]['cluster'] !== undefined) {
-            const markers = savedAttractions.map((attraction) => {
-                const position = { lat: attraction.latitude, lng: attraction.longitude };
-                return <Marker
-                    key={attraction.Id}
-                    position={position}
-                    // opacity={.6}
-                    icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
-                    animation={window.google.maps.Animation.DROP}
-                />;
-            });
-            setAttractionMarkers(markers);
-        }
+        // if (savedAttractions.length !== 0 && savedAttractions[0].cluster !== undefined) {
+        //     const markers = savedAttractions.map((attraction) => {
+        //         const position = { lat: attraction.latitude, lng: attraction.longitude };
+        //         return <Marker
+        //             key={attraction.Id}
+        //             position={position}
+        //             // opacity={.6}
+        //             icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
+        //             animation={window.google.maps.Animation.DROP}
+        //         />;
+        //     });
+        //     setAttractionMarkers(markers);
+        // }
         if (lodging !== undefined) {
             console.log(lodging)
             const hotelMarker = <Marker
                 position={{ lat: lodging.latitude, lng: lodging.longitude }}
-                opacity={.6}
+                // opacity={1}
                 animation={window.google.maps.Animation.DROP}
             />
             // map.panTo({ lat: lodging.latitude, lng: lodging.longitude })
