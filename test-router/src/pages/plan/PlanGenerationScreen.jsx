@@ -228,14 +228,21 @@ export default function DestinationSelectedScreen(props) {
     }
 
     function outputResults() {
-        // console.log(JSON.stringify(savedAttractions))
-        console.log(numFullDays)
+        console.log(JSON.stringify(savedAttractions))
+        var temp = {
+            attractions: savedAttractions,
+            numDays: fullDays,
+        };
+        // temp.append("numFullDays", numFullDays)
+        console.log(temp)
+        console.log(JSON.stringify(temp))
+        console.log(fullDays)
         fetch('/api/data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(savedAttractions),
+            body: JSON.stringify(temp),
         })
             .then(response =>
                 response.json()

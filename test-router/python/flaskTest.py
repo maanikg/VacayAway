@@ -11,7 +11,8 @@ app = Flask(__name__)
 def get_data():
     # Get the data to return
     # body = request.data[0]
-    attractions = request.get_json()
+    attractions = request.get_json()["attractions"]
+    numDays = request.get_json()["numDays"]
     locData = [
         [attraction["latitude"], attraction["longitude"]] for attraction in attractions
     ]
@@ -19,7 +20,7 @@ def get_data():
     # return locData
 
     X = np.array(locData)
-    kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
+    kmeans = KMeans(n_clusters=numDays, random_state=0).fit(X)
     labels = kmeans.labels_
 
     # Return the cluster labels as part of the response
