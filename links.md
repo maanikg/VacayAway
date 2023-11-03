@@ -74,6 +74,7 @@ Google API
 - https://developers.google.com/maps/billing-and-pricing/pricing#nearby-search
 - https://developers.google.com/maps/documentation/javascript/usage-and-billing#pricing-for-product
 - https://developers.google.com/maps/documentation/api-picker
+- 
 
 Tripadvisor API
 - https://developer-tripadvisor.com/content-api/
@@ -81,3 +82,22 @@ Tripadvisor API
 Luthansa API
 - https://developer.lufthansa.com/io-docs
 - https://developer.lufthansa.com/docs/read/API_basics
+
+Microsoft Azure
+- https://www.youtube.com/watch?v=BVmr0D9Pcy0
+- https://portal.azure.com/#view/HubsExtension/BrowseResourceGroups
+- https://azure.microsoft.com/en-ca/free/
+- https://portal.azure.com/#home
+- https://education.github.com/experiences/virtual_event_kit
+- https://portal.azure.com/#view/HubsExtension/DeploymentDetailsBlade/~/overview/id/%2Fsubscriptions%2F5804637d-a601-4fe6-b9c0-ab6390b22ed4%2FresourceGroups%2Ftemp1%2Fproviders%2FMicrosoft.Resources%2Fdeployments%2FMicrosoft.Template-20230602155411
+- https://learn.microsoft.com/en-ca/training/modules/optimize-basketball-player-rest-breaks/
+- https://learn.microsoft.com/en-ca/training/student-hub/certifications
+- https://learn.microsoft.com/en-ca/training/
+
+
+https://web.dev/learn/
+https://ai.google/build/machine-learning/
+
+https://amadeus4dev.github.io/developer-guides/common-errors/
+https://github.com/amadeus4dev-examples/APIRateLimits
+
