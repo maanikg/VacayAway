@@ -77,3 +77,7 @@ Google API
 
 Tripadvisor API
 - https://developer-tripadvisor.com/content-api/
+
+Luthansa API
+- https://developer.lufthansa.com/io-docs
+- https://developer.lufthansa.com/docs/read/API_basics
