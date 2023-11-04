@@ -47,5 +47,12 @@ def get_data():
     return data
 
 
+@app.route("/api/test", methods=["POST"])
+def test():
+    data = request.get_json()
+    print(data)
+    return jsonify(data)
+
+
 if __name__ == "__main__":
     app.run(port=3000)

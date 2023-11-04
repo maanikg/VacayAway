@@ -244,22 +244,9 @@ export default function DestinationSelectedScreen(props) {
             },
             body: JSON.stringify(temp),
         })
-            .then(response =>
-                response.json()
-                // response.forEach((result) => {
-                //     console.log(result)
-                //     const savedAttraction = savedAttractions.find((a) => a.reference === result.attraction.reference);
-                //     if (savedAttraction) {
-                //         savedAttraction.cluster = result.cluster;
-                //     }
-                // })
-                // var returnVal = response.json()
-
-            )
-            // .then(response => console.log(response))
+            .then(response => response.json())
             .then(
                 data => {
-                    console.log("hi")
                     data.forEach((attraction) => {
                         const savedAttraction = savedAttractions.find((a) => a.reference === attraction.attraction.reference);
                         if (savedAttraction) {
@@ -267,6 +254,17 @@ export default function DestinationSelectedScreen(props) {
                         }
                     });
                     console.log(savedAttractions);
+                    savedAttractions.sort((a, b) => {
+                        if (a.cluster === undefined && b.cluster === undefined) {
+                            return 0;
+                        } else if (a.cluster === undefined) {
+                            return 1;
+                        } else if (b.cluster === undefined) {
+                            return -1;
+                        } else {
+                            return a.cluster - b.cluster;
+                        }
+                    });
                     const attractionsRef = ref(db, 'users/' + auth.currentUser.uid + '/trips/' + newPathKey + '/attractions');
                     savedAttractions.forEach((attraction, index) => {
                         update(attractionsRef, {
@@ -329,6 +327,42 @@ export default function DestinationSelectedScreen(props) {
             update(hotelRef, formattedSelectedLodging)
         })
 
+    }
+    function makeSchedule() {
+        console.log(savedAttractions)
+        const schedule = [];
+        const blockedHours = [];
+
+        for (let i = 0; i < fullDays; i++) {
+            schedule.push([]);
+            blockedHours.push([]);
+        }
+        savedAttractions.forEach((attraction) => {
+            schedule[attraction.cluster].push(attraction);
+        })
+        for (let i = 0; i < schedule.length; i++) {
+            schedule[i].forEach((attraction) => {
+                if (attraction.opening_hours !== undefined && attraction.opening_hours.periods !== undefined && attraction.opening_hours.periods.length === 7) {
+                    console.log(attraction.name)
+                    var hours = attraction.opening_hours.periods[convertDay(props.departureDate.getDay() + i)]
+                    console.log(hours)
+                }
+            })
+        }
+        console.log(schedule)
+    }
+
+    function convertDay(jsInputDay) {
+        var jsToGoogleDayConvert = {
+            0: 6,
+            1: 0,
+            2: 1,
+            3: 2,
+            4: 3,
+            5: 4,
+            6: 5
+        }
+        return jsToGoogleDayConvert[jsInputDay]
     }
 
     const generateTrip = () => {
@@ -531,13 +565,12 @@ export default function DestinationSelectedScreen(props) {
             3: "yellow",
             4: "purple",
             5: "pink",
-            6: "brown",
+            6: "red",
             7: "white",
             8: "black",
         }
         return colorDict[cluster]
     }
-
 
     useEffect(() => {
         props.monitorAuthState()
@@ -581,27 +614,12 @@ export default function DestinationSelectedScreen(props) {
             });
             setAttractionMarkers(markers);
         }
-        // if (savedAttractions.length !== 0 && savedAttractions[0].cluster !== undefined) {
-        //     const markers = savedAttractions.map((attraction) => {
-        //         const position = { lat: attraction.latitude, lng: attraction.longitude };
-        //         return <Marker
-        //             key={attraction.Id}
-        //             position={position}
-        //             // opacity={.6}
-        //             icon={{ url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(attraction.cluster)}-dot.png` }}
-        //             animation={window.google.maps.Animation.DROP}
-        //         />;
-        //     });
-        //     setAttractionMarkers(markers);
-        // }
         if (lodging !== undefined) {
             console.log(lodging)
             const hotelMarker = <Marker
                 position={{ lat: lodging.latitude, lng: lodging.longitude }}
-                // opacity={1}
                 animation={window.google.maps.Animation.DROP}
             />
-            // map.panTo({ lat: lodging.latitude, lng: lodging.longitude })
             setHotelMarkers(hotelMarker);
         }
     }, [map, destFlightLatLon, savedAttractions, averageLatLon, lodging]);
@@ -639,6 +657,7 @@ export default function DestinationSelectedScreen(props) {
                 >
                     <p>Dates:</p>
                     <p>{props.departureDate.toString()}</p>
+                    {/* <p>{props.departureDate.getDay()}</p> */}
                     <p>{props.returnDate.toString()}</p>
                 </div>
                 <div
@@ -672,6 +691,11 @@ export default function DestinationSelectedScreen(props) {
                     >
                         Search Hotels
                     </button>
+                    <button
+                        onClick={makeSchedule}
+                    >
+                        Make Schedule
+                    </button>
                 </div>
                 <div
                     style={{
@@ -688,6 +712,11 @@ export default function DestinationSelectedScreen(props) {
                         {attractionMarkers}
                         {hotelMarkers}
                     </GoogleMap>
+                </div>
+                <div
+                    style={{ display: lodging !== undefined ? "flex" : "none" }}
+                >
+                    <p>Attractions:</p>
                 </div>
             </div>
         </div >

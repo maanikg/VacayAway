@@ -1,4 +1,7 @@
-12:01:01.351 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-12:01:01.445 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms
-12:29:12.450 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.NamespaceActor - vacayaway successfully activated FBKV (SurveyIdle(0)) wait: 173ms, init: 0ms
+22:08:33.386 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+22:08:33.494 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+22:09:07.310 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO com.firebase.core.namespace.NamespaceActor - vacayaway-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 98ms, init: 0ms
+22:19:54.033 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+22:19:54.076 [NamespaceSystem-akka.actor.default-dispatcher-16] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: vacayaway-default-rtdb
+22:19:54.084 [NamespaceSystem-akka.actor.default-dispatcher-17] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for vacayaway-default-rtdb
+22:19:54.087 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
